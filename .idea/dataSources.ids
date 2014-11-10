@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source source="LOCAL" name="MySQL - roadmap@localhost" uuid="91a4d059-a3fa-4a87-ba8c-4133afa932d7">
+    <database-info product="MySQL" version="5.6.20" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.31 ( Revision: alexander.soklakov@oracle.com-20140520065950-groqzzbvxprqdmnz )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower"/>
+    <schema name="" catalog="roadmap"/>
+    <table name="application_features" schema="" catalog="roadmap" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="application_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="implemented" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7" def="YicwJw=="/>
+      <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
+      <column name="modified_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="application_features-to-apllication" columns="application_id" ref-table="applications" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <exported-key name="survey_features-to-app_features" table="survey_features" schema="" catalog="roadmap" columns="feature_id"/>
+      <exported-key name="votes-to-app_features" table="votes" schema="" catalog="roadmap" columns="feature_id"/>
+      <index name="id_UNIQUE" unique="true" columns="id"/>
+      <index name="application_features-to-apllication_idx" unique="false" columns="application_id"/>
+    </table>
+    <table name="applications" schema="" catalog="roadmap" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="description" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="user_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="api_key" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
+      <column name="api_token" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
+      <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
+      <column name="modified_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="applications-to-users" columns="user_id" ref-table="users" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <exported-key name="application_features-to-apllication" table="application_features" schema="" catalog="roadmap" columns="application_id"/>
+      <exported-key name="surveys-to-applications" table="surveys" schema="" catalog="roadmap" columns="application_id"/>
+      <index name="api_secret_key_UNIQUE" unique="true" columns="api_key"/>
+      <index name="api_security_key_UNIQUE" unique="true" columns="api_token"/>
+      <index name="id_UNIQUE" unique="true" columns="id"/>
+      <index name="applications-to-users_idx" unique="false" columns="user_id"/>
+    </table>
+    <table name="devices" schema="" catalog="roadmap" type="TABLE">
+      <column name="token" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="platform" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="device_locale" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="token"/>
+      <exported-key name="votes-to-devices" table="votes" schema="" catalog="roadmap" columns="device_token"/>
+      <index name="device_token_UNIQUE" unique="true" columns="token"/>
+    </table>
+    <table name="survey_features" schema="" catalog="roadmap" type="TABLE">
+      <column name="feature_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="survey_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <primary-key name="PRIMARY" columns="survey_id,feature_id"/>
+      <foreign-key name="survey_features-to-app_features" columns="feature_id" ref-table="application_features" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="survey_features-to-surveys" columns="survey_id" ref-table="surveys" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="survey_features-to-app_features_idx" unique="false" columns="feature_id"/>
+    </table>
+    <table name="surveys" schema="" catalog="roadmap" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="title" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="application_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="active" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7" def="YicwJw=="/>
+      <column name="required_votes" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="finish_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
+      <column name="modified_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="surveys-to-applications" columns="application_id" ref-table="applications" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <exported-key name="survey_features-to-surveys" table="survey_features" schema="" catalog="roadmap" columns="survey_id"/>
+      <exported-key name="votes-to-surveys" table="votes" schema="" catalog="roadmap" columns="survey_id"/>
+      <index name="id_UNIQUE" unique="true" columns="id"/>
+      <index name="surveys-to_applications_idx" unique="false" columns="application_id"/>
+    </table>
+    <table name="user_tokens" schema="" catalog="roadmap" type="TABLE">
+      <column name="token" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="user_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="valid_to" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
+      <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
+      <primary-key name="PRIMARY" columns="token"/>
+      <foreign-key name="user_tokens_to_users" columns="user_id" ref-table="users" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="token_UNIQUE" unique="true" columns="token"/>
+      <index name="user_tokens_to_users_idx" unique="false" columns="user_id"/>
+    </table>
+    <table name="users" schema="" catalog="roadmap" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="email" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="password" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
+      <column name="modified_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <exported-key name="applications-to-users" table="applications" schema="" catalog="roadmap" columns="user_id"/>
+      <exported-key name="user_tokens_to_users" table="user_tokens" schema="" catalog="roadmap" columns="user_id"/>
+      <index name="email_UNIQUE" unique="true" columns="email"/>
+      <index name="id_UNIQUE" unique="true" columns="id"/>
+    </table>
+    <table name="votes" schema="" catalog="roadmap" type="TABLE">
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="device_token" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="survey_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="feature_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="votes-to-app_features" columns="feature_id" ref-table="application_features" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="votes-to-devices" columns="device_token" ref-table="devices" ref-schema="" ref-catalog="roadmap" ref-columns="token" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="votes-to-surveys" columns="survey_id" ref-table="surveys" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="id_UNIQUE" unique="true" columns="id"/>
+      <index name="votes-to-app_features_idx" unique="false" columns="feature_id"/>
+      <index name="votes-to-devices_idx" unique="false" columns="device_token"/>
+      <index name="votes-to-surveys_idx" unique="false" columns="survey_id"/>
+    </table>
+  </data-source>
+</component>
