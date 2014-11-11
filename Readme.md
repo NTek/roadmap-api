@@ -4,3 +4,8 @@
 ### Version 0.1 ###
 
 * Hello world =)
+
+### Version 0.1.1 ###
+
+* Added database support with JPA
+* Implemented couple entities of model

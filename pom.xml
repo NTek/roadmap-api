@@ -5,7 +5,7 @@
     <groupId>com.ramotion</groupId>
     <artifactId>roadmap</artifactId>
     <packaging>war</packaging>
-    <version>0.1</version>
+    <version>0.1.1</version>
 
     <name>roadmap-api</name>
 
@@ -13,6 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.1.1.RELEASE</spring.version>
         <spring.security.version>3.2.5.RELEASE</spring.security.version>
+        <hibernate.version>4.2.4.Final</hibernate.version>
     </properties>
 
     <dependencies>
@@ -51,7 +52,7 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- SPRING TX -->
+        <!-- SPRING DATABASE AND TRANSACTIONS TOOLS-->
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -63,6 +64,72 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- SPRING DATA JPA -->
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>1.7.0.RELEASE</version>
+        </dependency>
+
+        <!-- DATABASE DRIVER -->
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.29</version>
+        </dependency>
+
+        <!-- HIBERNATE -->
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <!-- HIBERNATE VALIDATOR -->
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.0.1.Final</version>
+        </dependency>
+
+        <!-- DATABASE POOLING FROM APACHE COMMONS -->
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <!-- JACKSON -->
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <version>2.2.3</version>
         </dependency>
 
         <!-- SERVLET API -->
