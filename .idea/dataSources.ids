@@ -123,6 +123,8 @@
       <column name="user_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
       <column name="application_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
       <column name="access_level" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA=="/>
+      <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
+      <column name="modified_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
       <primary-key name="PRIMARY" columns="id"/>
       <foreign-key name="user_to_application-to-application" columns="application_id" ref-table="application" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
       <foreign-key name="user_to_application-to-user" columns="user_id" ref-table="user" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
@@ -131,18 +133,18 @@
       <index name="user_to_application-to-user" unique="false" columns="user_id"/>
     </table>
     <table name="vote" schema="" catalog="roadmap" type="TABLE">
-      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="uuid" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <column name="device_token" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="survey_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
       <column name="feature_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
       <column name="language_id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
-      <primary-key name="PRIMARY" columns="id"/>
+      <primary-key name="PRIMARY" columns="uuid"/>
       <foreign-key name="votes-to-app_features" columns="feature_id" ref-table="feature" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
       <foreign-key name="votes-to-devices" columns="device_token" ref-table="device" ref-schema="" ref-catalog="roadmap" ref-columns="token" update-rule="0" delete-rule="0" deferrability="2"/>
       <foreign-key name="votes-to-laguage" columns="language_id" ref-table="language" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="3" delete-rule="3" deferrability="2"/>
       <foreign-key name="votes-to-surveys" columns="survey_id" ref-table="survey" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
-      <index name="id_UNIQUE" unique="true" columns="id"/>
+      <index name="uuid_UNIQUE" unique="true" columns="uuid"/>
       <index name="votes-to-app_features_idx" unique="false" columns="feature_id"/>
       <index name="votes-to-devices_idx" unique="false" columns="device_token"/>
       <index name="votes-to-laguage_idx" unique="false" columns="language_id"/>

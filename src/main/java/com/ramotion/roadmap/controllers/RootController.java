@@ -1,15 +1,15 @@
 package com.ramotion.roadmap.controllers;
 
 import com.ramotion.roadmap.config.AppConfig;
+import com.ramotion.roadmap.model.FeatureEntity;
 import com.ramotion.roadmap.repository.ApplicationRepository;
+import com.ramotion.roadmap.repository.FeatureRepository;
 import com.ramotion.roadmap.repository.UserHasApplicationRepository;
 import com.ramotion.roadmap.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -25,12 +25,15 @@ public class RootController {
 
     private Environment env;
     private UserRepository userRepository;
+    private FeatureRepository featureRepository;
     private ApplicationRepository applicationRepository;
     private UserHasApplicationRepository userHasApplicationRepository;
 
     @Autowired
     public RootController(UserHasApplicationRepository userHasApplicationRepository,
+                          FeatureRepository featureRepository,
                           UserRepository userRepository, ApplicationRepository applicationRepository, Environment env) {
+        this.featureRepository = featureRepository;
         this.userRepository = userRepository;
         this.applicationRepository = applicationRepository;
         this.userHasApplicationRepository = userHasApplicationRepository;
@@ -52,6 +55,11 @@ public class RootController {
         return userRepository.findAll();
     }
 
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public Object login() {
+        return userRepository.findByEmailAndPassword("test@test.com", "123");
+    }
+
     @RequestMapping(value = "/apps", method = RequestMethod.GET)
     public Object applications() {
         return applicationRepository.findAll();
@@ -60,6 +68,20 @@ public class RootController {
     @RequestMapping(value = "/userapps", method = RequestMethod.GET)
     public Object userapps() {
         return userHasApplicationRepository.findAll();
+    }
+
+    @RequestMapping(value = "/features", method = RequestMethod.GET)
+    public Object features() {
+        return featureRepository.findAll();
+    }
+
+    @RequestMapping(value = "/createfeature/{id}", method = RequestMethod.GET)
+    public Object testCreateFeature(@PathVariable(value = "id") long id,
+                                    @RequestParam(value = "name", required = false) String includes) {
+        FeatureEntity feature = new FeatureEntity();
+        feature.setApplication(applicationRepository.findOne(id));
+        featureRepository.save(feature);
+        return feature;
     }
 
     private String createUptimeString(long millis) {

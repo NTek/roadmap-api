@@ -1,6 +1,8 @@
 package com.ramotion.roadmap.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ramotion.roadmap.model.utils.AuditTimestamps;
+import com.ramotion.roadmap.model.utils.AuditableEntityListener;
+import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
 
 import javax.persistence.*;
 
@@ -9,16 +11,22 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "user_has_application", schema = "", catalog = "roadmap")
-public class UserHasApplicationEntity {
+@EntityListeners(value = AuditableEntityListener.class)
+public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
+
     private Long id;
+
     private Long userId;
+
     private Long applicationId;
+
     private Byte accessLevel;
 
-    @JsonIgnore
+    @Embedded
+    private AuditTimestamps auditTimestamps;
+
     private ApplicationEntity applicationByApplicationId;
 
-    @JsonIgnore
     private UserEntity userByUserId;
 
     @Id
@@ -59,6 +67,16 @@ public class UserHasApplicationEntity {
     }
 
     @Override
+    public AuditTimestamps getAuditTimestamps() {
+        return auditTimestamps;
+    }
+
+    @Override
+    public void setAuditTimestamps(AuditTimestamps auditTimestamps) {
+        this.auditTimestamps = auditTimestamps;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -66,8 +84,14 @@ public class UserHasApplicationEntity {
         UserHasApplicationEntity that = (UserHasApplicationEntity) o;
 
         if (accessLevel != null ? !accessLevel.equals(that.accessLevel) : that.accessLevel != null) return false;
+        if (applicationByApplicationId != null ? !applicationByApplicationId.equals(that.applicationByApplicationId) : that.applicationByApplicationId != null)
+            return false;
         if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null)
             return false;
+        if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
+            return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (userByUserId != null ? !userByUserId.equals(that.userByUserId) : that.userByUserId != null) return false;
         if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
 
         return true;
@@ -75,9 +99,13 @@ public class UserHasApplicationEntity {
 
     @Override
     public int hashCode() {
-        int result = userId != null ? userId.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (userId != null ? userId.hashCode() : 0);
         result = 31 * result + (applicationId != null ? applicationId.hashCode() : 0);
         result = 31 * result + (accessLevel != null ? accessLevel.hashCode() : 0);
+        result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
+        result = 31 * result + (applicationByApplicationId != null ? applicationByApplicationId.hashCode() : 0);
+        result = 31 * result + (userByUserId != null ? userByUserId.hashCode() : 0);
         return result;
     }
 

@@ -1,6 +1,9 @@
 package com.ramotion.roadmap.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ramotion.roadmap.model.utils.AuditTimestamps;
+import com.ramotion.roadmap.model.utils.AuditableEntityListener;
+import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,19 +14,24 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "user", schema = "", catalog = "roadmap")
-public class UserEntity {
+@EntityListeners(value = AuditableEntityListener.class)
+public class UserEntity implements EntityWithAuditTimestamps {
+
     private Long id;
+
     private String email;
 
     @JsonIgnore
     private String password;
 
-    private Boolean disabled;
+    private boolean disabled;
     private String role;
+
     private Timestamp recoveryTokenExpiration;
     private String recoveryToken;
-    private Timestamp createdAt;
-    private Timestamp modifiedAt;
+
+    @Embedded
+    private AuditTimestamps auditTimestamps;
 
     @JsonIgnore
     private Collection<UserHasApplicationEntity> userToApplicationsById;
@@ -101,24 +109,14 @@ public class UserEntity {
         this.recoveryToken = recoveryToken;
     }
 
-    @Basic
-    @Column(name = "created_at", nullable = false, insertable = true, updatable = true)
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    @Override
+    public AuditTimestamps getAuditTimestamps() {
+        return auditTimestamps;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Basic
-    @Column(name = "modified_at", nullable = false, insertable = true, updatable = true)
-    public Timestamp getModifiedAt() {
-        return modifiedAt;
-    }
-
-    public void setModifiedAt(Timestamp modifiedAt) {
-        this.modifiedAt = modifiedAt;
+    @Override
+    public void setAuditTimestamps(AuditTimestamps auditTimestamps) {
+        this.auditTimestamps = auditTimestamps;
     }
 
     @Override
@@ -128,17 +126,21 @@ public class UserEntity {
 
         UserEntity that = (UserEntity) o;
 
-        if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) return false;
-        if (disabled != null ? !disabled.equals(that.disabled) : that.disabled != null) return false;
+        if (disabled != that.disabled) return false;
+        if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
+            return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (modifiedAt != null ? !modifiedAt.equals(that.modifiedAt) : that.modifiedAt != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (recoveryToken != null ? !recoveryToken.equals(that.recoveryToken) : that.recoveryToken != null)
             return false;
         if (recoveryTokenExpiration != null ? !recoveryTokenExpiration.equals(that.recoveryTokenExpiration) : that.recoveryTokenExpiration != null)
             return false;
         if (role != null ? !role.equals(that.role) : that.role != null) return false;
+        if (userAuthTokensById != null ? !userAuthTokensById.equals(that.userAuthTokensById) : that.userAuthTokensById != null)
+            return false;
+        if (userToApplicationsById != null ? !userToApplicationsById.equals(that.userToApplicationsById) : that.userToApplicationsById != null)
+            return false;
 
         return true;
     }
@@ -148,12 +150,13 @@ public class UserEntity {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (disabled != null ? disabled.hashCode() : 0);
+        result = 31 * result + (disabled ? 1 : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (recoveryTokenExpiration != null ? recoveryTokenExpiration.hashCode() : 0);
         result = 31 * result + (recoveryToken != null ? recoveryToken.hashCode() : 0);
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-        result = 31 * result + (modifiedAt != null ? modifiedAt.hashCode() : 0);
+        result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
+        result = 31 * result + (userToApplicationsById != null ? userToApplicationsById.hashCode() : 0);
+        result = 31 * result + (userAuthTokensById != null ? userAuthTokensById.hashCode() : 0);
         return result;
     }
 

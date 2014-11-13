@@ -1,9 +1,11 @@
 package com.ramotion.roadmap.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ramotion.roadmap.model.utils.AuditTimestamps;
+import com.ramotion.roadmap.model.utils.AuditableEntityListener;
+import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Collection;
 
 /**
@@ -11,16 +13,23 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "application", schema = "", catalog = "roadmap")
-public class ApplicationEntity {
+@EntityListeners(value = AuditableEntityListener.class)
+public class ApplicationEntity implements EntityWithAuditTimestamps {
+
     private Long id;
     private String name;
     private String description;
     private String apiKey;
     private String apiToken;
-    private Timestamp createdAt;
-    private Timestamp modifiedAt;
+
+    @Embedded
+    private AuditTimestamps auditTimestamps;
+
     @JsonIgnore
     private Collection<UserHasApplicationEntity> userToApplicationsById;
+
+    @JsonIgnore
+    private Collection<FeatureEntity> applicationFeatures;
 
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -32,7 +41,6 @@ public class ApplicationEntity {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 255)
     public String getName() {
         return name;
@@ -42,7 +50,6 @@ public class ApplicationEntity {
         this.name = name;
     }
 
-    @Basic
     @Column(name = "description", nullable = true, insertable = true, updatable = true, length = 255)
     public String getDescription() {
         return description;
@@ -52,7 +59,6 @@ public class ApplicationEntity {
         this.description = description;
     }
 
-    @Basic
     @Column(name = "api_key", nullable = false, insertable = true, updatable = true, length = 45)
     public String getApiKey() {
         return apiKey;
@@ -62,7 +68,6 @@ public class ApplicationEntity {
         this.apiKey = apiKey;
     }
 
-    @Basic
     @Column(name = "api_token", nullable = false, insertable = true, updatable = true, length = 45)
     public String getApiToken() {
         return apiToken;
@@ -72,24 +77,33 @@ public class ApplicationEntity {
         this.apiToken = apiToken;
     }
 
-    @Basic
-    @Column(name = "created_at", nullable = false, insertable = true, updatable = true)
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    @Override
+    public AuditTimestamps getAuditTimestamps() {
+        return auditTimestamps;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    @Override
+    public void setAuditTimestamps(AuditTimestamps auditTimestamps) {
+        this.auditTimestamps = auditTimestamps;
     }
 
-    @Basic
-    @Column(name = "modified_at", nullable = false, insertable = true, updatable = true)
-    public Timestamp getModifiedAt() {
-        return modifiedAt;
+
+    @OneToMany(mappedBy = "applicationByApplicationId")
+    public Collection<UserHasApplicationEntity> getUserToApplicationsById() {
+        return userToApplicationsById;
     }
 
-    public void setModifiedAt(Timestamp modifiedAt) {
-        this.modifiedAt = modifiedAt;
+    public void setUserToApplicationsById(Collection<UserHasApplicationEntity> userToApplicationsById) {
+        this.userToApplicationsById = userToApplicationsById;
+    }
+
+    @OneToMany(mappedBy = "application")
+    public Collection<FeatureEntity> getApplicationFeatures() {
+        return applicationFeatures;
+    }
+
+    public void setApplicationFeatures(Collection<FeatureEntity> applicationFeatures) {
+        this.applicationFeatures = applicationFeatures;
     }
 
     @Override
@@ -101,11 +115,15 @@ public class ApplicationEntity {
 
         if (apiKey != null ? !apiKey.equals(that.apiKey) : that.apiKey != null) return false;
         if (apiToken != null ? !apiToken.equals(that.apiToken) : that.apiToken != null) return false;
-        if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null) return false;
+        if (applicationFeatures != null ? !applicationFeatures.equals(that.applicationFeatures) : that.applicationFeatures != null)
+            return false;
+        if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
+            return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (modifiedAt != null ? !modifiedAt.equals(that.modifiedAt) : that.modifiedAt != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (userToApplicationsById != null ? !userToApplicationsById.equals(that.userToApplicationsById) : that.userToApplicationsById != null)
+            return false;
 
         return true;
     }
@@ -117,17 +135,9 @@ public class ApplicationEntity {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
         result = 31 * result + (apiToken != null ? apiToken.hashCode() : 0);
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-        result = 31 * result + (modifiedAt != null ? modifiedAt.hashCode() : 0);
+        result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
+        result = 31 * result + (userToApplicationsById != null ? userToApplicationsById.hashCode() : 0);
+        result = 31 * result + (applicationFeatures != null ? applicationFeatures.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "applicationByApplicationId")
-    public Collection<UserHasApplicationEntity> getUserToApplicationsById() {
-        return userToApplicationsById;
-    }
-
-    public void setUserToApplicationsById(Collection<UserHasApplicationEntity> userToApplicationsById) {
-        this.userToApplicationsById = userToApplicationsById;
     }
 }

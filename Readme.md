@@ -9,3 +9,8 @@
 
 * Added database support with JPA
 * Implemented couple entities of model
+
+### Version 0.1.2 ###
+
+* Implemented preview version of model
+* Implemented listener update audit timestamps

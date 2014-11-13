@@ -5,7 +5,7 @@
     <groupId>com.ramotion</groupId>
     <artifactId>roadmap</artifactId>
     <packaging>war</packaging>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 
     <name>roadmap-api</name>
 
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>1.7.0.RELEASE</version>
+            <version>1.7.1.RELEASE</version>
         </dependency>
 
         <!-- DATABASE DRIVER -->
