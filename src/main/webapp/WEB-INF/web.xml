@@ -14,7 +14,10 @@
     <!-- Location of Java @Configuration classes that configure the components that makeup this application -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>com.ramotion.roadmap.config.AppConfig</param-value>
+        <param-value>
+            com.ramotion.roadmap.config.AppConfig
+            com.ramotion.roadmap.config.WebSocketConfig
+        </param-value>
     </context-param>
 
     <listener>

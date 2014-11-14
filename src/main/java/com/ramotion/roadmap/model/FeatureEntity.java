@@ -25,6 +25,7 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
     @Embedded
     private AuditTimestamps auditTimestamps;
 
+    @JsonIgnore
     private ApplicationEntity application;
 
     @JsonIgnore

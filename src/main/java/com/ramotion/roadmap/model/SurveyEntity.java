@@ -19,6 +19,8 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
 
     private Long id;
 
+    private Long applicationId;
+
     private String title;
 
     private boolean active;
@@ -85,6 +87,15 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
         this.finishAt = finishAt;
     }
 
+    @Column(name = "application_id", nullable = false, insertable = false, updatable = false)
+    public Long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
     @Override
     public AuditTimestamps getAuditTimestamps() {
         return auditTimestamps;
@@ -97,14 +108,13 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         SurveyEntity that = (SurveyEntity) o;
 
         if (active != that.active) return false;
-        if (applicationByApplicationId != null ? !applicationByApplicationId.equals(that.applicationByApplicationId) : that.applicationByApplicationId != null)
+        if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null)
             return false;
         if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
             return false;
@@ -112,10 +122,7 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (requiredVotes != null ? !requiredVotes.equals(that.requiredVotes) : that.requiredVotes != null)
             return false;
-        if (surveyFeatures != null ? !surveyFeatures.equals(that.surveyFeatures) : that.surveyFeatures != null)
-            return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
-        if (votesById != null ? !votesById.equals(that.votesById) : that.votesById != null) return false;
 
         return true;
     }
@@ -126,11 +133,9 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (active ? 1 : 0);
         result = 31 * result + (requiredVotes != null ? requiredVotes.hashCode() : 0);
+        result = 31 * result + (applicationId != null ? applicationId.hashCode() : 0);
         result = 31 * result + (finishAt != null ? finishAt.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
-        result = 31 * result + (applicationByApplicationId != null ? applicationByApplicationId.hashCode() : 0);
-        result = 31 * result + (surveyFeatures != null ? surveyFeatures.hashCode() : 0);
-        result = 31 * result + (votesById != null ? votesById.hashCode() : 0);
         return result;
     }
 

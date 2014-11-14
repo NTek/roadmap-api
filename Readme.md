@@ -14,3 +14,8 @@
 
 * Implemented preview version of model
 * Implemented listener update audit timestamps
+
+### Version 0.1.3 ###
+
+* Experiments with STOMP over websocket
+* Some minor changes in model entities

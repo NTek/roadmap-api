@@ -1,6 +1,7 @@
 package com.ramotion.roadmap.controllers;
 
 import com.ramotion.roadmap.config.AppConfig;
+import com.ramotion.roadmap.dto.Greeting;
 import com.ramotion.roadmap.model.FeatureEntity;
 import com.ramotion.roadmap.repository.ApplicationRepository;
 import com.ramotion.roadmap.repository.FeatureRepository;
@@ -8,6 +9,7 @@ import com.ramotion.roadmap.repository.UserHasApplicationRepository;
 import com.ramotion.roadmap.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,15 +31,19 @@ public class RootController {
     private ApplicationRepository applicationRepository;
     private UserHasApplicationRepository userHasApplicationRepository;
 
+    private SimpMessagingTemplate template;
+
     @Autowired
     public RootController(UserHasApplicationRepository userHasApplicationRepository,
                           FeatureRepository featureRepository,
+                          SimpMessagingTemplate template,
                           UserRepository userRepository, ApplicationRepository applicationRepository, Environment env) {
         this.featureRepository = featureRepository;
         this.userRepository = userRepository;
         this.applicationRepository = applicationRepository;
         this.userHasApplicationRepository = userHasApplicationRepository;
         this.env = env;
+        this.template = template;
     }
 
     @ResponseBody
@@ -82,6 +88,12 @@ public class RootController {
         feature.setApplication(applicationRepository.findOne(id));
         featureRepository.save(feature);
         return feature;
+    }
+
+    @RequestMapping(value = "/sayhello", method = RequestMethod.GET)
+    public String SayHelloToSocket(@RequestParam(value = "name", required = false) String name) {
+        this.template.convertAndSend("/topic/greetings", new Greeting(name));
+        return "Sent " + name;
     }
 
     private String createUptimeString(long millis) {

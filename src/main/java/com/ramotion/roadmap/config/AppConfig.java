@@ -71,7 +71,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/hello").setViewName("index");
+        registry.addViewController("/index").setViewName("index");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 

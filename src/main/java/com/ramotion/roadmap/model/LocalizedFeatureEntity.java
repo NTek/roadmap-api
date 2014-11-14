@@ -22,6 +22,10 @@ public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
     @Embedded
     private AuditTimestamps auditTimestamps;
 
+    private Long featureId;
+
+    private Integer languageId;
+
     @JsonIgnore
     private FeatureEntity featureByFeatureId;
 
@@ -57,6 +61,24 @@ public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
         this.auditTimestamps = auditTimestamps;
     }
 
+    @Column(name = "feature_id", nullable = false, insertable = false, updatable = false)
+    public Long getFeatureId() {
+        return featureId;
+    }
+
+    public void setFeatureId(Long featureId) {
+        this.featureId = featureId;
+    }
+
+    @Column(name = "language_id", nullable = false, insertable = false, updatable = false)
+    public Integer getLanguageId() {
+        return languageId;
+    }
+
+    public void setLanguageId(Integer languageId) {
+        this.languageId = languageId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,11 +88,9 @@ public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
 
         if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
             return false;
-        if (featureByFeatureId != null ? !featureByFeatureId.equals(that.featureByFeatureId) : that.featureByFeatureId != null)
-            return false;
+        if (featureId != null ? !featureId.equals(that.featureId) : that.featureId != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (languageByLanguageId != null ? !languageByLanguageId.equals(that.languageByLanguageId) : that.languageByLanguageId != null)
-            return false;
+        if (languageId != null ? !languageId.equals(that.languageId) : that.languageId != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
 
         return true;
@@ -81,8 +101,8 @@ public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
-        result = 31 * result + (featureByFeatureId != null ? featureByFeatureId.hashCode() : 0);
-        result = 31 * result + (languageByLanguageId != null ? languageByLanguageId.hashCode() : 0);
+        result = 31 * result + (featureId != null ? featureId.hashCode() : 0);
+        result = 31 * result + (languageId != null ? languageId.hashCode() : 0);
         return result;
     }
 
