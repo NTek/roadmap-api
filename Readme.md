@@ -19,3 +19,9 @@
 
 * Experiments with STOMP over websocket
 * Some minor changes in model entities
+
+### Version 0.2.0 ###
+
+* Added Liquibase(www.liquibase.org) tool for database version control and migration
+* Added datasource configuration from environment variables for heroku
+

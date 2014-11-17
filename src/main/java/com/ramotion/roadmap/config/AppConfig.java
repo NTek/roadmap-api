@@ -1,5 +1,6 @@
 package com.ramotion.roadmap.config;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.annotation.PostConstruct;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Properties;
@@ -40,6 +42,7 @@ import java.util.Properties;
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
 
+    public static final String DB_URL_ENV_VAR_NAME = "DATABASE_URL";
     public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
 
     @Autowired
@@ -93,11 +96,30 @@ public class AppConfig extends WebMvcConfigurerAdapter {
      */
     @Bean
     public BasicDataSource getBasicDBCPDatasource() {
+
+        String dbURL;
+        String dbUsername;
+        String dbPassword;
+
+        //Get connection parameters from environment variable DB_URL_ENV_VAR_NAME
+        try {
+            URI dbUri = new URI(System.getenv(DB_URL_ENV_VAR_NAME));
+            dbUsername = dbUri.getUserInfo().split(":")[0];
+            dbPassword = dbUri.getUserInfo().split(":")[1];
+            dbURL = env.getProperty("database.connection.url.driver") + dbUri.getHost() + ':' + dbUri.getPort() +
+                    dbUri.getPath() + env.getProperty("database.connection.url.properties");
+        } catch (Exception e) {
+            System.err.println("Error while parsing database parameters from system variable " + DB_URL_ENV_VAR_NAME);
+            dbURL = env.getProperty("database.connection.url.full");
+            dbUsername = env.getProperty("database.connection.user");
+            dbPassword = env.getProperty("database.connection.password");
+        }
+
         BasicDataSource datasource = new BasicDataSource();
-        datasource.setDriverClassName("com.mysql.jdbc.Driver");
-        datasource.setUrl(env.getProperty("database.connection.url"));
-        datasource.setUsername(env.getProperty("database.connection.user"));
-        datasource.setPassword(env.getProperty("database.connection.password"));
+        datasource.setUrl(dbURL);
+        datasource.setUsername(dbUsername);
+        datasource.setPassword(dbPassword);
+        datasource.setDriverClassName(env.getProperty("database.driver.classname"));
         datasource.setMaxActive(Integer.parseInt(env.getProperty("database.pool.maxActive")));
         datasource.setMaxIdle(Integer.parseInt(env.getProperty("database.pool.maxIdle")));
         datasource.setMaxWait(Integer.parseInt(env.getProperty("database.pool.maxWait")));
@@ -130,4 +152,14 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         return entityManagerFactoryBean;
     }
 
+    @Bean
+    public SpringLiquibase springLiquibaseBean() {
+        SpringLiquibase springLiquibase = new SpringLiquibase();
+        springLiquibase.setDataSource(getBasicDBCPDatasource());
+        springLiquibase.setChangeLog("classpath:db-changelog.sql");
+        springLiquibase.setContexts("test, production");
+        springLiquibase.setDropFirst(false);
+        springLiquibase.setDefaultSchema("roadmap");
+        return springLiquibase;
+    }
 }

@@ -2,7 +2,11 @@
   <dictionary name="JavaDev">
     <words>
       <w>auditable</w>
+      <w>changelog</w>
+      <w>changeset</w>
       <w>heroku</w>
+      <w>inno</w>
+      <w>liquibase</w>
       <w>postgre</w>
       <w>postgresql</w>
       <w>roadmap</w>

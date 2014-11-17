@@ -1,4 +1,4 @@
-package com.ramotion.roadmap.controllers;
+package com.ramotion.roadmap.controllers.socket;
 
 import com.ramotion.roadmap.dto.Greeting;
 import com.ramotion.roadmap.dto.HelloMessage;
