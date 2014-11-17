@@ -159,7 +159,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         springLiquibase.setChangeLog("classpath:db-changelog.sql");
         springLiquibase.setContexts("test, production");
         springLiquibase.setDropFirst(false);
-        springLiquibase.setDefaultSchema("roadmap");
+//        springLiquibase.setDefaultSchema("roadmap");
         return springLiquibase;
     }
 }
