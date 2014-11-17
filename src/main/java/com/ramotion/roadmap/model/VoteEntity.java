@@ -11,7 +11,7 @@ import javax.persistence.*;
  * Created by Oleg Vasiliev on 12.11.2014.
  */
 @Entity
-@Table(name = "vote", schema = "", catalog = "roadmap")
+@Table(name = "vote")
 @EntityListeners(value = AuditableEntityListener.class)
 public class VoteEntity implements EntityWithAuditTimestamps {
 

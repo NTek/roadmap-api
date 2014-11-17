@@ -7,6 +7,7 @@ import com.ramotion.roadmap.repository.ApplicationRepository;
 import com.ramotion.roadmap.repository.FeatureRepository;
 import com.ramotion.roadmap.repository.UserHasApplicationRepository;
 import com.ramotion.roadmap.repository.UserRepository;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,13 +31,15 @@ public class RootController {
     private FeatureRepository featureRepository;
     private ApplicationRepository applicationRepository;
     private UserHasApplicationRepository userHasApplicationRepository;
-
+    private BasicDataSource dataSource;
     private SimpMessagingTemplate template;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     public RootController(UserHasApplicationRepository userHasApplicationRepository,
                           FeatureRepository featureRepository,
                           SimpMessagingTemplate template,
+                          BasicDataSource dataSource,
                           UserRepository userRepository, ApplicationRepository applicationRepository, Environment env) {
         this.featureRepository = featureRepository;
         this.userRepository = userRepository;
@@ -44,6 +47,7 @@ public class RootController {
         this.userHasApplicationRepository = userHasApplicationRepository;
         this.env = env;
         this.template = template;
+        this.dataSource = dataSource;
     }
 
     @ResponseBody
@@ -53,6 +57,7 @@ public class RootController {
         response.put("started", AppConfig.DATETIME_FORMATTER.format(new Date(serverStartedAt)));
         response.put("uptime", createUptimeString(System.currentTimeMillis() - serverStartedAt));
         response.put("version", env.getProperty("app.version"));
+        response.put("database", dataSource.getUrl());
         return response;
     }
 

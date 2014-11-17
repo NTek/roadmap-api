@@ -23,5 +23,9 @@
 ### Version 0.2.0 ###
 
 * Added Liquibase(www.liquibase.org) tool for database version control and migration
-* Added datasource configuration from environment variables for heroku
+* Added datasource configuration from environment variables for heroku### Version 0.2.0 ###
+
+### Version 0.2.1 ###
+
+* Some changes for heroku database
 

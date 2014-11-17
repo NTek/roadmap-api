@@ -13,7 +13,7 @@ import java.util.Collection;
  * Created by Oleg Vasiliev on 12.11.2014.
  */
 @Entity
-@Table(name = "survey", schema = "", catalog = "roadmap")
+@Table(name = "survey")
 @EntityListeners(value = AuditableEntityListener.class)
 public class SurveyEntity implements EntityWithAuditTimestamps {
 

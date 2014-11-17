@@ -9,7 +9,7 @@ import java.util.Collection;
  * Created by Oleg Vasiliev on 12.11.2014.
  */
 @Entity
-@Table(name = "device", schema = "", catalog = "roadmap")
+@Table(name = "device")
 public class DeviceEntity {
     private String token;
 

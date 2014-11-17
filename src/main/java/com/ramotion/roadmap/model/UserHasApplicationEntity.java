@@ -10,7 +10,7 @@ import javax.persistence.*;
  * Created by Oleg Vasiliev on 11.11.2014.
  */
 @Entity
-@Table(name = "user_has_application", schema = "", catalog = "roadmap")
+@Table(name = "user_has_application")
 @EntityListeners(value = AuditableEntityListener.class)
 public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
 

@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * Created by Oleg Vasiliev on 11.11.2014.
  */
 @Entity
-@Table(name = "auth_token", schema = "", catalog = "roadmap")
+@Table(name = "auth_token")
 public class AuthTokenEntity {
     private String token;
     private Timestamp validTo;

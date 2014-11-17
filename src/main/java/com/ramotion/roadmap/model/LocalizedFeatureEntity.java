@@ -12,7 +12,7 @@ import javax.persistence.*;
  * Created by Oleg Vasiliev on 12.11.2014.
  */
 @Entity
-@Table(name = "localized_feature", schema = "", catalog = "roadmap")
+@Table(name = "localized_feature")
 @EntityListeners(value = AuditableEntityListener.class)
 public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
 
