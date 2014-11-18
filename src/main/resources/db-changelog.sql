@@ -26,18 +26,23 @@ CREATE TABLE IF NOT EXISTS `user` (
   `role`                      VARCHAR(255) NOT NULL DEFAULT 'ROLE_USER',
   `recovery_token_expiration` TIMESTAMP    NULL,
   `recovery_token`            VARCHAR(255) NULL,
+  `modified_at`               TIMESTAMP    NULL,
   `created_at`                TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified_at`               TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC))
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `auth_token`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `auth_token` (
-  `token`      VARCHAR(255) NOT NULL,
-  `user_id`    BIGINT       NOT NULL,
-  `valid_to`   TIMESTAMP    NOT NULL,
-  `created_at` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `token`       VARCHAR(255) NOT NULL,
+  `user_id`     BIGINT       NOT NULL,
+  `valid_to`    TIMESTAMP    NULL,
+  `modified_at` TIMESTAMP    NULL,
+  `created_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`token`),
   UNIQUE INDEX `token_UNIQUE` (`token` ASC),
   INDEX `user_tokens_to_users_idx` (`user_id` ASC),
@@ -48,29 +53,37 @@ CREATE TABLE IF NOT EXISTS `auth_token` (
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `application`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `application` (
   `id`          BIGINT       NOT NULL AUTO_INCREMENT,
   `name`        VARCHAR(255) NOT NULL,
   `description` VARCHAR(255) NULL,
   `api_key`     VARCHAR(45)  NOT NULL,
   `api_token`   VARCHAR(45)  NOT NULL,
+  `modified_at` TIMESTAMP    NULL,
   `created_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified_at` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `api_security_key_UNIQUE` (`api_token` ASC),
   UNIQUE INDEX `api_secret_key_UNIQUE` (`api_key` ASC))
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `feature`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `feature` (
   `id`             BIGINT    NOT NULL AUTO_INCREMENT,
   `application_id` BIGINT    NOT NULL,
   `implemented`    BIT       NOT NULL DEFAULT 0,
+  `modified_at`    TIMESTAMP NULL,
   `created_at`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  INDEX `application_features-to-application_idx` (`application_id` ASC),
+  INDEX `application_features-to-apllication_idx` (`application_id` ASC),
   CONSTRAINT `application_features-to-application`
   FOREIGN KEY (`application_id`)
   REFERENCES `application` (`id`)
@@ -78,6 +91,10 @@ CREATE TABLE IF NOT EXISTS `feature` (
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `survey`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `survey` (
   `id`             BIGINT       NOT NULL AUTO_INCREMENT,
   `title`          VARCHAR(255) NOT NULL,
@@ -85,8 +102,8 @@ CREATE TABLE IF NOT EXISTS `survey` (
   `active`         BIT          NOT NULL DEFAULT 0,
   `required_votes` BIGINT       NULL DEFAULT NULL,
   `finish_at`      TIMESTAMP    NULL,
+  `modified_at`    TIMESTAMP    NULL,
   `created_at`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified_at`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   INDEX `surveys-to_applications_idx` (`application_id` ASC),
@@ -97,6 +114,10 @@ CREATE TABLE IF NOT EXISTS `survey` (
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `survey_has_feature`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `survey_has_feature` (
   `feature_id` BIGINT NOT NULL,
   `survey_id`  BIGINT NOT NULL,
@@ -114,6 +135,10 @@ CREATE TABLE IF NOT EXISTS `survey_has_feature` (
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `device`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `device` (
   `token`         VARCHAR(255) NOT NULL,
   `platform`      INT          NOT NULL,
@@ -122,6 +147,10 @@ CREATE TABLE IF NOT EXISTS `device` (
   UNIQUE INDEX `device_token_UNIQUE` (`token` ASC))
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `language`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `language` (
   `id`   INT          NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
@@ -130,18 +159,22 @@ CREATE TABLE IF NOT EXISTS `language` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC))
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `vote`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vote` (
   `uuid`         VARCHAR(45)  NOT NULL,
   `device_token` VARCHAR(255) NOT NULL,
   `survey_id`    BIGINT       NOT NULL,
   `feature_id`   BIGINT       NOT NULL,
   `language_id`  INT          NOT NULL,
+  `modified_at`  TIMESTAMP    NULL,
   `created_at`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX `votes-to-surveys_idx` (`survey_id` ASC),
   INDEX `votes-to-app_features_idx` (`feature_id` ASC),
   INDEX `votes-to-devices_idx` (`device_token` ASC),
-  INDEX `votes-to-language_idx` (`language_id` ASC),
+  INDEX `votes-to-laguage_idx` (`language_id` ASC),
   PRIMARY KEY (`uuid`),
   UNIQUE INDEX `uuid_UNIQUE` (`uuid` ASC),
   CONSTRAINT `votes-to-surveys`
@@ -166,13 +199,17 @@ CREATE TABLE IF NOT EXISTS `vote` (
     ON UPDATE NO ACTION)
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `localized_feature`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `localized_feature` (
   `id`          BIGINT      NOT NULL AUTO_INCREMENT,
   `feature_id`  BIGINT      NOT NULL,
   `language_id` INT         NOT NULL,
   `title`       VARCHAR(45) NOT NULL,
+  `modified_at` TIMESTAMP   NULL,
   `created_at`  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified_at` TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX `localized_features-to-features_idx` (`feature_id` ASC),
   INDEX `localized_features-to-language_idx` (`language_id` ASC),
   PRIMARY KEY (`id`),
@@ -189,13 +226,17 @@ CREATE TABLE IF NOT EXISTS `localized_feature` (
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `user_has_application`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `user_has_application` (
   `id`             BIGINT    NOT NULL AUTO_INCREMENT,
   `user_id`        BIGINT    NOT NULL,
   `application_id` BIGINT    NOT NULL,
   `access_level`   TINYINT   NOT NULL DEFAULT 0,
+  `modified_at`    TIMESTAMP NULL,
   `created_at`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX `user_to_application-to-application_idx` (`application_id` ASC),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
@@ -215,49 +256,48 @@ CREATE TABLE IF NOT EXISTS `user_has_application` (
 -- Data for table `user`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
-INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `created_at`, `modified_at`)
+INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
 VALUES (1, 'testuser1@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
-INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `created_at`, `modified_at`)
+INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
 VALUES (2, 'testuser2@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
-INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `created_at`, `modified_at`)
+INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
 VALUES (3, 'testuser3@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
 
 COMMIT;
+
 
 -- -----------------------------------------------------
 -- Data for table `application`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
-INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, `created_at`, `modified_at`)
+INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, `modified_at`, `created_at`)
 VALUES (1, 'App1', 'Description1', 'key1', 'token1', NULL, NULL);
-INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, `created_at`, `modified_at`)
+INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, `modified_at`, `created_at`)
 VALUES (2, 'App2', 'Description2', 'key2', 'token2', NULL, NULL);
-INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, `created_at`, `modified_at`)
+INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, `modified_at`, `created_at`)
 VALUES (3, 'App3', 'Description3', 'key3', 'token3', NULL, NULL);
 
 COMMIT;
+
 
 -- -----------------------------------------------------
 -- Data for table `language`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
 INSERT INTO `language` (`id`, `name`, `code`) VALUES (1, 'English', 'en_US');
 
 COMMIT;
+
 
 -- -----------------------------------------------------
 -- Data for table `user_has_application`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
-INSERT INTO `user_has_application` (`id`, `user_id`, `application_id`, `access_level`, `created_at`, `modified_at`)
+INSERT INTO `user_has_application` (`id`, `user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
 VALUES (1, 1, 1, 0, NULL, NULL);
-INSERT INTO `user_has_application` (`id`, `user_id`, `application_id`, `access_level`, `created_at`, `modified_at`)
+INSERT INTO `user_has_application` (`id`, `user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
 VALUES (2, 1, 2, 0, NULL, NULL);
-INSERT INTO `user_has_application` (`id`, `user_id`, `application_id`, `access_level`, `created_at`, `modified_at`)
+INSERT INTO `user_has_application` (`id`, `user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
 VALUES (3, 2, 3, 0, NULL, NULL);
 
 COMMIT;

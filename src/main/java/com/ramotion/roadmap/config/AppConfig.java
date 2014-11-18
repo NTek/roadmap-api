@@ -1,6 +1,5 @@
 package com.ramotion.roadmap.config;
 
-import liquibase.integration.spring.SpringLiquibase;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -152,14 +151,14 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         return entityManagerFactoryBean;
     }
 
-    @Bean
-    public SpringLiquibase springLiquibaseBean() {
-        SpringLiquibase springLiquibase = new SpringLiquibase();
-        springLiquibase.setDataSource(getBasicDBCPDatasource());
-        springLiquibase.setChangeLog("classpath:db-changelog.sql");
-        springLiquibase.setContexts("test, production");
-        springLiquibase.setDropFirst(false);
-//        springLiquibase.setDefaultSchema("roadmap");
-        return springLiquibase;
-    }
+//    @Bean
+//    public SpringLiquibase springLiquibaseBean() {
+//        SpringLiquibase springLiquibase = new SpringLiquibase();
+//        springLiquibase.setDataSource(getBasicDBCPDatasource());
+//        springLiquibase.setChangeLog("classpath:db-changelog.sql");
+//        springLiquibase.setContexts("test, production");
+//        springLiquibase.setDropFirst(false);
+////        springLiquibase.setDefaultSchema("roadmap");
+//        return springLiquibase;
+//    }
 }
