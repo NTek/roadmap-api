@@ -29,3 +29,7 @@
 
 * Some changes for heroku database
 
+### Version 0.2.2 ###
+
+* Fixes in heroku database connection settings
+* Fixes in model entities

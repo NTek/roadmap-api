@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE INDEX `email_UNIQUE` (`email` ASC))
   ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `auth_token`
 -- -----------------------------------------------------
@@ -53,7 +52,6 @@ CREATE TABLE IF NOT EXISTS `auth_token` (
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `application`
 -- -----------------------------------------------------
@@ -70,7 +68,6 @@ CREATE TABLE IF NOT EXISTS `application` (
   UNIQUE INDEX `api_security_key_UNIQUE` (`api_token` ASC),
   UNIQUE INDEX `api_secret_key_UNIQUE` (`api_key` ASC))
   ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `feature`
@@ -90,7 +87,6 @@ CREATE TABLE IF NOT EXISTS `feature` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `survey`
@@ -114,7 +110,6 @@ CREATE TABLE IF NOT EXISTS `survey` (
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `survey_has_feature`
 -- -----------------------------------------------------
@@ -135,7 +130,6 @@ CREATE TABLE IF NOT EXISTS `survey_has_feature` (
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `device`
 -- -----------------------------------------------------
@@ -147,7 +141,6 @@ CREATE TABLE IF NOT EXISTS `device` (
   UNIQUE INDEX `device_token_UNIQUE` (`token` ASC))
   ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `language`
 -- -----------------------------------------------------
@@ -158,7 +151,6 @@ CREATE TABLE IF NOT EXISTS `language` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC))
   ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `vote`
@@ -199,7 +191,6 @@ CREATE TABLE IF NOT EXISTS `vote` (
     ON UPDATE NO ACTION)
   ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `localized_feature`
 -- -----------------------------------------------------
@@ -225,7 +216,6 @@ CREATE TABLE IF NOT EXISTS `localized_feature` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `user_has_application`
@@ -262,9 +252,7 @@ INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_tok
 VALUES (2, 'testuser2@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
 INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
 VALUES (3, 'testuser3@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
-
 COMMIT;
-
 
 -- -----------------------------------------------------
 -- Data for table `application`
@@ -276,18 +264,14 @@ INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, 
 VALUES (2, 'App2', 'Description2', 'key2', 'token2', NULL, NULL);
 INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, `modified_at`, `created_at`)
 VALUES (3, 'App3', 'Description3', 'key3', 'token3', NULL, NULL);
-
 COMMIT;
-
 
 -- -----------------------------------------------------
 -- Data for table `language`
 -- -----------------------------------------------------
 START TRANSACTION;
 INSERT INTO `language` (`id`, `name`, `code`) VALUES (1, 'English', 'en_US');
-
 COMMIT;
-
 
 -- -----------------------------------------------------
 -- Data for table `user_has_application`
@@ -299,6 +283,6 @@ INSERT INTO `user_has_application` (`id`, `user_id`, `application_id`, `access_l
 VALUES (2, 1, 2, 0, NULL, NULL);
 INSERT INTO `user_has_application` (`id`, `user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
 VALUES (3, 2, 3, 0, NULL, NULL);
-
 COMMIT;
+
 
