@@ -105,7 +105,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
             URI dbUri = new URI(System.getenv(DB_URL_ENV_VAR_NAME));
             dbUsername = dbUri.getUserInfo().split(":")[0];
             dbPassword = dbUri.getUserInfo().split(":")[1];
-            dbURL = env.getProperty("database.connection.url.driver") + dbUri.getHost() + ':' + dbUri.getPort() +
+            String dbPort = dbUri.getPort() == -1 ? "" : (":" + dbUri.getPort());
+            dbURL = env.getProperty("database.connection.url.driver") + dbUri.getHost() + dbPort +
                     dbUri.getPath() + env.getProperty("database.connection.url.properties");
         } catch (Exception e) {
             System.err.println("Error while parsing database parameters from system variable " + DB_URL_ENV_VAR_NAME);
