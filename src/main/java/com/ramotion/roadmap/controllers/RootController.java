@@ -57,7 +57,8 @@ public class RootController {
         response.put("started", AppConfig.DATETIME_FORMATTER.format(new Date(serverStartedAt)));
         response.put("uptime", createUptimeString(System.currentTimeMillis() - serverStartedAt));
         response.put("version", env.getProperty("app.version"));
-        response.put("database", dataSource.getUrl());
+        response.put("database_used_url", dataSource.getUrl());
+        response.put("database_env_prop", System.getenv(AppConfig.DB_URL_ENV_VAR_NAME));
         return response;
     }
 
