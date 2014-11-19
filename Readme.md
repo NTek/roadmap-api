@@ -33,3 +33,8 @@
 
 * Fixes in heroku database connection settings
 * Fixes in model entities
+
+### Version 0.2.3 ###
+
+* Configured logging to file
+* Refactored database connection settings

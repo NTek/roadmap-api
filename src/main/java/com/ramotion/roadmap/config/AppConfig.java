@@ -2,6 +2,7 @@ package com.ramotion.roadmap.config;
 
 import liquibase.integration.spring.SpringLiquibase;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,13 +27,13 @@ import java.util.Properties;
 
 /**
  * Created by Oleg Vasiliev on 10.11.2014.
- * Class for app configuration
+ * Application beans configuration
  */
 @EnableAsync
 @EnableWebMvc
 @Configuration
 @EnableTransactionManagement
-@PropertySource("classpath:app.properties")
+@PropertySource("classpath:application.properties")
 @EnableJpaRepositories(basePackages = {"com.ramotion.roadmap.repository"})
 @ComponentScan(basePackages = {
         "com.ramotion.roadmap.controllers",
@@ -41,6 +42,8 @@ import java.util.Properties;
         "com.ramotion.roadmap.model"
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
+
+    private static final Logger LOG = Logger.getLogger(AppConfig.class.getName());
 
     public static final String DB_URL_ENV_VAR_NAME = "CLEARDB_DATABASE_URL";
     public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
@@ -66,7 +69,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
      */
     @PostConstruct
     public void postConstruct() {
-        System.out.println("============== APPLICATION CONFIG CONSTRUCTED ============");
+        LOG.info("Application config constructed");
     }
 
     /**
@@ -92,7 +95,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     /**
      * Datasource with connection pool by apache DBCP.
-     * Connection settings configured from app.properties file.
+     * Connection settings configured from application.properties file.
      */
     @Bean
     public BasicDataSource getBasicDBCPDatasource() {
@@ -110,8 +113,12 @@ public class AppConfig extends WebMvcConfigurerAdapter {
             dbURL = env.getProperty("database.connection.url.driver") + dbUri.getHost() + dbPort +
                     dbUri.getPath() + env.getProperty("database.connection.url.properties");
         } catch (Exception e) {
-            System.err.println("Error while parsing database parameters from system variable " + DB_URL_ENV_VAR_NAME);
-            dbURL = env.getProperty("database.connection.url.full");
+            LOG.warn("Can't parse system variable '" + DB_URL_ENV_VAR_NAME + "' with database params, will be used defaults.");
+            dbURL = env.getProperty("database.connection.url.driver") +
+                    env.getProperty("database.connection.url.host") + ":" +
+                    env.getProperty("database.connection.url.port") + "/" +
+                    env.getProperty("database.connection.url.path") +
+                    env.getProperty("database.connection.url.properties");
             dbUsername = env.getProperty("database.connection.user");
             dbPassword = env.getProperty("database.connection.password");
         }
@@ -160,7 +167,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         springLiquibase.setChangeLog("classpath:db-changelog.sql");
         springLiquibase.setContexts("test, production");
         springLiquibase.setDropFirst(false);
-//        springLiquibase.setDefaultSchema("roadmap");
         return springLiquibase;
     }
 }

@@ -1,5 +1,6 @@
 package com.ramotion.roadmap.config;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
@@ -16,9 +17,11 @@ import javax.annotation.PostConstruct;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
+    private static final Logger LOG = Logger.getLogger(WebSocketConfig.class.getName());
+
     @PostConstruct
     public void postConstruct() {
-        System.out.println("============== WEB SOCKET CONFIG CONSTRUCTED ============");
+        LOG.info("WebSocket config constructed");
     }
 
     @Override
@@ -33,46 +36,3 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     }
 
 }
-
-
-// Simple config with only WebSocket without STOMP and SockJS
-
-//@Configuration
-//@EnableWebSocket
-//public class WebSocketConfig implements WebSocketConfigurer {
-//
-//
-//    @Override
-//    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-//        registry.addHandler(testHandler(), "/ws")
-//                .addInterceptors(new HttpSessionHandshakeInterceptor());
-//    }
-//
-//    @Bean
-//    public ServletServerContainerFactoryBean createWebSocketContainer() {
-//        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
-//        container.setMaxTextMessageBufferSize(8192);
-//        container.setMaxBinaryMessageBufferSize(8192);
-//        return container;
-//    }
-//
-//
-//    @Bean
-//    public TestHandler testHandler() {
-//        return new TestHandler();
-//    }
-//}
-
-// Socket handler for simple socket config without STOMP and SockJS
-
-//public class TestWebSockethandler extends TextWebSocketHandler {
-//
-//    @Override
-//    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-//        super.handleTextMessage(session, message);
-//
-//        System.out.println(message.toString());
-//    }
-//
-//
-//}
