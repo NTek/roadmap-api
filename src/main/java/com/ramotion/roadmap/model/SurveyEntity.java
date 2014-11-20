@@ -33,13 +33,13 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
     private AuditTimestamps auditTimestamps;
 
     @JsonIgnore
-    private ApplicationEntity applicationByApplicationId;
+    private ApplicationEntity application;
 
     @JsonIgnore
     private Collection<FeatureEntity> surveyFeatures;
 
     @JsonIgnore
-    private Collection<VoteEntity> votesById;
+    private Collection<VoteEntity> votes;
 
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -141,12 +141,12 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
 
     @ManyToOne
     @JoinColumn(name = "application_id", referencedColumnName = "id", nullable = false)
-    public ApplicationEntity getApplicationByApplicationId() {
-        return applicationByApplicationId;
+    public ApplicationEntity getApplication() {
+        return application;
     }
 
-    public void setApplicationByApplicationId(ApplicationEntity applicationByApplicationId) {
-        this.applicationByApplicationId = applicationByApplicationId;
+    public void setApplication(ApplicationEntity applicationByApplicationId) {
+        this.application = applicationByApplicationId;
     }
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -160,11 +160,11 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
     }
 
     @OneToMany(mappedBy = "surveyBySurveyId")
-    public Collection<VoteEntity> getVotesById() {
-        return votesById;
+    public Collection<VoteEntity> getVotes() {
+        return votes;
     }
 
-    public void setVotesById(Collection<VoteEntity> votesById) {
-        this.votesById = votesById;
+    public void setVotes(Collection<VoteEntity> votesById) {
+        this.votes = votesById;
     }
 }

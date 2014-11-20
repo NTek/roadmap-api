@@ -4,7 +4,7 @@
 -- ## ADD "runAlways:true" to changeset for apply changes with each run
 -- ## more details at http://www.liquibase.org/documentation/sql_format.html
 
--- changeset oleg.v:1
+-- changeset oleg.v:1 runAlways:true
 
 DROP TABLE IF EXISTS `auth_token`;
 DROP TABLE IF EXISTS `user_has_application`;
@@ -142,17 +142,6 @@ CREATE TABLE IF NOT EXISTS `device` (
   ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `language`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `language` (
-  `id`   INT          NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NOT NULL,
-  `code` VARCHAR(10)  NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC))
-  ENGINE = InnoDB;
-
--- -----------------------------------------------------
 -- Table `vote`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vote` (
@@ -160,13 +149,12 @@ CREATE TABLE IF NOT EXISTS `vote` (
   `device_token` VARCHAR(255) NOT NULL,
   `survey_id`    BIGINT       NOT NULL,
   `feature_id`   BIGINT       NOT NULL,
-  `language_id`  INT          NOT NULL,
+  `language`     VARCHAR(2)   NULL,
   `modified_at`  TIMESTAMP    NULL,
   `created_at`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX `votes-to-surveys_idx` (`survey_id` ASC),
   INDEX `votes-to-app_features_idx` (`feature_id` ASC),
   INDEX `votes-to-devices_idx` (`device_token` ASC),
-  INDEX `votes-to-laguage_idx` (`language_id` ASC),
   PRIMARY KEY (`uuid`),
   UNIQUE INDEX `uuid_UNIQUE` (`uuid` ASC),
   CONSTRAINT `votes-to-surveys`
@@ -183,12 +171,7 @@ CREATE TABLE IF NOT EXISTS `vote` (
   FOREIGN KEY (`device_token`)
   REFERENCES `device` (`token`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `votes-to-language`
-  FOREIGN KEY (`language_id`)
-  REFERENCES `language` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
   ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -197,22 +180,16 @@ CREATE TABLE IF NOT EXISTS `vote` (
 CREATE TABLE IF NOT EXISTS `localized_feature` (
   `id`          BIGINT      NOT NULL AUTO_INCREMENT,
   `feature_id`  BIGINT      NOT NULL,
-  `language_id` INT         NOT NULL,
+  `language`    VARCHAR(2)  NOT NULL DEFAULT 'en',
   `title`       VARCHAR(45) NOT NULL,
   `modified_at` TIMESTAMP   NULL,
   `created_at`  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX `localized_features-to-features_idx` (`feature_id` ASC),
-  INDEX `localized_features-to-language_idx` (`language_id` ASC),
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   CONSTRAINT `localized_features-to-feature`
   FOREIGN KEY (`feature_id`)
   REFERENCES `feature` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `localized_features-to-language`
-  FOREIGN KEY (`language_id`)
-  REFERENCES `language` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
@@ -264,13 +241,6 @@ INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, 
 VALUES (2, 'App2', 'Description2', 'key2', 'token2', NULL, NULL);
 INSERT INTO `application` (`id`, `name`, `description`, `api_key`, `api_token`, `modified_at`, `created_at`)
 VALUES (3, 'App3', 'Description3', 'key3', 'token3', NULL, NULL);
-COMMIT;
-
--- -----------------------------------------------------
--- Data for table `language`
--- -----------------------------------------------------
-START TRANSACTION;
-INSERT INTO `language` (`id`, `name`, `code`) VALUES (1, 'English', 'en_US');
 COMMIT;
 
 -- -----------------------------------------------------

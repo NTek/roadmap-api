@@ -22,9 +22,10 @@ public class VoteEntity implements EntityWithAuditTimestamps {
 
     private Long surveyId;
 
-    private Long languageId;
 
     private Long featureId;
+
+    private Language language;
 
     @Embedded
     private AuditTimestamps auditTimestamps;
@@ -34,9 +35,6 @@ public class VoteEntity implements EntityWithAuditTimestamps {
 
     @JsonIgnore
     private DeviceEntity deviceByDeviceToken;
-
-    @JsonIgnore
-    private LanguageEntity languageByLanguageId;
 
     @JsonIgnore
     private SurveyEntity surveyBySurveyId;
@@ -69,13 +67,14 @@ public class VoteEntity implements EntityWithAuditTimestamps {
         this.surveyId = surveyId;
     }
 
-    @Column(name = "language_id", nullable = false, insertable = false, updatable = false)
-    public Long getLanguageId() {
-        return languageId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "language", nullable = true, insertable = true, updatable = true)
+    public Language getLanguage() {
+        return language;
     }
 
-    public void setLanguageId(Long languageId) {
-        this.languageId = languageId;
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     @Column(name = "feature_id", nullable = false, insertable = false, updatable = false)
@@ -106,16 +105,9 @@ public class VoteEntity implements EntityWithAuditTimestamps {
 
         if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
             return false;
-        if (deviceByDeviceToken != null ? !deviceByDeviceToken.equals(that.deviceByDeviceToken) : that.deviceByDeviceToken != null)
-            return false;
         if (deviceToken != null ? !deviceToken.equals(that.deviceToken) : that.deviceToken != null) return false;
-        if (featureByFeatureId != null ? !featureByFeatureId.equals(that.featureByFeatureId) : that.featureByFeatureId != null)
-            return false;
-        if (languageByLanguageId != null ? !languageByLanguageId.equals(that.languageByLanguageId) : that.languageByLanguageId != null)
-            return false;
-        if (surveyBySurveyId != null ? !surveyBySurveyId.equals(that.surveyBySurveyId) : that.surveyBySurveyId != null)
-            return false;
-
+        if (featureId != null ? !featureId.equals(that.featureId) : that.featureId != null) return false;
+        if (language != that.language) return false;
         if (surveyId != null ? !surveyId.equals(that.surveyId) : that.surveyId != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
@@ -127,11 +119,9 @@ public class VoteEntity implements EntityWithAuditTimestamps {
         int result = uuid != null ? uuid.hashCode() : 0;
         result = 31 * result + (deviceToken != null ? deviceToken.hashCode() : 0);
         result = 31 * result + (surveyId != null ? surveyId.hashCode() : 0);
+        result = 31 * result + (featureId != null ? featureId.hashCode() : 0);
+        result = 31 * result + (language != null ? language.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
-        result = 31 * result + (featureByFeatureId != null ? featureByFeatureId.hashCode() : 0);
-        result = 31 * result + (deviceByDeviceToken != null ? deviceByDeviceToken.hashCode() : 0);
-        result = 31 * result + (languageByLanguageId != null ? languageByLanguageId.hashCode() : 0);
-        result = 31 * result + (surveyBySurveyId != null ? surveyBySurveyId.hashCode() : 0);
         return result;
     }
 
@@ -153,16 +143,6 @@ public class VoteEntity implements EntityWithAuditTimestamps {
 
     public void setDeviceByDeviceToken(DeviceEntity deviceByDeviceToken) {
         this.deviceByDeviceToken = deviceByDeviceToken;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "language_id", referencedColumnName = "id", nullable = false)
-    public LanguageEntity getLanguageByLanguageId() {
-        return languageByLanguageId;
-    }
-
-    public void setLanguageByLanguageId(LanguageEntity languageByLanguageId) {
-        this.languageByLanguageId = languageByLanguageId;
     }
 
     @ManyToOne

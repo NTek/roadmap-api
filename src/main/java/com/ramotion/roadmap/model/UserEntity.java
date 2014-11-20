@@ -160,7 +160,7 @@ public class UserEntity implements EntityWithAuditTimestamps {
         return result;
     }
 
-    @OneToMany(mappedBy = "userByUserId")
+    @OneToMany(mappedBy = "user")
     public Collection<AuthTokenEntity> getUserAuthTokensById() {
         return userAuthTokensById;
     }

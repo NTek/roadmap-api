@@ -13,7 +13,7 @@ public class AuthTokenEntity {
     private Timestamp validTo;
     private Timestamp createdAt;
 
-    private UserEntity userByUserId;
+    private UserEntity user;
 
     @Id
     @Column(name = "token", nullable = false, insertable = true, updatable = true, length = 255)
@@ -69,11 +69,11 @@ public class AuthTokenEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    public UserEntity getUserByUserId() {
-        return userByUserId;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
-        this.userByUserId = userByUserId;
+    public void setUser(UserEntity userByUserId) {
+        this.user = userByUserId;
     }
 }
