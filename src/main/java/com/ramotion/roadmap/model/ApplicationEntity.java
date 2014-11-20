@@ -26,10 +26,13 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
     private AuditTimestamps auditTimestamps;
 
     @JsonIgnore
-    private Collection<UserHasApplicationEntity> userToApplicationsById;
+    private Collection<UserHasApplicationEntity> applicationUsers;
 
     @JsonIgnore
     private Collection<FeatureEntity> applicationFeatures;
+
+    @JsonIgnore
+    private Collection<SurveyEntity> applicationSurveys;
 
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -89,12 +92,12 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
 
 
     @OneToMany(mappedBy = "applicationByApplicationId")
-    public Collection<UserHasApplicationEntity> getUserToApplicationsById() {
-        return userToApplicationsById;
+    public Collection<UserHasApplicationEntity> getApplicationUsers() {
+        return applicationUsers;
     }
 
-    public void setUserToApplicationsById(Collection<UserHasApplicationEntity> userToApplicationsById) {
-        this.userToApplicationsById = userToApplicationsById;
+    public void setApplicationUsers(Collection<UserHasApplicationEntity> userToApplicationsById) {
+        this.applicationUsers = userToApplicationsById;
     }
 
     @OneToMany(mappedBy = "application")
@@ -106,6 +109,16 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
         this.applicationFeatures = applicationFeatures;
     }
 
+    @OneToMany(mappedBy = "application")
+    public Collection<SurveyEntity> getApplicationSurveys() {
+        return applicationSurveys;
+    }
+
+    public void setApplicationSurveys(Collection<SurveyEntity> applicationSurveys) {
+        this.applicationSurveys = applicationSurveys;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -115,15 +128,11 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
 
         if (apiKey != null ? !apiKey.equals(that.apiKey) : that.apiKey != null) return false;
         if (apiToken != null ? !apiToken.equals(that.apiToken) : that.apiToken != null) return false;
-        if (applicationFeatures != null ? !applicationFeatures.equals(that.applicationFeatures) : that.applicationFeatures != null)
-            return false;
         if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
             return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (userToApplicationsById != null ? !userToApplicationsById.equals(that.userToApplicationsById) : that.userToApplicationsById != null)
-            return false;
 
         return true;
     }
@@ -136,8 +145,6 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
         result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
         result = 31 * result + (apiToken != null ? apiToken.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
-        result = 31 * result + (userToApplicationsById != null ? userToApplicationsById.hashCode() : 0);
-        result = 31 * result + (applicationFeatures != null ? applicationFeatures.hashCode() : 0);
         return result;
     }
 }

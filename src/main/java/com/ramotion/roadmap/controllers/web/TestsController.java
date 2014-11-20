@@ -2,6 +2,7 @@ package com.ramotion.roadmap.controllers.web;
 
 import com.ramotion.roadmap.dto.Greeting;
 import com.ramotion.roadmap.model.FeatureEntity;
+import com.ramotion.roadmap.model.Language;
 import com.ramotion.roadmap.repository.ApplicationRepository;
 import com.ramotion.roadmap.repository.FeatureRepository;
 import com.ramotion.roadmap.repository.UserHasApplicationRepository;
@@ -87,5 +88,12 @@ public class TestsController {
         this.template.convertAndSend("/topic/greetings", new Greeting(name));
         return "Sent " + name;
     }
+
+    @RequestMapping(value = "/languages", method = RequestMethod.GET)
+    public Object languages() {
+
+        return Language.getCodesMap();
+    }
+
 
 }

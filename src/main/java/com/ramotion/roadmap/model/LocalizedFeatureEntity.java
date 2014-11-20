@@ -24,13 +24,10 @@ public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
 
     private Long featureId;
 
-    private Integer languageId;
+    private Language language;
 
     @JsonIgnore
     private FeatureEntity featureByFeatureId;
-
-    @JsonIgnore
-    private LanguageEntity languageByLanguageId;
 
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -70,13 +67,14 @@ public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
         this.featureId = featureId;
     }
 
-    @Column(name = "language_id", nullable = false, insertable = false, updatable = false)
-    public Integer getLanguageId() {
-        return languageId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "language", nullable = false, insertable = true, updatable = true)
+    public Language getLanguage() {
+        return language;
     }
 
-    public void setLanguageId(Integer languageId) {
-        this.languageId = languageId;
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 
     @Override
@@ -90,7 +88,7 @@ public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
             return false;
         if (featureId != null ? !featureId.equals(that.featureId) : that.featureId != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (languageId != null ? !languageId.equals(that.languageId) : that.languageId != null) return false;
+        if (language != that.language) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
 
         return true;
@@ -102,7 +100,7 @@ public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
         result = 31 * result + (featureId != null ? featureId.hashCode() : 0);
-        result = 31 * result + (languageId != null ? languageId.hashCode() : 0);
+        result = 31 * result + (language != null ? language.hashCode() : 0);
         return result;
     }
 
@@ -116,13 +114,4 @@ public class LocalizedFeatureEntity implements EntityWithAuditTimestamps {
         this.featureByFeatureId = featureByFeatureId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "language_id", referencedColumnName = "id", nullable = false)
-    public LanguageEntity getLanguageByLanguageId() {
-        return languageByLanguageId;
-    }
-
-    public void setLanguageByLanguageId(LanguageEntity languageByLanguageId) {
-        this.languageByLanguageId = languageByLanguageId;
-    }
 }

@@ -8,9 +8,8 @@ public class APIMappings {
 
     public static class Web {
 
-        public static final String GET_APP_SURVEYS = "";
-        public static final String GET_SURVEY_FEATURES = "";
-        public static final String VOTE = "";
+        public static final String GET_SURVEYS = "surveys";
+        public static final String VOTE = "vote";
 
     }
 

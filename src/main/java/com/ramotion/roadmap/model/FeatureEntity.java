@@ -29,13 +29,13 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
     private ApplicationEntity application;
 
     @JsonIgnore
-    private Collection<LocalizedFeatureEntity> localizedFeaturesById;
+    private Collection<LocalizedFeatureEntity> localizedFeatures;
 
     @JsonIgnore
     private Collection<SurveyEntity> surveys;
 
     @JsonIgnore
-    private Collection<VoteEntity> votesById;
+    private Collection<VoteEntity> votes;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -86,12 +86,12 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
     }
 
     @OneToMany(mappedBy = "featureByFeatureId")
-    public Collection<LocalizedFeatureEntity> getLocalizedFeaturesById() {
-        return localizedFeaturesById;
+    public Collection<LocalizedFeatureEntity> getLocalizedFeatures() {
+        return localizedFeatures;
     }
 
-    public void setLocalizedFeaturesById(Collection<LocalizedFeatureEntity> localizedFeaturesById) {
-        this.localizedFeaturesById = localizedFeaturesById;
+    public void setLocalizedFeatures(Collection<LocalizedFeatureEntity> localizedFeaturesById) {
+        this.localizedFeatures = localizedFeaturesById;
     }
 
     @ManyToMany(mappedBy = "surveyFeatures")
@@ -105,12 +105,12 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
 
 
     @OneToMany(mappedBy = "featureByFeatureId")
-    public Collection<VoteEntity> getVotesById() {
-        return votesById;
+    public Collection<VoteEntity> getVotes() {
+        return votes;
     }
 
-    public void setVotesById(Collection<VoteEntity> votesById) {
-        this.votesById = votesById;
+    public void setVotes(Collection<VoteEntity> votesById) {
+        this.votes = votesById;
     }
 
     @Override
@@ -127,10 +127,10 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
         if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
             return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (localizedFeaturesById != null ? !localizedFeaturesById.equals(that.localizedFeaturesById) : that.localizedFeaturesById != null)
+        if (localizedFeatures != null ? !localizedFeatures.equals(that.localizedFeatures) : that.localizedFeatures != null)
             return false;
         if (surveys != null ? !surveys.equals(that.surveys) : that.surveys != null) return false;
-        if (votesById != null ? !votesById.equals(that.votesById) : that.votesById != null) return false;
+        if (votes != null ? !votes.equals(that.votes) : that.votes != null) return false;
 
         return true;
     }
@@ -142,9 +142,9 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
         result = 31 * result + (implemented ? 1 : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
         result = 31 * result + (application != null ? application.hashCode() : 0);
-        result = 31 * result + (localizedFeaturesById != null ? localizedFeaturesById.hashCode() : 0);
+        result = 31 * result + (localizedFeatures != null ? localizedFeatures.hashCode() : 0);
         result = 31 * result + (surveys != null ? surveys.hashCode() : 0);
-        result = 31 * result + (votesById != null ? votesById.hashCode() : 0);
+        result = 31 * result + (votes != null ? votes.hashCode() : 0);
         return result;
     }
 }
