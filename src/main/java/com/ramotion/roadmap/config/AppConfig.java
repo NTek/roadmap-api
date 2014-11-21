@@ -58,6 +58,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 //        SpringApplication.run(configs, args);
 //    }
 
+
     /**
      * Configure default servlet for static app resources like images or *.css and *.js files
      */

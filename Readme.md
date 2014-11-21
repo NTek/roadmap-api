@@ -44,3 +44,7 @@
 * Many changes in model
 * Languages moved from model entity to enum with all ISO639-1 language codes
 * Web API interface designed
+
+### Version 0.2.5 ###
+
+* Testing webapp runner 7.0.4 with embedded tomcat
