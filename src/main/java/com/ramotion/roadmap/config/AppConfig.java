@@ -51,6 +51,13 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private Environment env;
 
+//    public static void main(String[] args) throws Exception {
+//        Object[] configs = new Object[2];
+//        configs[0] = AppConfig.class;
+//        configs[1] = WebSocketConfig.class;
+//        SpringApplication.run(configs, args);
+//    }
+
     /**
      * Configure default servlet for static app resources like images or *.css and *.js files
      */
