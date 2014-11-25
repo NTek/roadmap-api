@@ -20,13 +20,13 @@
     Javascript and reload this page!</h2></noscript>
 <div>
     <div>
-        <button id="connect" onclick="connect();">Connect</button>
-        <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
+        <button surveyId="connect" onclick="connect();">Connect</button>
+        <button surveyId="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
     </div>
-    <div id="conversationDiv">
-        <label>What is your name?</label><input type="text" id="name"/>
-        <button id="sendName" onclick="sendName();">Send</button>
-        <p id="response"></p>
+    <div surveyId="conversationDiv">
+        <label>What is your name?</label><input type="text" surveyId="name"/>
+        <button surveyId="sendName" onclick="sendName();">Send</button>
+        <p surveyId="response"></p>
     </div>
 </div>
 </body>

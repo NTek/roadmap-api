@@ -2,7 +2,6 @@ package com.ramotion.roadmap.controllers.web;
 
 import com.ramotion.roadmap.dto.Greeting;
 import com.ramotion.roadmap.model.FeatureEntity;
-import com.ramotion.roadmap.model.Language;
 import com.ramotion.roadmap.repository.ApplicationRepository;
 import com.ramotion.roadmap.repository.FeatureRepository;
 import com.ramotion.roadmap.repository.UserHasApplicationRepository;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @ResponseBody
+@RequestMapping(value = "/test")
 public class TestsController {
 
     private static final Logger LOG = Logger.getLogger(TestsController.class.getName());
@@ -87,12 +87,6 @@ public class TestsController {
     public String SayHelloToSocket(@RequestParam(value = "name", required = false) String name) {
         this.template.convertAndSend("/topic/greetings", new Greeting(name));
         return "Sent " + name;
-    }
-
-    @RequestMapping(value = "/languages", method = RequestMethod.GET)
-    public Object languages() {
-
-        return Language.getCodesMap();
     }
 
 

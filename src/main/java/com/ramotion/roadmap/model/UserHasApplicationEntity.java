@@ -6,15 +6,11 @@ import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
 
 import javax.persistence.*;
 
-/**
- * Created by Oleg Vasiliev on 11.11.2014.
- */
 @Entity
 @Table(name = "user_has_application")
 @EntityListeners(value = AuditableEntityListener.class)
+@IdClass(UserHasApplicationEntityPK.class)
 public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
-
-    private Long id;
 
     private Long userId;
 
@@ -30,16 +26,7 @@ public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
     private UserEntity userByUserId;
 
     @Id
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Column(name = "user_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "user_id", nullable = false, insertable = true, updatable = true)
     public Long getUserId() {
         return userId;
     }
@@ -48,7 +35,8 @@ public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
         this.userId = userId;
     }
 
-    @Column(name = "application_id", nullable = false, insertable = false, updatable = false)
+    @Id
+    @Column(name = "application_id", nullable = false, insertable = true, updatable = true)
     public Long getApplicationId() {
         return applicationId;
     }
@@ -76,41 +64,8 @@ public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
         this.auditTimestamps = auditTimestamps;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        UserHasApplicationEntity that = (UserHasApplicationEntity) o;
-
-        if (accessLevel != null ? !accessLevel.equals(that.accessLevel) : that.accessLevel != null) return false;
-        if (applicationByApplicationId != null ? !applicationByApplicationId.equals(that.applicationByApplicationId) : that.applicationByApplicationId != null)
-            return false;
-        if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null)
-            return false;
-        if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
-            return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (userByUserId != null ? !userByUserId.equals(that.userByUserId) : that.userByUserId != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (applicationId != null ? applicationId.hashCode() : 0);
-        result = 31 * result + (accessLevel != null ? accessLevel.hashCode() : 0);
-        result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
-        result = 31 * result + (applicationByApplicationId != null ? applicationByApplicationId.hashCode() : 0);
-        result = 31 * result + (userByUserId != null ? userByUserId.hashCode() : 0);
-        return result;
-    }
-
     @ManyToOne
-    @JoinColumn(name = "application_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "application_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public ApplicationEntity getApplicationByApplicationId() {
         return applicationByApplicationId;
     }
@@ -120,7 +75,7 @@ public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
     }
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public UserEntity getUserByUserId() {
         return userByUserId;
     }
@@ -129,3 +84,4 @@ public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
         this.userByUserId = userByUserId;
     }
 }
+

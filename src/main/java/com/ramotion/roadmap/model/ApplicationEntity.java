@@ -1,6 +1,5 @@
 package com.ramotion.roadmap.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ramotion.roadmap.model.utils.AuditTimestamps;
 import com.ramotion.roadmap.model.utils.AuditableEntityListener;
 import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
@@ -8,30 +7,28 @@ import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
 import javax.persistence.*;
 import java.util.Collection;
 
-/**
- * Created by Oleg Vasiliev on 11.11.2014.
- */
 @Entity
 @Table(name = "application")
 @EntityListeners(value = AuditableEntityListener.class)
 public class ApplicationEntity implements EntityWithAuditTimestamps {
 
     private Long id;
-    private String name;
-    private String description;
-    private String apiKey;
+
     private String apiToken;
+
+    private String name;
+
+    private String description;
+
+    private Long activeSurveyId;
 
     @Embedded
     private AuditTimestamps auditTimestamps;
 
-    @JsonIgnore
     private Collection<UserHasApplicationEntity> applicationUsers;
 
-    @JsonIgnore
     private Collection<FeatureEntity> applicationFeatures;
 
-    @JsonIgnore
     private Collection<SurveyEntity> applicationSurveys;
 
     @Id
@@ -62,15 +59,6 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
         this.description = description;
     }
 
-    @Column(name = "api_key", nullable = false, insertable = true, updatable = true, length = 45)
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
     @Column(name = "api_token", nullable = false, insertable = true, updatable = true, length = 45)
     public String getApiToken() {
         return apiToken;
@@ -78,6 +66,15 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
 
     public void setApiToken(String apiToken) {
         this.apiToken = apiToken;
+    }
+
+    @Column(name = "active_survey_id", nullable = true, insertable = true, updatable = true)
+    public Long getActiveSurveyId() {
+        return activeSurveyId;
+    }
+
+    public void setActiveSurveyId(Long activeSurvey) {
+        this.activeSurveyId = activeSurvey;
     }
 
     @Override
@@ -89,7 +86,6 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
     public void setAuditTimestamps(AuditTimestamps auditTimestamps) {
         this.auditTimestamps = auditTimestamps;
     }
-
 
     @OneToMany(mappedBy = "applicationByApplicationId")
     public Collection<UserHasApplicationEntity> getApplicationUsers() {
@@ -118,7 +114,6 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
         this.applicationSurveys = applicationSurveys;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,7 +121,6 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
 
         ApplicationEntity that = (ApplicationEntity) o;
 
-        if (apiKey != null ? !apiKey.equals(that.apiKey) : that.apiKey != null) return false;
         if (apiToken != null ? !apiToken.equals(that.apiToken) : that.apiToken != null) return false;
         if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
             return false;
@@ -142,7 +136,6 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
         result = 31 * result + (apiToken != null ? apiToken.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
         return result;

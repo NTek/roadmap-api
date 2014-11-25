@@ -1,15 +1,12 @@
 package com.ramotion.roadmap.repository;
 
 import com.ramotion.roadmap.model.UserHasApplicationEntity;
+import com.ramotion.roadmap.model.UserHasApplicationEntityPK;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-/**
- * Created by Oleg Vasiliev on 11.11.2014.
- */
-
-public interface UserHasApplicationRepository extends CrudRepository<UserHasApplicationEntity, Long> {
+public interface UserHasApplicationRepository extends CrudRepository<UserHasApplicationEntity, UserHasApplicationEntityPK> {
 
     List<UserHasApplicationEntity> findByUserId(long userId);
 

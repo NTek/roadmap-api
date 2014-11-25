@@ -7,21 +7,15 @@ import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
 
 import javax.persistence.*;
 
-/**
- * Created by Oleg Vasiliev on 12.11.2014.
- */
 @Entity
 @Table(name = "vote")
 @EntityListeners(value = AuditableEntityListener.class)
+@IdClass(VoteEntityPK.class)
 public class VoteEntity implements EntityWithAuditTimestamps {
-
-    @Id
-    private String uuid;
 
     private String deviceToken;
 
     private Long surveyId;
-
 
     private Long featureId;
 
@@ -34,22 +28,22 @@ public class VoteEntity implements EntityWithAuditTimestamps {
     private FeatureEntity featureByFeatureId;
 
     @JsonIgnore
-    private DeviceEntity deviceByDeviceToken;
-
-    @JsonIgnore
     private SurveyEntity surveyBySurveyId;
 
+
+    public VoteEntity() {
+    }
+
+    public VoteEntity(VoteEntityPK pk, Long featureId, Language lang) {
+        assert pk != null;
+        this.deviceToken = pk.getDeviceToken();
+        this.surveyId = pk.getSurveyId();
+        this.featureId = featureId;
+        this.language = lang;
+    }
+
     @Id
-    @Column(name = "uuid", nullable = false, insertable = true, updatable = true, length = 255)
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    @Column(name = "device_token", nullable = false, insertable = false, updatable = false, length = 255)
+    @Column(name = "device_token", nullable = false, insertable = true, updatable = true, length = 255)
     public String getDeviceToken() {
         return deviceToken;
     }
@@ -58,7 +52,8 @@ public class VoteEntity implements EntityWithAuditTimestamps {
         this.deviceToken = deviceToken;
     }
 
-    @Column(name = "survey_id", nullable = false, insertable = false, updatable = false)
+    @Id
+    @Column(name = "survey_id", nullable = false, insertable = true, updatable = true)
     public Long getSurveyId() {
         return surveyId;
     }
@@ -77,7 +72,7 @@ public class VoteEntity implements EntityWithAuditTimestamps {
         this.language = language;
     }
 
-    @Column(name = "feature_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "feature_id", nullable = false, insertable = true, updatable = true)
     public Long getFeatureId() {
         return featureId;
     }
@@ -109,15 +104,13 @@ public class VoteEntity implements EntityWithAuditTimestamps {
         if (featureId != null ? !featureId.equals(that.featureId) : that.featureId != null) return false;
         if (language != that.language) return false;
         if (surveyId != null ? !surveyId.equals(that.surveyId) : that.surveyId != null) return false;
-        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = uuid != null ? uuid.hashCode() : 0;
-        result = 31 * result + (deviceToken != null ? deviceToken.hashCode() : 0);
+        int result = deviceToken != null ? deviceToken.hashCode() : 0;
         result = 31 * result + (surveyId != null ? surveyId.hashCode() : 0);
         result = 31 * result + (featureId != null ? featureId.hashCode() : 0);
         result = 31 * result + (language != null ? language.hashCode() : 0);
@@ -126,7 +119,7 @@ public class VoteEntity implements EntityWithAuditTimestamps {
     }
 
     @ManyToOne
-    @JoinColumn(name = "feature_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "feature_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public FeatureEntity getFeatureByFeatureId() {
         return featureByFeatureId;
     }
@@ -135,18 +128,9 @@ public class VoteEntity implements EntityWithAuditTimestamps {
         this.featureByFeatureId = featureByFeatureId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "device_token", referencedColumnName = "token", nullable = false)
-    public DeviceEntity getDeviceByDeviceToken() {
-        return deviceByDeviceToken;
-    }
-
-    public void setDeviceByDeviceToken(DeviceEntity deviceByDeviceToken) {
-        this.deviceByDeviceToken = deviceByDeviceToken;
-    }
 
     @ManyToOne
-    @JoinColumn(name = "survey_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "survey_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public SurveyEntity getSurveyBySurveyId() {
         return surveyBySurveyId;
     }

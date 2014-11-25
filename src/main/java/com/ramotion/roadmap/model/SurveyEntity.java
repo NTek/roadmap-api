@@ -9,9 +9,6 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 
-/**
- * Created by Oleg Vasiliev on 12.11.2014.
- */
 @Entity
 @Table(name = "survey")
 @EntityListeners(value = AuditableEntityListener.class)
@@ -23,11 +20,15 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
 
     private String title;
 
-    private boolean active;
+    private boolean disabled;
 
     private Long requiredVotes;
 
-    private Timestamp finishAt;
+    private Timestamp requiredDate;
+
+    private Timestamp startedAt;
+
+    private Timestamp finishedAt;
 
     @Embedded
     private AuditTimestamps auditTimestamps;
@@ -36,7 +37,7 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
     private ApplicationEntity application;
 
     @JsonIgnore
-    private Collection<FeatureEntity> surveyFeatures;
+    private Collection<FeatureEntity> feature;
 
     @JsonIgnore
     private Collection<VoteEntity> votes;
@@ -60,13 +61,13 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
         this.title = title;
     }
 
-    @Column(name = "active", nullable = false, insertable = true, updatable = true)
-    public boolean getActive() {
-        return active;
+    @Column(name = "disabled", nullable = false, insertable = true, updatable = true)
+    public boolean isDisabled() {
+        return disabled;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     @Column(name = "required_votes", nullable = true, insertable = true, updatable = true)
@@ -78,13 +79,31 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
         this.requiredVotes = requiredVotes;
     }
 
-    @Column(name = "finish_at", nullable = true, insertable = true, updatable = true)
-    public Timestamp getFinishAt() {
-        return finishAt;
+    @Column(name = "required_date", nullable = true, insertable = true, updatable = true)
+    public Timestamp getRequiredDate() {
+        return requiredDate;
     }
 
-    public void setFinishAt(Timestamp finishAt) {
-        this.finishAt = finishAt;
+    public void setRequiredDate(Timestamp requiredDate) {
+        this.requiredDate = requiredDate;
+    }
+
+    @Column(name = "started_at", nullable = true, insertable = true, updatable = true)
+    public Timestamp getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(Timestamp startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    @Column(name = "finished_at", nullable = true, insertable = true, updatable = true)
+    public Timestamp getFinishedAt() {
+        return finishedAt;
+    }
+
+    public void setFinishedAt(Timestamp finishedAt) {
+        this.finishedAt = finishedAt;
     }
 
     @Column(name = "application_id", nullable = false, insertable = false, updatable = false)
@@ -113,15 +132,17 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
 
         SurveyEntity that = (SurveyEntity) o;
 
-        if (active != that.active) return false;
+        if (disabled != that.disabled) return false;
         if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null)
             return false;
         if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
             return false;
-        if (finishAt != null ? !finishAt.equals(that.finishAt) : that.finishAt != null) return false;
+        if (finishedAt != null ? !finishedAt.equals(that.finishedAt) : that.finishedAt != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (requiredDate != null ? !requiredDate.equals(that.requiredDate) : that.requiredDate != null) return false;
         if (requiredVotes != null ? !requiredVotes.equals(that.requiredVotes) : that.requiredVotes != null)
             return false;
+        if (startedAt != null ? !startedAt.equals(that.startedAt) : that.startedAt != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
 
         return true;
@@ -130,11 +151,13 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (active ? 1 : 0);
-        result = 31 * result + (requiredVotes != null ? requiredVotes.hashCode() : 0);
         result = 31 * result + (applicationId != null ? applicationId.hashCode() : 0);
-        result = 31 * result + (finishAt != null ? finishAt.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (disabled ? 1 : 0);
+        result = 31 * result + (requiredVotes != null ? requiredVotes.hashCode() : 0);
+        result = 31 * result + (requiredDate != null ? requiredDate.hashCode() : 0);
+        result = 31 * result + (startedAt != null ? startedAt.hashCode() : 0);
+        result = 31 * result + (finishedAt != null ? finishedAt.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
         return result;
     }
@@ -151,12 +174,12 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "survey_has_feature")
-    public Collection<FeatureEntity> getSurveyFeatures() {
-        return surveyFeatures;
+    public Collection<FeatureEntity> getFeature() {
+        return feature;
     }
 
-    public void setSurveyFeatures(Collection<FeatureEntity> surveyFeatures) {
-        this.surveyFeatures = surveyFeatures;
+    public void setFeature(Collection<FeatureEntity> surveyFeatures) {
+        this.feature = surveyFeatures;
     }
 
     @OneToMany(mappedBy = "surveyBySurveyId")

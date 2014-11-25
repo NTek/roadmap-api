@@ -2,6 +2,7 @@ package com.ramotion.roadmap.controllers.web;
 
 import com.ramotion.roadmap.controllers.APIMappings;
 import com.ramotion.roadmap.dto.NewVoteRequestDto;
+import com.ramotion.roadmap.model.Language;
 import com.ramotion.roadmap.service.APIService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Oleg Vasiliev on 19.11.2014.
- * Web API for client sdk
+ * Web API for voting
  */
 @Controller
 @ResponseBody
-@RequestMapping(value = "/api/{secret}/", method = RequestMethod.GET)
+@RequestMapping(value = "/api/")
 public class APIController {
 
     private static final Logger LOG = Logger.getLogger(APIController.class.getName());
@@ -23,18 +24,23 @@ public class APIController {
     private APIService apiService;
 
     @ResponseBody
-    @RequestMapping(value = APIMappings.Web.GET_SURVEYS, method = RequestMethod.GET)
-    public Object getSurveys(@PathVariable(value = "secret") String secret,
+    @RequestMapping(value = APIMappings.Web.GET_SURVEY, method = RequestMethod.GET)
+    public Object getSurveys(@RequestHeader(value = "token", required = true) String token,
                              @RequestParam(value = "device", required = true) String deviceToken,
-                             @RequestParam(value = "lang", required = true) String lang) {
-        return apiService.getSurveysForDevice(secret, deviceToken, lang);
+                             @RequestParam(value = "language", required = true) String lang) {
+        return apiService.getSurveyForDevice(token, deviceToken, lang);
     }
 
     @ResponseBody
-    @RequestMapping(value = APIMappings.Web.VOTE, method = RequestMethod.POST)
-    public Object vote(@PathVariable(value = "secret") String secret,
+    @RequestMapping(value = APIMappings.Web.CREATE_VOTE, method = RequestMethod.POST)
+    public Object vote(@RequestHeader(value = "token", required = true) String token,
                        @RequestBody NewVoteRequestDto voteDto) {
-        return apiService.createVote(secret, voteDto);
+        return apiService.createVote(token, voteDto);
+    }
+
+    @RequestMapping(value = APIMappings.Web.GET_LANGUAGES, method = RequestMethod.GET)
+    public Object languages() {
+        return Language.getCodesMap();
     }
 
 }

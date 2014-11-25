@@ -166,4 +166,11 @@ public enum Language {
         return resMap;
     }
 
+    public static Language valueOfOrNullIgnoreCase(String code) {
+        for (Language lang : Language.values()) {
+            if (lang.toString().equals(code.toLowerCase()))
+                return lang;
+        }
+        return null;
+    }
 }

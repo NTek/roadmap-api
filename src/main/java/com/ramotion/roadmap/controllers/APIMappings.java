@@ -8,8 +8,10 @@ public class APIMappings {
 
     public static class Web {
 
-        public static final String GET_SURVEYS = "surveys";
-        public static final String VOTE = "vote";
+        public static final String GET_SURVEY = "survey";
+        public static final String CREATE_VOTE = "vote";
+        public static final String GET_LANGUAGES = "languages";
+
 
     }
 

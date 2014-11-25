@@ -29,10 +29,10 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
     private ApplicationEntity application;
 
     @JsonIgnore
-    private Collection<LocalizedFeatureEntity> localizedFeatures;
+    private Collection<FeatureTextEntity> localizedFeatures;
 
     @JsonIgnore
-    private Collection<SurveyEntity> surveys;
+    private Collection<SurveyEntity> survey;
 
     @JsonIgnore
     private Collection<VoteEntity> votes;
@@ -85,22 +85,22 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
         this.applicationId = application != null ? application.getId() : null;
     }
 
-    @OneToMany(mappedBy = "featureByFeatureId")
-    public Collection<LocalizedFeatureEntity> getLocalizedFeatures() {
+    @OneToMany(mappedBy = "feature")
+    public Collection<FeatureTextEntity> getLocalizedFeatures() {
         return localizedFeatures;
     }
 
-    public void setLocalizedFeatures(Collection<LocalizedFeatureEntity> localizedFeaturesById) {
+    public void setLocalizedFeatures(Collection<FeatureTextEntity> localizedFeaturesById) {
         this.localizedFeatures = localizedFeaturesById;
     }
 
-    @ManyToMany(mappedBy = "surveyFeatures")
-    public Collection<SurveyEntity> getSurveys() {
-        return surveys;
+    @ManyToMany(mappedBy = "feature")
+    public Collection<SurveyEntity> getSurvey() {
+        return survey;
     }
 
-    public void setSurveys(Collection<SurveyEntity> surveys) {
-        this.surveys = surveys;
+    public void setSurvey(Collection<SurveyEntity> surveys) {
+        this.survey = surveys;
     }
 
 
@@ -129,7 +129,7 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (localizedFeatures != null ? !localizedFeatures.equals(that.localizedFeatures) : that.localizedFeatures != null)
             return false;
-        if (surveys != null ? !surveys.equals(that.surveys) : that.surveys != null) return false;
+        if (survey != null ? !survey.equals(that.survey) : that.survey != null) return false;
         if (votes != null ? !votes.equals(that.votes) : that.votes != null) return false;
 
         return true;
@@ -143,7 +143,7 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
         result = 31 * result + (application != null ? application.hashCode() : 0);
         result = 31 * result + (localizedFeatures != null ? localizedFeatures.hashCode() : 0);
-        result = 31 * result + (surveys != null ? surveys.hashCode() : 0);
+        result = 31 * result + (survey != null ? survey.hashCode() : 0);
         result = 31 * result + (votes != null ? votes.hashCode() : 0);
         return result;
     }

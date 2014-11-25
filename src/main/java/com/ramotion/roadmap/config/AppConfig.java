@@ -1,5 +1,6 @@
 package com.ramotion.roadmap.config;
 
+import com.ramotion.roadmap.model.Language;
 import liquibase.integration.spring.SpringLiquibase;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
@@ -44,20 +45,14 @@ import java.util.Properties;
 public class AppConfig extends WebMvcConfigurerAdapter {
 
     private static final Logger LOG = Logger.getLogger(AppConfig.class.getName());
+    public static final Language DEFAULT_LOCALIZATION_LANGUAGE = Language.en;
+    public static final String LOCALIZATION_NOT_FOUND_MSG = "Default localization text not found";
 
     public static final String DB_URL_ENV_VAR_NAME = "CLEARDB_DATABASE_URL";
     public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
 
     @Autowired
     private Environment env;
-
-//    public static void main(String[] args) throws Exception {
-//        Object[] configs = new Object[2];
-//        configs[0] = AppConfig.class;
-//        configs[1] = WebSocketConfig.class;
-//        SpringApplication.run(configs, args);
-//    }
-
 
     /**
      * Configure default servlet for static app resources like images or *.css and *.js files
@@ -160,7 +155,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
         Properties jpaProperties = new Properties();
         jpaProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        jpaProperties.setProperty("hibernate.id.new_generator_mappings", "true");
+        jpaProperties.setProperty("hibernate.surveyId.new_generator_mappings", "true");
         jpaProperties.setProperty("show_sql", "true");
         jpaProperties.setProperty("format_sql", "true");
 

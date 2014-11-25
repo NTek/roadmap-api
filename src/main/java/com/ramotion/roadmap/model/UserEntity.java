@@ -9,9 +9,6 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 
-/**
- * Created by Oleg Vasiliev on 11.11.2014.
- */
 @Entity
 @Table(name = "user")
 @EntityListeners(value = AuditableEntityListener.class)
@@ -25,19 +22,19 @@ public class UserEntity implements EntityWithAuditTimestamps {
     private String password;
 
     private boolean disabled;
+
     private String role;
 
     private Timestamp recoveryTokenExpiration;
+
     private String recoveryToken;
 
     @Embedded
     private AuditTimestamps auditTimestamps;
 
     @JsonIgnore
-    private Collection<UserHasApplicationEntity> userToApplicationsById;
+    private Collection<UserHasApplicationEntity> applications;
 
-    @JsonIgnore
-    private Collection<AuthTokenEntity> userAuthTokensById;
 
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -137,9 +134,7 @@ public class UserEntity implements EntityWithAuditTimestamps {
         if (recoveryTokenExpiration != null ? !recoveryTokenExpiration.equals(that.recoveryTokenExpiration) : that.recoveryTokenExpiration != null)
             return false;
         if (role != null ? !role.equals(that.role) : that.role != null) return false;
-        if (userAuthTokensById != null ? !userAuthTokensById.equals(that.userAuthTokensById) : that.userAuthTokensById != null)
-            return false;
-        if (userToApplicationsById != null ? !userToApplicationsById.equals(that.userToApplicationsById) : that.userToApplicationsById != null)
+        if (applications != null ? !applications.equals(that.applications) : that.applications != null)
             return false;
 
         return true;
@@ -155,26 +150,16 @@ public class UserEntity implements EntityWithAuditTimestamps {
         result = 31 * result + (recoveryTokenExpiration != null ? recoveryTokenExpiration.hashCode() : 0);
         result = 31 * result + (recoveryToken != null ? recoveryToken.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
-        result = 31 * result + (userToApplicationsById != null ? userToApplicationsById.hashCode() : 0);
-        result = 31 * result + (userAuthTokensById != null ? userAuthTokensById.hashCode() : 0);
+        result = 31 * result + (applications != null ? applications.hashCode() : 0);
         return result;
     }
 
-    @OneToMany(mappedBy = "user")
-    public Collection<AuthTokenEntity> getUserAuthTokensById() {
-        return userAuthTokensById;
-    }
-
-    public void setUserAuthTokensById(Collection<AuthTokenEntity> userAuthTokensById) {
-        this.userAuthTokensById = userAuthTokensById;
-    }
-
     @OneToMany(mappedBy = "userByUserId")
-    public Collection<UserHasApplicationEntity> getUserToApplicationsById() {
-        return userToApplicationsById;
+    public Collection<UserHasApplicationEntity> getApplications() {
+        return applications;
     }
 
-    public void setUserToApplicationsById(Collection<UserHasApplicationEntity> userToApplicationsById) {
-        this.userToApplicationsById = userToApplicationsById;
+    public void setApplications(Collection<UserHasApplicationEntity> userToApplicationsById) {
+        this.applications = userToApplicationsById;
     }
 }

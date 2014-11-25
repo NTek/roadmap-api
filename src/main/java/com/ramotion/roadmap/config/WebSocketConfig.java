@@ -24,27 +24,6 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         LOG.info("WebSocket config constructed");
     }
 
-//    @Bean
-//    public ServletServerContainerFactoryBean createWebSocketContainer() {
-//        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
-//        container.setMaxTextMessageBufferSize(8192);
-//        container.setMaxBinaryMessageBufferSize(8192);
-//        return container;
-//    }
-
-
-//    // Bean for JETTY WebSockets implementation
-//    @Bean
-//    public DefaultHandshakeHandler handshakeHandler() {
-//
-//        WebSocketPolicy policy = new WebSocketPolicy(WebSocketBehavior.SERVER);
-//        policy.setInputBufferSize(8192);
-//        policy.setIdleTimeout(600000);
-//
-//        return new DefaultHandshakeHandler(
-//                new JettyRequestUpgradeStrategy(new WebSocketServerFactory(policy)));
-//    }
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");

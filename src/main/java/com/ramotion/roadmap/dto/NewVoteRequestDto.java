@@ -1,28 +1,34 @@
 package com.ramotion.roadmap.dto;
 
-/**
- * Created by Oleg Vasiliev on 19.11.2014.
- */
 public class NewVoteRequestDto {
 
-    private String surveyId;
-    private String deviceToken;
+    private String device;
+    private Long surveyId;
+    private Long featureId;
     private String language;
 
-    public String getDeviceToken() {
-        return deviceToken;
+    public String getDevice() {
+        return device;
     }
 
-    public void setDeviceToken(String deviceToken) {
-        this.deviceToken = deviceToken;
+    public void setDevice(String device) {
+        this.device = device;
     }
 
-    public String getSurveyId() {
+    public Long getSurveyId() {
         return surveyId;
     }
 
-    public void setSurveyId(String surveyId) {
+    public void setSurveyId(Long surveyId) {
         this.surveyId = surveyId;
+    }
+
+    public Long getFeatureId() {
+        return featureId;
+    }
+
+    public void setFeatureId(Long featureId) {
+        this.featureId = featureId;
     }
 
     public String getLanguage() {

@@ -48,3 +48,9 @@
 ### Version 0.2.5 ###
 
 * Testing webapp runner 7.0.4 with embedded tomcat
+
+### Version 0.3.0 ###
+
+* Many model changes
+* Added mock data to database
+* Couple of web APIs implemented without exception handling
