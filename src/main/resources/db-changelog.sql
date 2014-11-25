@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `survey` (
   INDEX `surveys-to_applications_idx` (`application_id` ASC),
   CONSTRAINT `survey-to-application`
   FOREIGN KEY (`application_id`)
-  REFERENCES `roadmap`.`application` (`id`)
+  REFERENCES `application` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
@@ -116,12 +116,12 @@ CREATE TABLE IF NOT EXISTS `vote` (
   PRIMARY KEY (`device_token`, `survey_id`),
   CONSTRAINT `votes-to-surveys`
   FOREIGN KEY (`survey_id`)
-  REFERENCES `roadmap`.`survey` (`id`)
+  REFERENCES `survey` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `votes-to-app_features`
   FOREIGN KEY (`feature_id`)
-  REFERENCES `roadmap`.`feature` (`id`)
+  REFERENCES `feature` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
@@ -162,120 +162,111 @@ CREATE TABLE IF NOT EXISTS `user_has_application` (
   ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Data for table `roadmap`.`user`
+-- Data for table `user`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
-INSERT INTO `roadmap`.`user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
+INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
 VALUES (1, 'testuser1@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
-INSERT INTO `roadmap`.`user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
+INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
 VALUES (2, 'testuser2@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
-INSERT INTO `roadmap`.`user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
+INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
 VALUES (3, 'testuser3@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `roadmap`.`application`
+-- Data for table `application`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
-INSERT INTO `roadmap`.`application` (`id`, `name`, `description`, `api_token`, `active_survey_id`, `modified_at`, `created_at`)
+INSERT INTO `application` (`id`, `name`, `description`, `api_token`, `active_survey_id`, `modified_at`, `created_at`)
 VALUES (1, 'App1', 'Description1', 'token1', 1, NULL, NULL);
-INSERT INTO `roadmap`.`application` (`id`, `name`, `description`, `api_token`, `active_survey_id`, `modified_at`, `created_at`)
+INSERT INTO `application` (`id`, `name`, `description`, `api_token`, `active_survey_id`, `modified_at`, `created_at`)
 VALUES (2, 'App2', 'Description2', 'token2', 2, NULL, NULL);
-INSERT INTO `roadmap`.`application` (`id`, `name`, `description`, `api_token`, `active_survey_id`, `modified_at`, `created_at`)
+INSERT INTO `application` (`id`, `name`, `description`, `api_token`, `active_survey_id`, `modified_at`, `created_at`)
 VALUES (3, 'App3', 'Description3', 'token3', NULL, NULL, NULL);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `roadmap`.`feature`
+-- Data for table `feature`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
-INSERT INTO `roadmap`.`feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
+INSERT INTO `feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
 VALUES (1, 1, 0, NULL, NULL);
-INSERT INTO `roadmap`.`feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
+INSERT INTO `feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
 VALUES (2, 1, 0, NULL, NULL);
-INSERT INTO `roadmap`.`feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
+INSERT INTO `feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
 VALUES (3, 1, 0, NULL, NULL);
-INSERT INTO `roadmap`.`feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
+INSERT INTO `feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
 VALUES (4, 2, 0, NULL, NULL);
-INSERT INTO `roadmap`.`feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
+INSERT INTO `feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
 VALUES (5, 2, 0, NULL, NULL);
-INSERT INTO `roadmap`.`feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
+INSERT INTO `feature` (`id`, `application_id`, `implemented`, `modified_at`, `created_at`)
 VALUES (6, 3, 0, NULL, NULL);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `roadmap`.`survey`
+-- Data for table `survey`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
-INSERT INTO `roadmap`.`survey` (`id`, `title`, `application_id`, `disabled`, `required_votes`, `required_date`, `started_at`, `finished_at`, `modified_at`, `created_at`)
+INSERT INTO `survey` (`id`, `title`, `application_id`, `disabled`, `required_votes`, `required_date`, `started_at`, `finished_at`, `modified_at`, `created_at`)
 VALUES (1, 'Survey1', 1, 0, 1000, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `roadmap`.`survey` (`id`, `title`, `application_id`, `disabled`, `required_votes`, `required_date`, `started_at`, `finished_at`, `modified_at`, `created_at`)
+INSERT INTO `survey` (`id`, `title`, `application_id`, `disabled`, `required_votes`, `required_date`, `started_at`, `finished_at`, `modified_at`, `created_at`)
 VALUES (2, 'Sunvey2', 2, 0, 20, NULL, NULL, NULL, NULL, NULL);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `roadmap`.`survey_has_feature`
+-- Data for table `survey_has_feature`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
-INSERT INTO `roadmap`.`survey_has_feature` (`feature_id`, `survey_id`) VALUES (1, 1);
-INSERT INTO `roadmap`.`survey_has_feature` (`feature_id`, `survey_id`) VALUES (2, 1);
-INSERT INTO `roadmap`.`survey_has_feature` (`feature_id`, `survey_id`) VALUES (3, 1);
-INSERT INTO `roadmap`.`survey_has_feature` (`feature_id`, `survey_id`) VALUES (4, 2);
-INSERT INTO `roadmap`.`survey_has_feature` (`feature_id`, `survey_id`) VALUES (5, 2);
+INSERT INTO `survey_has_feature` (`feature_id`, `survey_id`) VALUES (1, 1);
+INSERT INTO `survey_has_feature` (`feature_id`, `survey_id`) VALUES (2, 1);
+INSERT INTO `survey_has_feature` (`feature_id`, `survey_id`) VALUES (3, 1);
+INSERT INTO `survey_has_feature` (`feature_id`, `survey_id`) VALUES (4, 2);
+INSERT INTO `survey_has_feature` (`feature_id`, `survey_id`) VALUES (5, 2);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `roadmap`.`feature_text`
+-- Data for table `feature_text`
 -- -----------------------------------------------------
 START TRANSACTION;
-
-INSERT INTO `roadmap`.`feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
+INSERT INTO `feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
 VALUES (1, 'en', 'Feature 1 en-text', NULL, NULL);
-INSERT INTO `roadmap`.`feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
+INSERT INTO `feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
 VALUES (2, 'en', 'Feature 2 en-text', NULL, NULL);
-INSERT INTO `roadmap`.`feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
+INSERT INTO `feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
 VALUES (3, 'en', 'Feature 3 en-text', NULL, NULL);
-INSERT INTO `roadmap`.`feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
+INSERT INTO `feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
 VALUES (4, 'en', 'Feature 4 en-text', NULL, NULL);
-INSERT INTO `roadmap`.`feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
+INSERT INTO `feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
 VALUES (5, 'en', 'Feature 5 en-text', NULL, NULL);
-INSERT INTO `roadmap`.`feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
+INSERT INTO `feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
 VALUES (6, 'en', 'Feature 6 en-text', NULL, NULL);
-INSERT INTO `roadmap`.`feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
+INSERT INTO `feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
 VALUES (1, 'ru', 'Feature 1 ru-text', NULL, NULL);
-INSERT INTO `roadmap`.`feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
+INSERT INTO `feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
 VALUES (2, 'ru', 'Feature 2 ru-text', NULL, NULL);
-INSERT INTO `roadmap`.`feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
+INSERT INTO `feature_text` (`feature_id`, `language`, `text`, `modified_at`, `created_at`)
 VALUES (3, 'ru', 'Feature 3 ru-text', NULL, NULL);
-
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `roadmap`.`user_has_application`
+-- Data for table `user_has_application`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `roadmap`;
-INSERT INTO `roadmap`.`user_has_application` (`user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
+INSERT INTO `user_has_application` (`user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
 VALUES (1, 1, 0, NULL, NULL);
-INSERT INTO `roadmap`.`user_has_application` (`user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
+INSERT INTO `user_has_application` (`user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
 VALUES (1, 2, 0, NULL, NULL);
-INSERT INTO `roadmap`.`user_has_application` (`user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
+INSERT INTO `user_has_application` (`user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
 VALUES (2, 3, 0, NULL, NULL);
-
 COMMIT;
