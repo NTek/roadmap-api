@@ -2,7 +2,7 @@ package com.ramotion.roadmap.service;
 
 import com.ramotion.roadmap.config.AppConfig;
 import com.ramotion.roadmap.dto.NewVoteRequestDto;
-import com.ramotion.roadmap.dto.web.GetSurveyResponceDto;
+import com.ramotion.roadmap.dto.web.GetSurveyDto;
 import com.ramotion.roadmap.exceptions.NotFoundException;
 import com.ramotion.roadmap.exceptions.ValidationException;
 import com.ramotion.roadmap.model.*;
@@ -42,7 +42,7 @@ public class APIServiceImpl implements APIService {
     }
 
     @Override
-    public GetSurveyResponceDto getSurveyForDevice(String apiToken, String deviceToken, String langCode) {
+    public GetSurveyDto getSurveyForDevice(String apiToken, String deviceToken, String langCode) {
         ApplicationEntity app = applicationRepository.findByApiToken(apiToken);
         if (app == null) throw new NotFoundException();  //app api token invalid
 
@@ -58,20 +58,20 @@ public class APIServiceImpl implements APIService {
         Language lang = Language.valueOfOrNullIgnoreCase(langCode);
         if (lang == null) throw new ValidationException(); //invalid language
 
-        GetSurveyResponceDto getSurveyResponceDto = new GetSurveyResponceDto();
-        getSurveyResponceDto.setSurveyId(activeSurvey.getId());
+        GetSurveyDto getSurveyDto = new GetSurveyDto();
+        getSurveyDto.setSurveyId(activeSurvey.getId());
         Collection<FeatureEntity> surveyFeatures = activeSurvey.getFeature();
-        getSurveyResponceDto.setFeatures(new HashMap<Long, String>(surveyFeatures.size()));
+        getSurveyDto.setFeatures(new HashMap<Long, String>(surveyFeatures.size()));
 
         for (FeatureEntity feature : surveyFeatures) {
             FeatureTextEntity localizedFeature = featureTextRepository.findByFeatureIdAndLanguage(feature.getId(), lang);
             if (localizedFeature == null) {
                 localizedFeature = featureTextRepository.findByFeatureIdAndLanguage(feature.getId(), AppConfig.DEFAULT_LOCALIZATION_LANGUAGE);
             }
-            getSurveyResponceDto.getFeatures().put(feature.getId(), localizedFeature != null ? localizedFeature.getText() : AppConfig.LOCALIZATION_NOT_FOUND_MSG);
+            getSurveyDto.getFeatures().put(feature.getId(), localizedFeature != null ? localizedFeature.getText() : AppConfig.LOCALIZATION_NOT_FOUND_MSG);
         }
 
-        return getSurveyResponceDto;
+        return getSurveyDto;
     }
 
     @Override

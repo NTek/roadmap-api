@@ -1,7 +1,7 @@
 package com.ramotion.roadmap.service;
 
 import com.ramotion.roadmap.dto.NewVoteRequestDto;
-import com.ramotion.roadmap.dto.web.GetSurveyResponceDto;
+import com.ramotion.roadmap.dto.web.GetSurveyDto;
 import com.ramotion.roadmap.model.VoteEntity;
 
 /**
@@ -9,7 +9,7 @@ import com.ramotion.roadmap.model.VoteEntity;
  */
 public interface APIService {
 
-    GetSurveyResponceDto getSurveyForDevice(String appSecret, String deviceToken, String langCode);
+    GetSurveyDto getSurveyForDevice(String appSecret, String deviceToken, String langCode);
 
     VoteEntity createVote(String appSecret, NewVoteRequestDto dto);
 }
