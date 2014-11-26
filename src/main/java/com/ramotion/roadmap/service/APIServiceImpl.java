@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 /**
  * Created by Oleg Vasiliev on 20.11.2014.
@@ -61,14 +60,13 @@ public class APIServiceImpl implements APIService {
         GetSurveyDto getSurveyDto = new GetSurveyDto();
         getSurveyDto.setSurveyId(activeSurvey.getId());
         Collection<FeatureEntity> surveyFeatures = activeSurvey.getFeature();
-        getSurveyDto.setFeatures(new HashMap<Long, String>(surveyFeatures.size()));
 
         for (FeatureEntity feature : surveyFeatures) {
             FeatureTextEntity localizedFeature = featureTextRepository.findByFeatureIdAndLanguage(feature.getId(), lang);
             if (localizedFeature == null) {
                 localizedFeature = featureTextRepository.findByFeatureIdAndLanguage(feature.getId(), AppConfig.DEFAULT_LOCALIZATION_LANGUAGE);
             }
-            getSurveyDto.getFeatures().put(feature.getId(), localizedFeature != null ? localizedFeature.getText() : AppConfig.LOCALIZATION_NOT_FOUND_MSG);
+            getSurveyDto.getFeatures().add(new GetSurveyDto.Feature(feature.getId(), localizedFeature != null ? localizedFeature.getText() : AppConfig.LOCALIZATION_NOT_FOUND_MSG));
         }
 
         return getSurveyDto;

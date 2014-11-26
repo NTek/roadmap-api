@@ -54,3 +54,7 @@
 * Many model changes
 * Added mock data to database
 * Couple of web APIs implemented without exception handling
+
+### Version 0.3.1 ###
+
+* Changed structure in get survey API
