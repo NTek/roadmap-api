@@ -1,6 +1,7 @@
 package com.ramotion.roadmap.model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by Oleg Vasiliev on 20.11.2014.
@@ -167,10 +168,49 @@ public enum Language {
     }
 
     public static Language valueOfOrNullIgnoreCase(String code) {
+
         for (Language lang : Language.values()) {
             if (lang.toString().equals(code.toLowerCase()))
                 return lang;
         }
         return null;
+    }
+
+    private static HashSet<LanguageEntity> languageEntities;
+
+    public static HashSet<LanguageEntity> getAllEntities() {
+        if (languageEntities != null) return languageEntities;
+
+        HashSet<LanguageEntity> resList = new HashSet<LanguageEntity>(Language.values().length);
+        for (Language lang : Language.values()) {
+            resList.add(new LanguageEntity(lang.toString(), lang.getName()));
+        }
+        return resList;
+    }
+
+    public static class LanguageEntity {
+        private String code;
+        private String name;
+
+        public LanguageEntity(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }

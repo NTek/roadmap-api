@@ -5,7 +5,7 @@
     <groupId>com.ramotion</groupId>
     <artifactId>roadmap</artifactId>
     <packaging>war</packaging>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
 
     <name>roadmap-api</name>
 
@@ -158,25 +158,11 @@
             <version>1.1.2</version>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.apache.tomcat.embed</groupId>-->
-        <!--<artifactId>tomcat-embed-websocket</artifactId>-->
-        <!--<version>8.0.14</version>-->
-        <!--</dependency>-->
-
-
-        <!--&lt;!&ndash; JETTY SOCKETS &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.eclipse.jetty.websocket</groupId>-->
-        <!--<artifactId>websocket-api</artifactId>-->
-        <!--<version>9.2.5.v20141112</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.eclipse.jetty.websocket</groupId>-->
-        <!--<artifactId>websocket-server</artifactId>-->
-        <!--<version>9.2.5.v20141112</version>-->
-        <!--</dependency>-->
-
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.2</version>
+        </dependency>
 
         <!-- LOGGING -->
 
