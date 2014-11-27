@@ -49,7 +49,7 @@ public class APIController {
     @ResponseBody
     @ExceptionHandler(value = ValidationException.class)
     public Object validationException(HttpServletRequest req, ValidationException e) {
-        return "Validation exception message";
+        return e.getMessage();
     }
 
 }

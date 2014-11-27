@@ -58,3 +58,7 @@
 ### Version 0.3.1 ###
 
 * Changed structure in get survey API
+
+### Version 0.3.2 ###
+
+* Added more default exception handlers

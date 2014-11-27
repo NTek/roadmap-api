@@ -6,7 +6,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<h1>Error Page</h1>
+<h2 style="margin-bottom: 5px;">Oops! An error has occurred!</h2>
 
 <p>Application has encountered an error. View page source for details.</p>
 

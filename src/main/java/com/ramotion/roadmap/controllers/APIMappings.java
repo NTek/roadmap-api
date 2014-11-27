@@ -11,7 +11,6 @@ public class APIMappings {
         public static final String GET_SURVEY = "survey";
         public static final String CREATE_VOTE = "vote";
         public static final String GET_LANGUAGES = "languages";
-
     }
 
     public static class Socket {

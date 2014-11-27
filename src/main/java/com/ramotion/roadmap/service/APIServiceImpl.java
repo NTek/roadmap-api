@@ -17,7 +17,6 @@ import java.util.Collection;
  * Created by Oleg Vasiliev on 20.11.2014.
  * Implementation for Web API Service
  * TODO: Move validations to separate validator class
- * TODO: Add exception handlers
  */
 @Service
 @Transactional
@@ -43,19 +42,22 @@ public class APIServiceImpl implements APIService {
     @Override
     public GetSurveyDto getSurveyForDevice(String apiToken, String deviceToken, String langCode) {
         ApplicationEntity app = applicationRepository.findByApiToken(apiToken);
-        if (app == null) throw new NotFoundException();  //app api token invalid
+        if (app == null) throw new NotFoundException("Invalid api token");  //app api token invalid
 
-        if (app.getActiveSurveyId() == null) throw new ValidationException(); //app does not have active survey
+        if (app.getActiveSurveyId() == null)
+            throw new ValidationException("App does not have active survey"); //app does not have active survey
 
         SurveyEntity activeSurvey = surveyRepository.findOne(app.getActiveSurveyId());
-        if (activeSurvey == null) throw new ValidationException(); //app does not have active survey
+        if (activeSurvey == null)
+            throw new ValidationException("App does not have active survey"); //app does not have active survey
 
         VoteEntity existedVote = voteRepository.findOne(new VoteEntityPK(deviceToken, activeSurvey.getId()));
-        if (existedVote != null) throw new ValidationException(); // this device already voted in this survey
+        if (existedVote != null)
+            throw new ValidationException("You already voted in this survey"); // this device already voted in this survey
 
         //detecting language
         Language lang = Language.valueOfOrNullIgnoreCase(langCode);
-        if (lang == null) throw new ValidationException(); //invalid language
+        if (lang == null) throw new ValidationException("Invalid language"); //invalid language
 
         GetSurveyDto getSurveyDto = new GetSurveyDto();
         getSurveyDto.setSurveyId(activeSurvey.getId());
@@ -75,32 +77,32 @@ public class APIServiceImpl implements APIService {
     @Override
     public VoteEntity createVote(String apiToken, NewVoteRequestDto dto) {
         ApplicationEntity app = applicationRepository.findByApiToken(apiToken);
-        if (app == null) throw new NotFoundException();  //app api token invalid
+        if (app == null) throw new NotFoundException("Invalid api token");  //app api token invalid
 
         //detecting language
         Language lang = Language.valueOfOrNullIgnoreCase(dto.getLanguage());
-        if (lang == null) throw new ValidationException(); //invalid language
+        if (lang == null) throw new ValidationException("Invalid language"); //invalid language
 
         if (!app.getActiveSurveyId().equals(dto.getSurveyId()))
-            throw new ValidationException(); // survey not available for voting
+            throw new ValidationException("Survey not available for voting"); // survey not available for voting
 
         SurveyEntity surveyEntity = surveyRepository.findOne(dto.getSurveyId());
 
         if (surveyEntity == null || !surveyEntity.getApplicationId().equals(app.getId()))
-            throw new NotFoundException(); // survey not found
+            throw new ValidationException("Survey not found"); // survey not found
 
         if (surveyEntity.isDisabled())
-            throw new ValidationException(); // survey temporary disabled
+            throw new ValidationException("Survey is temporary disabled"); // survey temporary disabled
 
         FeatureEntity selectedFeature = featureRepository.findOne(dto.getFeatureId());
 
         if (selectedFeature == null || !surveyEntity.getFeature().contains(selectedFeature))
-            throw new ValidationException(); // selected feature not found in survey
+            throw new ValidationException("Feature not found in survey"); // selected feature not found in survey
 
         VoteEntityPK pk = new VoteEntityPK(dto.getDevice(), dto.getSurveyId());
 
         if (voteRepository.exists(pk))
-            throw new ValidationException(); // device already voted in this survey
+            throw new ValidationException("You already voted in this survey"); // device already voted in this survey
         else {
             return voteRepository.save(new VoteEntity(pk, dto.getFeatureId(), lang));
         }
