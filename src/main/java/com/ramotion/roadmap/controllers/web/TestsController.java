@@ -1,6 +1,5 @@
 package com.ramotion.roadmap.controllers.web;
 
-import com.ramotion.roadmap.dto.Greeting;
 import com.ramotion.roadmap.model.FeatureEntity;
 import com.ramotion.roadmap.repository.ApplicationRepository;
 import com.ramotion.roadmap.repository.FeatureRepository;
@@ -81,12 +80,6 @@ public class TestsController {
         feature.setApplication(applicationRepository.findOne(id));
         featureRepository.save(feature);
         return feature;
-    }
-
-    @RequestMapping(value = "/sayhello", method = RequestMethod.GET)
-    public String SayHelloToSocket(@RequestParam(value = "name", required = false) String name) {
-        this.template.convertAndSend("/topic/greetings", new Greeting(name));
-        return "Sent " + name;
     }
 
 

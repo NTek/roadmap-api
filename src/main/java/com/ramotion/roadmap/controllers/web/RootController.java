@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.Principal;
 import java.util.*;
 
 /**
@@ -35,12 +36,16 @@ public class RootController {
 
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public Object getStatus() {
+    public Object getStatus(Principal principal) {
         Map<String, Object> response = new HashMap<>();
         response.put("started", AppConfig.DATETIME_FORMATTER.format(new Date(serverStartedAt)));
         response.put("uptime", createUptimeString(System.currentTimeMillis() - serverStartedAt));
         response.put("version", env.getProperty("app.version"));
         response.put("database_used_url", dataSource.getUrl());
+
+        if (principal != null) {
+            response.put("logged_in_as", principal.getName());
+        }
         return response;
     }
 

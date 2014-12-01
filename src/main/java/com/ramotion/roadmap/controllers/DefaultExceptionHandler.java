@@ -4,6 +4,7 @@ import com.ramotion.roadmap.exceptions.NotFoundException;
 import com.ramotion.roadmap.exceptions.ValidationException;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +37,13 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(value = ServletRequestBindingException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ModelAndView invalidRequest(HttpServletRequest req, Exception e) throws Exception {
+        return defaultExceptionView(req, e);
+    }
+
+    //spring's access denied handler
+    @ExceptionHandler(value = AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ModelAndView accessDenied(HttpServletRequest req, Exception e) throws Exception {
         return defaultExceptionView(req, e);
     }
 

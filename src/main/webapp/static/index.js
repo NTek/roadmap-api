@@ -8,13 +8,14 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('/hello');
+    var socket = new SockJS('/socket');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function(frame) {
+    stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function(greeting){
-            showGreeting(JSON.parse(greeting.body).content);
+        stompClient.subscribe('/topic/chat', function (chatmsg) {
+            var msg = JSON.parse(chatmsg.body);
+            showMessage(msg.username, msg.text);
         });
     });
 }
@@ -25,15 +26,31 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName() {
-    var name = document.getElementById('name').value;
-    stompClient.send("/app/hello", {}, JSON.stringify({ 'name': name }));
+function sendMsg() {
+    var text = document.getElementById('text').value;
+    if (text == '') {
+        alert("Enter a message!");
+        return
+    }
+    stompClient.send("/app/chat", {}, JSON.stringify({ 'text': text }));
+    $('#text').val("");
 }
 
-function showGreeting(message) {
+function showMessage(username, message) {
     var response = document.getElementById('response');
     var p = document.createElement('p');
     p.style.wordWrap = 'break-word';
-    p.appendChild(document.createTextNode(message));
+    p.appendChild(document.createTextNode(username + ': ' + message));
     response.appendChild(p);
 }
+
+$(document).keypress(function (event) {
+    if (event.keyCode == 13) {
+        $('#sendbtn').trigger('click');
+    }
+});
+
+$(document).ready(function (event) {
+    setConnected(false);
+
+});

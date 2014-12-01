@@ -62,3 +62,9 @@
 ### Version 0.3.2 ###
 
 * Added more default exception handlers
+
+### Version 0.4.0 ###
+
+* Implemented simple chat on websocket
+* Added Spring security support
+* Three in-memory users for testing chat

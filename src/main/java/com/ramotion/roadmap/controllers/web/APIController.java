@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @ResponseBody
-@RequestMapping(value = "/api/")
+@RequestMapping(value = APIMappings.Web.API_ROOT + "/")
 public class APIController {
 
     private static final Logger LOG = Logger.getLogger(APIController.class.getName());
