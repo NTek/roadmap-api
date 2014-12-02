@@ -99,7 +99,7 @@ public class APIServiceImpl implements APIService {
         if (selectedFeature == null || !surveyEntity.getFeature().contains(selectedFeature))
             throw new ValidationException("Feature not found in survey"); // selected feature not found in survey
 
-        VoteEntityPK pk = new VoteEntityPK(dto.getDevice(), dto.getSurveyId());
+        VoteEntityPK pk = new VoteEntityPK(dto.getDeviceToken(), dto.getSurveyId());
 
         if (voteRepository.exists(pk))
             throw new ValidationException("You already voted in this survey"); // device already voted in this survey

@@ -2,17 +2,17 @@ package com.ramotion.roadmap.dto;
 
 public class NewVoteRequestDto {
 
-    private String device;
+    private String deviceToken;
     private Long surveyId;
     private Long featureId;
     private String language;
 
-    public String getDevice() {
-        return device;
+    public String getDeviceToken() {
+        return deviceToken;
     }
 
-    public void setDevice(String device) {
-        this.device = device;
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 
     public Long getSurveyId() {
