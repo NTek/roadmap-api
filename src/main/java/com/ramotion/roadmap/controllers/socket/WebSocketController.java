@@ -3,6 +3,7 @@ package com.ramotion.roadmap.controllers.socket;
 import com.ramotion.roadmap.dto.ChatMessage;
 import com.ramotion.roadmap.dto.MessageText;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -27,6 +28,7 @@ public class WebSocketController {
      */
     @MessageMapping("/chat")
 //    @SendTo("/topic/chat")
+    @SendToUser(value = "/topic/chat")
     public ChatMessage message(MessageText text, Principal principal) throws Exception {
         return new ChatMessage(text.getText(), principal.getName());
     }

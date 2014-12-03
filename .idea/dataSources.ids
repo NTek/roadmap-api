@@ -78,7 +78,7 @@
       <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
       <column name="email" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="password" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
-      <column name="disabled" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7" def="YicwJw=="/>
+      <column name="enabled" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7" def="YicxJw=="/>
       <column name="role" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" def="J1JPTEVfVVNFUic="/>
       <column name="recovery_token_expiration" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
       <column name="recovery_token" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>

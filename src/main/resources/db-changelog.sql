@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `id`                        BIGINT       NOT NULL AUTO_INCREMENT,
   `email`                     VARCHAR(255) NOT NULL,
   `password`                  VARCHAR(255) NOT NULL,
-  `disabled`                  BIT          NOT NULL DEFAULT 0,
+  `enabled`                   BIT          NOT NULL DEFAULT 1,
   `role`                      VARCHAR(255) NOT NULL DEFAULT 'ROLE_USER',
   `recovery_token_expiration` TIMESTAMP    NULL,
   `recovery_token`            VARCHAR(255) NULL,
@@ -165,12 +165,12 @@ CREATE TABLE IF NOT EXISTS `user_has_application` (
 -- Data for table `user`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
-VALUES (1, 'testuser1@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
-INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
-VALUES (2, 'testuser2@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
-INSERT INTO `user` (`id`, `email`, `password`, `disabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
-VALUES (3, 'testuser3@mail.com', '123', 0, 'ROLE_USER', NULL, NULL, NULL, NULL);
+INSERT INTO `user` (`id`, `email`, `password`, `enabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
+VALUES (1, 'testuser1@mail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 1, 'ROLE_USER', NULL, NULL, NULL, NULL);
+INSERT INTO `user` (`id`, `email`, `password`, `enabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
+VALUES (2, 'testuser2@mail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 1, 'ROLE_USER', NULL, NULL, NULL, NULL);
+INSERT INTO `user` (`id`, `email`, `password`, `enabled`, `role`, `recovery_token_expiration`, `recovery_token`, `modified_at`, `created_at`)
+VALUES (3, 'testuser3@mail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 1, 'ROLE_USER', NULL, NULL, NULL, NULL);
 
 COMMIT;
 

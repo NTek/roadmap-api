@@ -21,7 +21,7 @@ public class UserEntity implements EntityWithAuditTimestamps {
     @JsonIgnore
     private String password;
 
-    private boolean disabled;
+    private boolean enabled;
 
     private String role;
 
@@ -67,13 +67,13 @@ public class UserEntity implements EntityWithAuditTimestamps {
     }
 
     @Basic
-    @Column(name = "disabled", nullable = false, insertable = true, updatable = true)
-    public Boolean getDisabled() {
-        return disabled;
+    @Column(name = "enabled", nullable = false, insertable = true, updatable = true)
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setDisabled(Boolean disabled) {
-        this.disabled = disabled;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Basic
@@ -123,7 +123,7 @@ public class UserEntity implements EntityWithAuditTimestamps {
 
         UserEntity that = (UserEntity) o;
 
-        if (disabled != that.disabled) return false;
+        if (enabled != that.enabled) return false;
         if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
             return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
@@ -145,7 +145,7 @@ public class UserEntity implements EntityWithAuditTimestamps {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (disabled ? 1 : 0);
+        result = 31 * result + (enabled ? 1 : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (recoveryTokenExpiration != null ? recoveryTokenExpiration.hashCode() : 0);
         result = 31 * result + (recoveryToken != null ? recoveryToken.hashCode() : 0);

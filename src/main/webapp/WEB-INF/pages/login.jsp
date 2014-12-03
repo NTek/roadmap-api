@@ -27,7 +27,7 @@
                autocomplete="off" autocapitalize="off" autocorrect="off">
         <input type="password" name="password" class="form-control" placeholder="Password" required="">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Enter</button>
-        <h5 class="alert alert-info">try: bob/mike/alice and 123</h5>
+        <%--<h5 class="alert alert-info">try: bob/mike/alice and 123</h5>--%>
 
         <c:if test="${param.error!=null}">
             <h5 class="alert alert-danger">Invalid credentials!</h5>
