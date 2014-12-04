@@ -1,5 +1,6 @@
 package com.ramotion.roadmap.config;
 
+import com.ramotion.roadmap.controllers.APIMappings;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -27,7 +28,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         //Message Brokers for subscribers
-        registry.enableSimpleBroker("/topic/");
+        registry.enableSimpleBroker(APIMappings.Socket.Subscriptions.TOPIC);
         //Prefix for input requests mapping
         registry.setApplicationDestinationPrefixes("/app");
     }

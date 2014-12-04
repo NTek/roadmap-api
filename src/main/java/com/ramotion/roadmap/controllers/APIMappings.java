@@ -17,15 +17,18 @@ public class APIMappings {
     public static class Socket {
 
         public static class Subscriptions {
-            public static final String APPLICATIONS = "";
-            public static final String SURVEYS = "";
-            public static final String VOTES = "";
+            public static final String TOPIC = "/topic";
+            public static final String TOPIC_APPLICATIONS = TOPIC + "/applications";
+            public static final String TOPIC_SURVEYS = TOPIC + "/surveys";
+            public static final String TOPIC_VOTES = TOPIC + "/votes";
+            public static final String TOPIC_ERRORS = TOPIC + "/errors";
         }
 
         public static class Endpoints {
-            public static final String NEW_APPLICATION = "/new-app";
-            public static final String NEW_FEATURE = "";
-            public static final String NEW_SURVEY = "";
+            public static final String NEW_APPLICATION = "/application";
+            public static final String NEW_APP_USER = "/application_user_access";
+            public static final String NEW_FEATURE = "/feature";
+            public static final String NEW_SURVEY = "/survey";
         }
 
     }

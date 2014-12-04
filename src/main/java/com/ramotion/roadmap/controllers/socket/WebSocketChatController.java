@@ -1,9 +1,10 @@
 package com.ramotion.roadmap.controllers.socket;
 
+import com.ramotion.roadmap.controllers.APIMappings;
 import com.ramotion.roadmap.dto.ChatMessage;
 import com.ramotion.roadmap.dto.MessageText;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
@@ -12,7 +13,7 @@ import java.security.Principal;
  * Created by Oleg Vasiliev on 14.11.2014.
  */
 @Controller
-public class WebSocketController {
+public class WebSocketChatController {
 
 //    /**
 //     * Request - response mapping without message broker
@@ -27,8 +28,8 @@ public class WebSocketController {
      * message broker, client must be subscribed to message broker for receive responce
      */
     @MessageMapping("/chat")
-//    @SendTo("/topic/chat")
-    @SendToUser(value = "/topic/chat")
+    @SendTo(APIMappings.Socket.Subscriptions.TOPIC + "/chat")
+//    @SendToUser(value = "/topic/chat")
     public ChatMessage message(MessageText text, Principal principal) throws Exception {
         return new ChatMessage(text.getText(), principal.getName());
     }
