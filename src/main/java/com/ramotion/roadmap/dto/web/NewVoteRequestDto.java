@@ -1,4 +1,4 @@
-package com.ramotion.roadmap.dto;
+package com.ramotion.roadmap.dto.web;
 
 public class NewVoteRequestDto {
 

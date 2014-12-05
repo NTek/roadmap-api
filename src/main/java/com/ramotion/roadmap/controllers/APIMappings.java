@@ -9,18 +9,17 @@ public class APIMappings {
     public static class Web {
 
         public static final String API_ROOT = "/api";
-        public static final String GET_SURVEY = "survey";
-        public static final String CREATE_VOTE = "vote";
-        public static final String GET_LANGUAGES = "languages";
+        public static final String GET_SURVEY = "/survey";
+        public static final String CREATE_VOTE = "/vote";
+        public static final String GET_LANGUAGES = "/languages";
     }
 
     public static class Socket {
 
         public static class Subscriptions {
             public static final String TOPIC = "/topic";
-            public static final String TOPIC_APPLICATIONS = TOPIC + "/applications";
-            public static final String TOPIC_SURVEYS = TOPIC + "/surveys";
-            public static final String TOPIC_VOTES = TOPIC + "/votes";
+            public static final String TOPIC_USER_APPS = TOPIC + "/user_apps";
+            public static final String TOPIC_APP_DETAILS = TOPIC + "/app";
             public static final String TOPIC_ERRORS = TOPIC + "/errors";
         }
 

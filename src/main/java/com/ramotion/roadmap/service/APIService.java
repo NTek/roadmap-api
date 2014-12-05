@@ -1,7 +1,7 @@
 package com.ramotion.roadmap.service;
 
-import com.ramotion.roadmap.dto.NewVoteRequestDto;
 import com.ramotion.roadmap.dto.web.GetSurveyDto;
+import com.ramotion.roadmap.dto.web.NewVoteRequestDto;
 import com.ramotion.roadmap.model.VoteEntity;
 
 /**

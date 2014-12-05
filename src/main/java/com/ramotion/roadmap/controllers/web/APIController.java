@@ -1,7 +1,7 @@
 package com.ramotion.roadmap.controllers.web;
 
 import com.ramotion.roadmap.controllers.APIMappings;
-import com.ramotion.roadmap.dto.NewVoteRequestDto;
+import com.ramotion.roadmap.dto.web.NewVoteRequestDto;
 import com.ramotion.roadmap.exceptions.ValidationException;
 import com.ramotion.roadmap.model.Language;
 import com.ramotion.roadmap.service.APIService;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @ResponseBody
-@RequestMapping(value = APIMappings.Web.API_ROOT + "/")
+@RequestMapping(value = APIMappings.Web.API_ROOT)
 public class APIController {
 
     private static final Logger LOG = Logger.getLogger(APIController.class.getName());

@@ -8,7 +8,6 @@ public class ChatMessage {
     private String text;
     private String username;
 
-
     public ChatMessage() {
     }
 

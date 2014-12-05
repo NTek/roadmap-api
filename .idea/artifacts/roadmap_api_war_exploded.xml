@@ -1,7 +1,8 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="roadmap-api:war exploded">
-    <output-path>$PROJECT_DIR$/target/roadmap-api-0.4.2</output-path>
+    <output-path>$PROJECT_DIR$/target/roadmap-api-0.4.3</output-path>
     <root id="root">
+      <element id="javaee-facet-resources" facet="roadmap-api/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="roadmap-api" />
@@ -60,7 +61,6 @@
           <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="roadmap-api/web/Web" />
     </root>
   </artifact>
 </component>
