@@ -1,17 +1,19 @@
 package com.ramotion.roadmap.model.utils;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ramotion.roadmap.utils.JsonTimestampSerializer;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.sql.Timestamp;
 
-/**
- * Created by Oleg Vasiliev on 13.11.2014.
- */
 @Embeddable
 public class AuditTimestamps {
 
+    @JsonSerialize(using = JsonTimestampSerializer.class)
     private Timestamp createdAt;
 
+    @JsonSerialize(using = JsonTimestampSerializer.class)
     private Timestamp modifiedAt;
 
     @Column(name = "created_at", nullable = false, insertable = true, updatable = false)
@@ -23,7 +25,7 @@ public class AuditTimestamps {
         this.createdAt = createdAt;
     }
 
-    @Column(name = "modified_at", nullable = false, insertable = false, updatable = true)
+    @Column(name = "modified_at", nullable = false, insertable = true, updatable = true)
     public Timestamp getModifiedAt() {
         return modifiedAt;
     }
@@ -31,7 +33,6 @@ public class AuditTimestamps {
     public void setModifiedAt(Timestamp modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
-
 
     @Override
     public boolean equals(Object o) {

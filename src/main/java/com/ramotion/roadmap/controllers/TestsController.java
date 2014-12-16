@@ -1,4 +1,4 @@
-package com.ramotion.roadmap.controllers.web;
+package com.ramotion.roadmap.controllers;
 
 import com.ramotion.roadmap.model.FeatureEntity;
 import com.ramotion.roadmap.repository.ApplicationRepository;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Created by Oleg Vasiliev on 19.11.2014.
  * Controller for testing some things during development
  */
 @Controller
@@ -31,6 +30,7 @@ public class TestsController {
     private UserHasApplicationRepository userHasApplicationRepository;
     private BasicDataSource dataSource;
     private SimpMessagingTemplate template;
+
 
     @Autowired
     @SuppressWarnings("SpringJavaAutowiringInspection")

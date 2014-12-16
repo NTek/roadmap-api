@@ -5,22 +5,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ramotion.roadmap.model.utils.AuditTimestamps;
 import com.ramotion.roadmap.model.utils.AuditableEntityListener;
 import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-/**
- * Created by Oleg Vasiliev on 12.11.2014.
- */
 @Entity
 @Table(name = "feature_text")
 @EntityListeners(value = AuditableEntityListener.class)
-@IdClass(FeatureTextEntityPK.class)
 public class FeatureTextEntity implements EntityWithAuditTimestamps {
+
+    private Long id;
 
     private Long featureId;
 
+    @NotNull(message = "required")
     private Language language;
 
+    @NotNull(message = "required")
+    @NotEmpty(message = "can't be empty")
     private String text;
 
     @Embedded
@@ -30,6 +33,16 @@ public class FeatureTextEntity implements EntityWithAuditTimestamps {
     private FeatureEntity feature;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = true, updatable = true)
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Column(name = "feature_id", nullable = false, insertable = false, updatable = false)
     public Long getFeatureId() {
         return featureId;
@@ -39,7 +52,6 @@ public class FeatureTextEntity implements EntityWithAuditTimestamps {
         this.featureId = featureId;
     }
 
-    @Id
     @Enumerated(EnumType.STRING)
     @Column(name = "language", nullable = false, insertable = true, updatable = true)
     public Language getLanguage() {
@@ -77,6 +89,7 @@ public class FeatureTextEntity implements EntityWithAuditTimestamps {
 
     public void setFeature(FeatureEntity featureByFeatureId) {
         this.feature = featureByFeatureId;
+        if (featureByFeatureId != null) this.featureId = featureByFeatureId.getId();
     }
 
     @Override

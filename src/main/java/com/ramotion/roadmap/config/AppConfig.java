@@ -27,7 +27,6 @@ import java.util.Locale;
 import java.util.Properties;
 
 /**
- * Created by Oleg Vasiliev on 10.11.2014.
  * Application beans configuration
  */
 @EnableAsync
@@ -40,13 +39,19 @@ import java.util.Properties;
         "com.ramotion.roadmap.controllers",
         "com.ramotion.roadmap.service",
         "com.ramotion.roadmap.repository",
-        "com.ramotion.roadmap.model"
+        "com.ramotion.roadmap.model",
+        "com.ramotion.roadmap.exceptions",
+        "com.ramotion.roadmap.utils"
 })
 public class AppConfig extends WebMvcConfigurerAdapter {
 
     private static final Logger LOG = Logger.getLogger(AppConfig.class.getName());
     public static final Language DEFAULT_LOCALIZATION_LANGUAGE = Language.en;
     public static final String LOCALIZATION_NOT_FOUND_MSG = "Default localization text not found";
+
+    public static final byte USER_ACCESS_OWNER = 0;
+    public static final byte USER_ACCESS_EDIT = 1;
+    public static final byte USER_ACCESS_READ = 2;
 
     public static final String DB_URL_ENV_VAR_NAME = "CLEARDB_DATABASE_URL";
     public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
@@ -80,8 +85,9 @@ public class AppConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login");
+//        registry.addViewController("/login").setViewName("login");
         registry.addViewController("/index").setViewName("index");
+        registry.addViewController("/chat").setViewName("chat");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 

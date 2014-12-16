@@ -1,5 +1,6 @@
 package com.ramotion.roadmap.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ramotion.roadmap.model.utils.AuditTimestamps;
 import com.ramotion.roadmap.model.utils.AuditableEntityListener;
 import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
@@ -16,14 +17,25 @@ public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
 
     private Long applicationId;
 
-    private Byte accessLevel;
+    private byte accessLevel;
 
     @Embedded
     private AuditTimestamps auditTimestamps;
 
+    @JsonIgnore
     private ApplicationEntity applicationByApplicationId;
 
+    @JsonIgnore
     private UserEntity userByUserId;
+
+    public UserHasApplicationEntity() {
+    }
+
+    public UserHasApplicationEntity(long userId, long applicationId, byte accessLevel) {
+        this.userId = userId;
+        this.applicationId = applicationId;
+        this.accessLevel = accessLevel;
+    }
 
     @Id
     @Column(name = "user_id", nullable = false, insertable = true, updatable = true)
@@ -46,11 +58,11 @@ public class UserHasApplicationEntity implements EntityWithAuditTimestamps {
     }
 
     @Column(name = "access_level", nullable = false, insertable = true, updatable = true)
-    public Byte getAccessLevel() {
+    public byte getAccessLevel() {
         return accessLevel;
     }
 
-    public void setAccessLevel(Byte accessLevel) {
+    public void setAccessLevel(byte accessLevel) {
         this.accessLevel = accessLevel;
     }
 

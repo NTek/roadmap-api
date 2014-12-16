@@ -1,7 +1,5 @@
-package com.ramotion.roadmap.controllers;
+package com.ramotion.roadmap.exceptions;
 
-import com.ramotion.roadmap.exceptions.NotFoundException;
-import com.ramotion.roadmap.exceptions.ValidationException;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;

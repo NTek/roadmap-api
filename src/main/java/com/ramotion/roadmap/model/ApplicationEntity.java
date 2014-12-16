@@ -1,21 +1,27 @@
 package com.ramotion.roadmap.model;
 
-import com.ramotion.roadmap.model.utils.AuditTimestamps;
-import com.ramotion.roadmap.model.utils.AuditableEntityListener;
-import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
+import com.ramotion.roadmap.model.utils.*;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.UUID;
 
 @Entity
 @Table(name = "application")
-@EntityListeners(value = AuditableEntityListener.class)
-public class ApplicationEntity implements EntityWithAuditTimestamps {
+@EntityListeners(value = {AuditableEntityListener.class, EntityWithUUIDListener.class})
+public class ApplicationEntity implements EntityWithAuditTimestamps, EntityWithUUID {
 
     private Long id;
 
+    private UUID uuid;
+
     private String apiToken;
 
+    @NotNull(message = "required")
+    @NotEmpty(message = "can't be empty")
     private String name;
 
     private String description;
@@ -27,11 +33,13 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
 
     private Collection<UserHasApplicationEntity> applicationUsers;
 
+    @Valid
     private Collection<FeatureEntity> applicationFeatures;
 
     private Collection<SurveyEntity> applicationSurveys;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
@@ -39,6 +47,15 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = false)
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     @Column(name = "name", nullable = false, insertable = true, updatable = true, length = 255)
@@ -96,7 +113,7 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
         this.applicationUsers = userToApplicationsById;
     }
 
-    @OneToMany(mappedBy = "application")
+    @OneToMany(mappedBy = "application", cascade = {CascadeType.ALL})
     public Collection<FeatureEntity> getApplicationFeatures() {
         return applicationFeatures;
     }
@@ -121,12 +138,15 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
 
         ApplicationEntity that = (ApplicationEntity) o;
 
+        if (activeSurveyId != null ? !activeSurveyId.equals(that.activeSurveyId) : that.activeSurveyId != null)
+            return false;
         if (apiToken != null ? !apiToken.equals(that.apiToken) : that.apiToken != null) return false;
         if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
             return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
         return true;
     }
@@ -134,9 +154,11 @@ public class ApplicationEntity implements EntityWithAuditTimestamps {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
+        result = 31 * result + (apiToken != null ? apiToken.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (apiToken != null ? apiToken.hashCode() : 0);
+        result = 31 * result + (activeSurveyId != null ? activeSurveyId.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
         return result;
     }

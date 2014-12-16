@@ -1,6 +1,6 @@
 package com.ramotion.roadmap.config;
 
-import com.ramotion.roadmap.controllers.APIMappings;
+import com.ramotion.roadmap.utils.APIMappings;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,22 +48,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 new XFrameOptionsHeaderWriter(
                         XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)).and()
 
-                .formLogin()
-                .defaultSuccessUrl("/")
-                .loginPage("/login")
-                .failureUrl("/login?error")
-                .permitAll()
-                .and()
+//                .formLogin()
+//                .defaultSuccessUrl("/")
+//                .loginPage("/login")
+//                .failureUrl("/login?error")
+//                .permitAll()
+//                .and()
+                .httpBasic().and()
 
                 .logout()
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/")
                 .logoutUrl("/logout")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)
                 .permitAll()
                 .and()
 
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers(APIMappings.Web.API_ROOT + "/**").permitAll()
+                .antMatchers(APIMappings.Web.SDK_API_ROOT + "/**").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .anyRequest().authenticated()
                 .and();

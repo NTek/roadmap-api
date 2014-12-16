@@ -13,6 +13,14 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/chat', function (chatmsg) {
+            var msg = JSON.parse(chatmsg.body);
+            showMessage(msg.username, msg.text);
+        });
+//        stompClient.subscribe('/user/topic/chat', function (chatmsg) {
+//            var msg = JSON.parse(chatmsg.body);
+//            showMessage(msg.username, msg.text);
+//        });
     });
 }
 
@@ -22,22 +30,22 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function subscribe() {
-    var text = document.getElementById('subscribe_field').value;
+function sendMsg() {
+    var text = document.getElementById('text').value;
     if (text == '') {
         alert("Enter a message!");
         return
     }
-    stompClient.subscribe(text, function (chatmsg) {
-        var msg = JSON.parse(chatmsg.body);
-        showMessage(JSON.stringify(msg, "", 4));
-    });
-    $('#subscribe_field').val("");
-    showMessage("Subscribed to " + text)
+    stompClient.send("/chat", {}, JSON.stringify({'text': text}));
+    $('#text').val("");
 }
 
-function showMessage(message) {
-    $('#response').html(message);
+function showMessage(username, message) {
+    var response = document.getElementById('response');
+    var p = document.createElement('p');
+    p.style.wordWrap = 'break-word';
+    p.appendChild(document.createTextNode(username + ': ' + message));
+    response.appendChild(p);
 }
 
 $(document).keypress(function (event) {

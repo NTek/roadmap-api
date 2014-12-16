@@ -6,11 +6,9 @@ import com.ramotion.roadmap.model.utils.AuditableEntityListener;
 import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.Collection;
 
-/**
- * Created by Oleg Vasiliev on 12.11.2014.
- */
 @Entity
 @Table(name = "feature")
 @EntityListeners(value = AuditableEntityListener.class)
@@ -28,7 +26,7 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
     @JsonIgnore
     private ApplicationEntity application;
 
-    @JsonIgnore
+    @Valid
     private Collection<FeatureTextEntity> localizedFeatures;
 
     @JsonIgnore
@@ -85,7 +83,7 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
         this.applicationId = application != null ? application.getId() : null;
     }
 
-    @OneToMany(mappedBy = "feature")
+    @OneToMany(mappedBy = "feature", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     public Collection<FeatureTextEntity> getLocalizedFeatures() {
         return localizedFeatures;
     }

@@ -4,7 +4,7 @@
 -- ## ADD "runAlways:true" to changeset for apply changes with each run
 -- ## more details at http://www.liquibase.org/documentation/sql_format.html
 
--- changeset oleg.v:1
+-- changeset oleg.v:1 runAlways:true
 
 DROP TABLE IF EXISTS `auth_token`;
 DROP TABLE IF EXISTS `user_has_application`;
@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS `application`;
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id`                        BIGINT       NOT NULL AUTO_INCREMENT,
+  `uuid`                      BINARY(16)   NULL,
   `email`                     VARCHAR(255) NOT NULL,
   `password`                  VARCHAR(255) NOT NULL,
   `enabled`                   BIT          NOT NULL DEFAULT 1,
@@ -31,11 +32,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   `created_at`                TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
+  UNIQUE INDEX `uid_UNIQUE` (`uuid` ASC),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC)
+)
+
   ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `application` (
   `id`               BIGINT       NOT NULL AUTO_INCREMENT,
+  `uuid`             BINARY(16)   NULL,
   `name`             VARCHAR(255) NOT NULL,
   `description`      VARCHAR(255) NULL,
   `api_token`        VARCHAR(45)  NOT NULL,
@@ -44,9 +49,11 @@ CREATE TABLE IF NOT EXISTS `application` (
   `created_at`       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `uid_UNIQUE` (`uuid` ASC),
   UNIQUE INDEX `api_security_key_UNIQUE` (`api_token` ASC),
   UNIQUE INDEX `active_survey_id_UNIQUE` (`active_survey_id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC)
+)
   ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `feature` (
@@ -62,11 +69,13 @@ CREATE TABLE IF NOT EXISTS `feature` (
   FOREIGN KEY (`application_id`)
   REFERENCES `application` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE
+)
   ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `survey` (
   `id`             BIGINT       NOT NULL,
+  `uuid`           BINARY(16)   NULL,
   `title`          VARCHAR(255) NOT NULL,
   `application_id` BIGINT       NOT NULL,
   `disabled`       BIT          NOT NULL DEFAULT 0,
@@ -78,12 +87,14 @@ CREATE TABLE IF NOT EXISTS `survey` (
   `created_at`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `uid_UNIQUE` (`uuid` ASC),
   INDEX `surveys-to_applications_idx` (`application_id` ASC),
   CONSTRAINT `survey-to-application`
   FOREIGN KEY (`application_id`)
   REFERENCES `application` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE
+)
   ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `survey_has_feature` (
@@ -100,7 +111,8 @@ CREATE TABLE IF NOT EXISTS `survey_has_feature` (
   FOREIGN KEY (`feature_id`)
   REFERENCES `feature` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE
+)
   ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `vote` (
@@ -123,22 +135,26 @@ CREATE TABLE IF NOT EXISTS `vote` (
   FOREIGN KEY (`feature_id`)
   REFERENCES `feature` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE
+)
   ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `feature_text` (
+  `id`          BIGINT       NOT NULL AUTO_INCREMENT,
   `feature_id`  BIGINT       NOT NULL,
   `language`    VARCHAR(2)   NOT NULL DEFAULT 'en',
   `text`        VARCHAR(255) NOT NULL,
   `modified_at` TIMESTAMP    NULL,
   `created_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX `localized_features-to-features_idx` (`feature_id` ASC),
-  PRIMARY KEY (`feature_id`, `language`),
+  INDEX `id_UNIQUE` (`id` ASC),
+  PRIMARY KEY (`id`),
   CONSTRAINT `localized_features-to-feature`
   FOREIGN KEY (`feature_id`)
   REFERENCES `feature` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE
+)
   ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `user_has_application` (
@@ -158,7 +174,8 @@ CREATE TABLE IF NOT EXISTS `user_has_application` (
   FOREIGN KEY (`application_id`)
   REFERENCES `application` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE
+)
   ENGINE = InnoDB;
 
 -- -----------------------------------------------------

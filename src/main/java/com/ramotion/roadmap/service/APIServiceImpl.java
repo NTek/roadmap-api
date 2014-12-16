@@ -1,8 +1,8 @@
 package com.ramotion.roadmap.service;
 
 import com.ramotion.roadmap.config.AppConfig;
-import com.ramotion.roadmap.dto.web.GetSurveyDto;
-import com.ramotion.roadmap.dto.web.NewVoteRequestDto;
+import com.ramotion.roadmap.dto.GetSurveyDto;
+import com.ramotion.roadmap.dto.NewVoteRequestDto;
 import com.ramotion.roadmap.exceptions.NotFoundException;
 import com.ramotion.roadmap.exceptions.ValidationException;
 import com.ramotion.roadmap.model.*;

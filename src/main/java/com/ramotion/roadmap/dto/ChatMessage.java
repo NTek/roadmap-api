@@ -1,8 +1,5 @@
 package com.ramotion.roadmap.dto;
 
-/**
- * Created by Oleg Vasiliev on 14.11.2014.
- */
 public class ChatMessage {
 
     private String text;

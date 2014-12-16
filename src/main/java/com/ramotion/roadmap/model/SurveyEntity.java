@@ -1,20 +1,21 @@
 package com.ramotion.roadmap.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ramotion.roadmap.model.utils.AuditTimestamps;
-import com.ramotion.roadmap.model.utils.AuditableEntityListener;
-import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
+import com.ramotion.roadmap.model.utils.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.UUID;
 
 @Entity
 @Table(name = "survey")
-@EntityListeners(value = AuditableEntityListener.class)
-public class SurveyEntity implements EntityWithAuditTimestamps {
+@EntityListeners(value = {AuditableEntityListener.class, EntityWithUUIDListener.class})
+public class SurveyEntity implements EntityWithAuditTimestamps, EntityWithUUID {
 
     private Long id;
+
+    private UUID uuid;
 
     private Long applicationId;
 
@@ -36,7 +37,6 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
     @JsonIgnore
     private ApplicationEntity application;
 
-    @JsonIgnore
     private Collection<FeatureEntity> feature;
 
     @JsonIgnore
@@ -50,6 +50,15 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = false)
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     @Column(name = "title", nullable = false, insertable = true, updatable = true, length = 255)
@@ -144,6 +153,7 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
             return false;
         if (startedAt != null ? !startedAt.equals(that.startedAt) : that.startedAt != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
         return true;
     }
@@ -151,6 +161,7 @@ public class SurveyEntity implements EntityWithAuditTimestamps {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
         result = 31 * result + (applicationId != null ? applicationId.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (disabled ? 1 : 0);

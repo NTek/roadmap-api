@@ -1,32 +1,38 @@
 package com.ramotion.roadmap.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ramotion.roadmap.model.utils.AuditTimestamps;
-import com.ramotion.roadmap.model.utils.AuditableEntityListener;
-import com.ramotion.roadmap.model.utils.EntityWithAuditTimestamps;
+import com.ramotion.roadmap.model.utils.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user")
-@EntityListeners(value = AuditableEntityListener.class)
-public class UserEntity implements EntityWithAuditTimestamps {
+@EntityListeners(value = {AuditableEntityListener.class, EntityWithUUIDListener.class})
+public class UserEntity implements EntityWithAuditTimestamps, EntityWithUUID {
 
+    @JsonIgnore
     private Long id;
+
+    private UUID uuid;
 
     private String email;
 
     @JsonIgnore
     private String password;
 
-    private boolean enabled;
+    @JsonIgnore
+    private boolean enabled = true;
 
-    private String role;
+    @JsonIgnore
+    private String role = "ROLE_USER";
 
+    @JsonIgnore
     private Timestamp recoveryTokenExpiration;
 
+    @JsonIgnore
     private String recoveryToken;
 
     @Embedded
@@ -35,8 +41,8 @@ public class UserEntity implements EntityWithAuditTimestamps {
     @JsonIgnore
     private Collection<UserHasApplicationEntity> applications;
 
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
@@ -46,7 +52,15 @@ public class UserEntity implements EntityWithAuditTimestamps {
         this.id = id;
     }
 
-    @Basic
+    @Column(name = "uuid", nullable = false, insertable = true, updatable = false)
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
     @Column(name = "email", nullable = false, insertable = true, updatable = true, length = 255)
     public String getEmail() {
         return email;
@@ -56,7 +70,6 @@ public class UserEntity implements EntityWithAuditTimestamps {
         this.email = email;
     }
 
-    @Basic
     @Column(name = "password", nullable = false, insertable = true, updatable = true, length = 255)
     public String getPassword() {
         return password;
@@ -66,7 +79,6 @@ public class UserEntity implements EntityWithAuditTimestamps {
         this.password = password;
     }
 
-    @Basic
     @Column(name = "enabled", nullable = false, insertable = true, updatable = true)
     public boolean isEnabled() {
         return enabled;
@@ -76,7 +88,6 @@ public class UserEntity implements EntityWithAuditTimestamps {
         this.enabled = enabled;
     }
 
-    @Basic
     @Column(name = "role", nullable = false, insertable = true, updatable = true, length = 255)
     public String getRole() {
         return role;
@@ -86,7 +97,6 @@ public class UserEntity implements EntityWithAuditTimestamps {
         this.role = role;
     }
 
-    @Basic
     @Column(name = "recovery_token_expiration", nullable = true, insertable = true, updatable = true)
     public Timestamp getRecoveryTokenExpiration() {
         return recoveryTokenExpiration;
@@ -96,7 +106,6 @@ public class UserEntity implements EntityWithAuditTimestamps {
         this.recoveryTokenExpiration = recoveryTokenExpiration;
     }
 
-    @Basic
     @Column(name = "recovery_token", nullable = true, insertable = true, updatable = true, length = 255)
     public String getRecoveryToken() {
         return recoveryToken;
@@ -134,8 +143,7 @@ public class UserEntity implements EntityWithAuditTimestamps {
         if (recoveryTokenExpiration != null ? !recoveryTokenExpiration.equals(that.recoveryTokenExpiration) : that.recoveryTokenExpiration != null)
             return false;
         if (role != null ? !role.equals(that.role) : that.role != null) return false;
-        if (applications != null ? !applications.equals(that.applications) : that.applications != null)
-            return false;
+        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
         return true;
     }
@@ -143,6 +151,7 @@ public class UserEntity implements EntityWithAuditTimestamps {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (enabled ? 1 : 0);
@@ -150,7 +159,6 @@ public class UserEntity implements EntityWithAuditTimestamps {
         result = 31 * result + (recoveryTokenExpiration != null ? recoveryTokenExpiration.hashCode() : 0);
         result = 31 * result + (recoveryToken != null ? recoveryToken.hashCode() : 0);
         result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
-        result = 31 * result + (applications != null ? applications.hashCode() : 0);
         return result;
     }
 

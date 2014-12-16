@@ -6,6 +6,7 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
+  <component name="IdProvider" IDEtalkID="E221A86AC40DB405D9B373DEE6E22662" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
@@ -17,4 +18,3 @@
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
-

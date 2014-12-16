@@ -1,10 +1,17 @@
 # Roadmap backend #
 [ ![Codeship Status for Ramotion/roadmap-api](https://codeship.com/projects/2ba911f0-4afc-0132-8280-0ac24b6883cd/status?branch=master)](https://codeship.com/projects/46560)
 
+### Version 0.5.0 ###
+
+* Many changes in model, added UUID's
+* Added public API for registration
+* Login page removed, auth changed to standard basic HTTP auth
+* Added CORS support
+
 ### Version 0.4.3 ###
-    
-* Started work on api socket API design
-    
+
+* Started work on API design
+
 ### Version 0.4.2 ###
 
 * User credentials for login now stored in database

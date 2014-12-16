@@ -9,7 +9,6 @@
 <h2 style="margin-bottom: 5px;">Oops! An error has occurred!</h2>
 
 <p>Application has encountered an error. View page source for details.</p>
-
 <!--
     Failed URL: ${url}
     Exception:  ${exception.getClass().getSimpleName()} - ${exception.message}

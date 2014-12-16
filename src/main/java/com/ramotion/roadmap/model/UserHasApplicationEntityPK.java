@@ -3,6 +3,7 @@ package com.ramotion.roadmap.model;
 import java.io.Serializable;
 
 public class UserHasApplicationEntityPK implements Serializable {
+
     private Long userId;
 
     private Long applicationId;
@@ -13,6 +14,14 @@ public class UserHasApplicationEntityPK implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
     }
 
     @Override

@@ -10,6 +10,12 @@ public interface UserHasApplicationRepository extends CrudRepository<UserHasAppl
 
     List<UserHasApplicationEntity> findByUserId(long userId);
 
+    List<UserHasApplicationEntity> getByUserId(long userId);
+
+    List<UserHasApplicationEntity> findDistinctByUserId(long userId);
+
     List<UserHasApplicationEntity> findByApplicationId(long applicationId);
+
+    UserHasApplicationEntity findByUserIdAndApplicationId(long userId, long applicationId);
 
 }

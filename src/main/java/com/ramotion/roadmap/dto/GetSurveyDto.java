@@ -1,4 +1,4 @@
-package com.ramotion.roadmap.dto.web;
+package com.ramotion.roadmap.dto;
 
 import java.util.HashSet;
 

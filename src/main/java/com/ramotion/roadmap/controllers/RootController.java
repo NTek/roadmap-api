@@ -1,23 +1,19 @@
-package com.ramotion.roadmap.controllers.web;
+package com.ramotion.roadmap.controllers;
 
 import com.ramotion.roadmap.config.AppConfig;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.*;
 
-/**
- * Created by Oleg Vasiliev on 11.11.2014.
- */
-@Controller
-@ResponseBody
+@RestController
 public class RootController {
 
     private static final Logger LOG = Logger.getLogger(RootController.class.getName());

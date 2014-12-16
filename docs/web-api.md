@@ -28,11 +28,11 @@
 - *Headers:* `token:{apitoken}`
 - *Description:* Get current survey for selected device and selected language, if translation not exist - will be returned default language
 - *Input:* `?devicetoken={x}&language={y}`
-- *Output:* 
+- *Output:*
 
         {
         "surveyId":1,
-        "features": 
+        "features":
             [
                 {
                 "featureId":2,
@@ -51,11 +51,11 @@
 
 - *URL:* `/api/vote`
 - *Method:* `POST`
-- *Headers:* 
+- *Headers:*
         token:{apitoken}
         Content-Type:application/json
 - *Description:* Vote for some feature in selected survey
-- *Input:* 
+- *Input:*
 
         {
         "deviceToken":"device-token-1",
@@ -64,7 +64,7 @@
         "language":"en"
         }
 
-- *Output:* 
+- *Output:*
 
         {
         "deviceToken": "device-token-1",
@@ -72,7 +72,7 @@
         "featureId": 4,
         "language": "en",
         "auditTimestamps":{
-                "createdAt": 1417512785460,
-                "modifiedAt": 1417512785460
+                "createdAt": "2014-12-11T14:00:38.696+0400",
+                "modifiedAt": "2014-12-11T14:00:38.696+0400"
             }
         }

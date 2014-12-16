@@ -5,9 +5,6 @@ import javax.persistence.PreUpdate;
 import java.sql.Timestamp;
 import java.util.Date;
 
-/**
- * Created by Oleg Vasiliev on 13.11.2014.
- */
 public class AuditableEntityListener {
 
     @PrePersist
@@ -17,7 +14,6 @@ public class AuditableEntityListener {
             if (auditableEntity.getAuditTimestamps() == null) {
                 auditableEntity.setAuditTimestamps(new AuditTimestamps());
             }
-
             Timestamp now = new Timestamp((new Date()).getTime());
             auditableEntity.getAuditTimestamps().setCreatedAt(now);
             auditableEntity.getAuditTimestamps().setModifiedAt(now);
@@ -31,7 +27,6 @@ public class AuditableEntityListener {
             if (auditableEntity.getAuditTimestamps() == null) {
                 auditableEntity.setAuditTimestamps(new AuditTimestamps());
             }
-
             Timestamp now = new Timestamp((new Date()).getTime());
             auditableEntity.getAuditTimestamps().setModifiedAt(now);
         }
