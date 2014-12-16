@@ -4,8 +4,7 @@
 -- ## ADD "runAlways:true" to changeset for apply changes with each run
 -- ## more details at http://www.liquibase.org/documentation/sql_format.html
 
--- changeset oleg.v:1 runAlways:true
-
+-- changeset oleg.v:1
 DROP TABLE IF EXISTS `auth_token`;
 DROP TABLE IF EXISTS `user_has_application`;
 DROP TABLE IF EXISTS `user`;
