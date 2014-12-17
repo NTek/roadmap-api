@@ -5,6 +5,7 @@
       <w>auditable</w>
       <w>changelog</w>
       <w>changeset</w>
+      <w>cors</w>
       <w>heroku</w>
       <w>inno</w>
       <w>liquibase</w>

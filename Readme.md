@@ -1,6 +1,11 @@
 # Roadmap backend #
 [ ![Codeship Status for Ramotion/roadmap-api](https://codeship.com/projects/2ba911f0-4afc-0132-8280-0ac24b6883cd/status?branch=master)](https://codeship.com/projects/46560)
 
+### Version 0.5.1 ###
+
+* Deployment fixes
+* Cors filter fixes
+
 ### Version 0.5.0 ###
 
 * Many changes in model, added UUID's
