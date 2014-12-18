@@ -85,7 +85,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/alogin").setViewName("alogin");
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/chat").setViewName("chat");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);

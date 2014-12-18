@@ -36,13 +36,13 @@ public class FeatureServiceImpl implements FeatureService {
     private UserHasApplicationRepository userHasApplicationRepository;
 
     @Override
-    public boolean deleteFeatureWithAccessCheck(long featureId, String username) {
-        if (username == null) return false;
+    public void deleteFeatureWithAccessCheck(long featureId, String username) {
+        if (username == null) return;
         UserEntity user = userRepository.findByEmail(username);
-        if (user == null) return false;
+        if (user == null) return;
 
         FeatureEntity featureEntity = featureRepository.findOne(featureId);
-        if (featureEntity == null) return false;
+        if (featureEntity == null) return;
 
         UserHasApplicationEntity userHasApplicationEntity =
                 userHasApplicationRepository.findByUserIdAndApplicationId(user.getId(),
@@ -55,11 +55,8 @@ public class FeatureServiceImpl implements FeatureService {
 
         featureRepository.delete(featureEntity);
 
-
         //notify subscribers for this app topic, also this action initialize lazy loaded collections
         messagingTemplate.convertAndSend(APIMappings.Socket.TOPIC_APPS + "/" + app.getUuid(), app);
-
-        return false;
     }
 
     @Override

@@ -74,6 +74,16 @@ public class APIController {
         return applicationService.createOrUpdateApplication(app, principal.getName());
     }
 
+//    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS + "/{app}/survey", method = RequestMethod.POST)
+//    public Object createOrEditSurvey(Principal principal,
+//                                     @PathVariable("app") String appId,
+//                                     @Valid @RequestBody SurveyEntity survey,
+//                                     BindingResult errors) {
+//        if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
+//        return null;
+//    }
+
+
     //============================================= EXCEPTION HANDLERS =================================================
 
     @ExceptionHandler(value = ValidationException.class)

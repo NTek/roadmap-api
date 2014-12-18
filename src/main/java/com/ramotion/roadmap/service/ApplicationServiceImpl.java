@@ -91,7 +91,8 @@ public class ApplicationServiceImpl implements ApplicationService {
         } else {
             //Check user access level - if user can't edit app - throw error!
             UserHasApplicationEntity accessObject = userHasApplicationRepository.findByUserIdAndApplicationId(existedUser.getId(), existedApp.getId());
-            if (accessObject == null || accessObject.getAccessLevel() > AppConfig.USER_ACCESS_OWNER) throw new AccessDeniedException();
+            if (accessObject == null || accessObject.getAccessLevel() > AppConfig.USER_ACCESS_OWNER)
+                throw new AccessDeniedException();
 
             //it's updating
             existedApp.setName(entity.getName());
@@ -115,7 +116,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         return existedApp;
     }
-
 
     @Override
     public void deleteApplication(long appId, String ownerEmail) {

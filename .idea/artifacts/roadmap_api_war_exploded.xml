@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="roadmap-api:war exploded">
-    <output-path>$PROJECT_DIR$/target/roadmap-api-0.5.1</output-path>
+    <output-path>$PROJECT_DIR$/target/roadmap-api-0.5.2</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -61,7 +61,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="C:\Dropbox\Projects\roadmap-api\target/MANIFEST.MF" />
+        <element id="file-copy" path="D:\Dropbox\Projects\roadmap-api\target/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="roadmap-api/web/Web" />
     </root>

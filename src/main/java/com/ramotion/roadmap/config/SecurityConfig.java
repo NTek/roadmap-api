@@ -1,6 +1,7 @@
 package com.ramotion.roadmap.config;
 
 import com.ramotion.roadmap.utils.APIMappings;
+import com.ramotion.roadmap.utils.LoginFailureHandler;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +49,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 new XFrameOptionsHeaderWriter(
                         XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)).and()
 
-//                .formLogin()
-//                .defaultSuccessUrl("/")
-//                .loginPage("/login")
-//                .failureUrl("/login?error")
-//                .permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .failureHandler(getLoginFailureHandler())
+                .permitAll()
+                .and()
+
+//                .httpBasic()
 //                .and()
-                .httpBasic().and()
 
                 .logout()
                 .logoutSuccessUrl("/")
@@ -66,11 +69,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/alogin").permitAll()
                 .antMatchers(APIMappings.Web.SDK_API_ROOT + "/**").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .anyRequest().authenticated()
                 .and();
+    }
 
+    @Bean
+    public LoginFailureHandler getLoginFailureHandler() {
+        return new LoginFailureHandler();
     }
 
     @Bean
@@ -85,11 +93,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("bob").password("123").roles("USER").and()
-//                .withUser("alice").password("123").roles("USER").and()
-//                .withUser("mike").password("123").roles("USER");
         auth.userDetailsService(getJdbcUserDetailsManager()).passwordEncoder(new ShaPasswordEncoder());
-
     }
 }
