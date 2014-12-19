@@ -6,6 +6,7 @@ import com.ramotion.roadmap.exceptions.AccessDeniedException;
 import com.ramotion.roadmap.exceptions.ValidationException;
 import com.ramotion.roadmap.model.ApplicationEntity;
 import com.ramotion.roadmap.model.Language;
+import com.ramotion.roadmap.model.SurveyEntity;
 import com.ramotion.roadmap.service.APIService;
 import com.ramotion.roadmap.service.ApplicationService;
 import com.ramotion.roadmap.service.UserService;
@@ -29,6 +30,10 @@ public class APIController {
 
     @Autowired
     private UserService userService;
+
+//    @Autowired
+//    private SurveyService surveyService;
+
 
     @Autowired
     private ApplicationService applicationService;
@@ -66,7 +71,7 @@ public class APIController {
         return applicationService.getApplicationsByUser(principal.getName());
     }
 
-    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS, method = RequestMethod.POST)
+    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS, method = RequestMethod.PUT)
     public Object editOrCreateApp(Principal principal,
                                   @Valid @RequestBody ApplicationEntity app,
                                   BindingResult errors) {
@@ -74,14 +79,14 @@ public class APIController {
         return applicationService.createOrUpdateApplication(app, principal.getName());
     }
 
-//    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS + "/{app}/survey", method = RequestMethod.POST)
-//    public Object createOrEditSurvey(Principal principal,
-//                                     @PathVariable("app") String appId,
-//                                     @Valid @RequestBody SurveyEntity survey,
-//                                     BindingResult errors) {
-//        if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
-//        return null;
-//    }
+    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS + "/{app}/survey", method = RequestMethod.POST)
+    public Object createOrEditSurvey(Principal principal,
+                                     @PathVariable("app") long appId,
+                                     @Valid @RequestBody SurveyEntity survey,
+                                     BindingResult errors) {
+        if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
+        return null;
+    }
 
 
     //============================================= EXCEPTION HANDLERS =================================================

@@ -2,10 +2,13 @@ package com.ramotion.roadmap.config;
 
 import com.ramotion.roadmap.utils.APIMappings;
 import com.ramotion.roadmap.utils.LoginFailureHandler;
+import com.ramotion.roadmap.utils.LoginSuccessHandler;
+import com.ramotion.roadmap.utils.RestAuthenticationEntryPoint;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,12 +50,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // See https://jira.springsource.org/browse/SPR-11496
                 .headers().addHeaderWriter(
                 new XFrameOptionsHeaderWriter(
-                        XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)).and()
+                        XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+                .and()
+
+                .exceptionHandling()
+                .authenticationEntryPoint(getRestAuthenticationEntryPoint())
+                .and()
 
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/", true)
+//                .defaultSuccessUrl("/", true)
                 .failureHandler(getLoginFailureHandler())
+                .successHandler(getLoginSuccessHandler())
                 .permitAll()
                 .and()
 
@@ -72,13 +81,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/alogin").permitAll()
                 .antMatchers(APIMappings.Web.SDK_API_ROOT + "/**").permitAll()
                 .antMatchers("/static/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and();
     }
 
     @Bean
+    public RestAuthenticationEntryPoint getRestAuthenticationEntryPoint() {
+        return new RestAuthenticationEntryPoint();
+    }
+
+    @Bean
     public LoginFailureHandler getLoginFailureHandler() {
         return new LoginFailureHandler();
+    }
+
+    @Bean
+    public LoginSuccessHandler getLoginSuccessHandler() {
+        return new LoginSuccessHandler();
     }
 
     @Bean

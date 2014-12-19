@@ -1,10 +1,14 @@
 # Roadmap backend #
 [ ![Codeship Status for Ramotion/roadmap-api](https://codeship.com/projects/2ba911f0-4afc-0132-8280-0ac24b6883cd/status?branch=master)](https://codeship.com/projects/46560)
 
+### Version 0.5.3 ###
+
+* Issues with login and cors requests
+
 ### Version 0.5.2 ###
 
 * Login logic changed to form-login with `/login` endpoint
-* Ajax login example available on "/alogin` page
+* Ajax login example available on `/alogin` page
 
 ### Version 0.5.1 ###
 
