@@ -46,6 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+//                .addFilterBefore(getCorsFilter(), ChannelProcessingFilter.class)
+
                 .csrf().disable()
                 // See https://jira.springsource.org/browse/SPR-11496
                 .headers().addHeaderWriter(
@@ -85,6 +87,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and();
     }
+
+//    @Bean
+//    public CORSFilter getCorsFilter() {
+//        return new CORSFilter();
+//    }
 
     @Bean
     public RestAuthenticationEntryPoint getRestAuthenticationEntryPoint() {

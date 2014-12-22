@@ -12,6 +12,7 @@
 
     <link href="${prefix}/static/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" charset="utf8" src="${prefix}/static/js-libs/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="${prefix}/static/example.js"></script>
 
     <link href="${prefix}/static/css/login.css" rel="stylesheet">
 </head>
@@ -20,36 +21,7 @@
     <h1>Ajax login example</h1>
 
     <h2>Output in console, code example in sources</h2>
-    <script>
 
-        $.post(
-                "http://roadmap-api.herokuapp.com/login",
-                {
-                    username: "testuser1@mail.com",
-                    password: "123"
-                },
-                onlogin
-        );
-
-        function onlogin(data) {
-            console.log("You logged in:")
-//            console.log(data)
-            console.log(JSON.stringify(data, "", 4))
-
-            getApps()
-        }
-
-        function getApps() {
-            $.get(
-                    "http://roadmap-api.herokuapp.com/apps",
-                    function (data) {
-                        console.log("Your app list:")
-                        console.log(data)
-
-                    }
-            );
-        }
-    </script>
 </div>
 </body>
 </html>
