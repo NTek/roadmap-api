@@ -23,7 +23,7 @@
     <script>
 
         $.post(
-                "/login",
+                "http://roadmap-api.herokuapp.com/login",
                 {
                     username: "testuser1@mail.com",
                     password: "123"
@@ -41,7 +41,7 @@
 
         function getApps() {
             $.get(
-                    "/apps",
+                    "http://roadmap-api.herokuapp.com/apps",
                     function (data) {
                         console.log("Your app list:")
                         console.log(data)
