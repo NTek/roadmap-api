@@ -19,9 +19,6 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by Oleg Vasiliev on 01.12.2014.
- */
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -46,8 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//                .addFilterBefore(getCorsFilter(), ChannelProcessingFilter.class)
-
                 .csrf().disable()
                 // See https://jira.springsource.org/browse/SPR-11496
                 .headers().addHeaderWriter(
@@ -61,14 +56,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .formLogin()
                 .loginPage("/login")
-//                .defaultSuccessUrl("/", true)
                 .failureHandler(getLoginFailureHandler())
                 .successHandler(getLoginSuccessHandler())
                 .permitAll()
                 .and()
-
-//                .httpBasic()
-//                .and()
 
                 .logout()
                 .logoutSuccessUrl("/")
@@ -87,11 +78,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and();
     }
-
-//    @Bean
-//    public CORSFilter getCorsFilter() {
-//        return new CORSFilter();
-//    }
 
     @Bean
     public RestAuthenticationEntryPoint getRestAuthenticationEntryPoint() {

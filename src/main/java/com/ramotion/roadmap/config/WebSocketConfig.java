@@ -10,10 +10,6 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by Oleg Vasiliev on 14.11.2014.
- * Web socket configuration with STOMP and SockJS
- */
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {

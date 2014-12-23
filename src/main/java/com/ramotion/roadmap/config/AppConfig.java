@@ -26,9 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Properties;
 
-/**
- * Application beans configuration
- */
 @EnableAsync
 @EnableWebMvc
 @Configuration
