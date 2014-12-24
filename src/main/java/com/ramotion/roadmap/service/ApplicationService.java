@@ -11,6 +11,10 @@ public interface ApplicationService {
 
     List<ApplicationEntity> getApplicationsByUser(String userEmail);
 
+    ApplicationEntity createApplication(ApplicationEntity entity, String ownerEmail);
+
+    ApplicationEntity editApplication(long appId, ApplicationEntity entity, String userEmail);
+
     ApplicationEntity createOrUpdateApplication(ApplicationEntity applicationEntity, String ownerEmail);
 
     void deleteApplication(long appId, String ownerEmail);

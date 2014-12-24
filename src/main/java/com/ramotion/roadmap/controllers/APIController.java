@@ -71,12 +71,21 @@ public class APIController {
         return applicationService.getApplicationsByUser(principal.getName());
     }
 
-    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS, method = RequestMethod.PUT)
-    public Object editOrCreateApp(Principal principal,
-                                  @Valid @RequestBody ApplicationEntity app,
-                                  BindingResult errors) {
+    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS, method = RequestMethod.POST)
+    public Object createApp(Principal principal,
+                            @Valid @RequestBody ApplicationEntity app,
+                            BindingResult errors) {
         if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
-        return applicationService.createOrUpdateApplication(app, principal.getName());
+        return applicationService.createApplication(app, principal.getName());
+    }
+
+    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS + "/{id}", method = RequestMethod.PUT)
+    public Object editApp(Principal principal,
+                          @PathVariable(value = "id") long id,
+                          @Valid @RequestBody ApplicationEntity app,
+                          BindingResult errors) {
+        if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
+        return applicationService.editApplication(id, app, principal.getName());
     }
 
     @RequestMapping(value = APIMappings.Web.FRONTEND_APPS + "/{app}/survey", method = RequestMethod.POST)

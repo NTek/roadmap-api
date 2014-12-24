@@ -50,8 +50,7 @@ CREATE TABLE IF NOT EXISTS `application` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   UNIQUE INDEX `uid_UNIQUE` (`uuid` ASC),
   UNIQUE INDEX `api_security_key_UNIQUE` (`api_token` ASC),
-  UNIQUE INDEX `active_survey_id_UNIQUE` (`active_survey_id` ASC),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC)
+  UNIQUE INDEX `active_survey_id_UNIQUE` (`active_survey_id` ASC)
 )
   ENGINE = InnoDB;
 

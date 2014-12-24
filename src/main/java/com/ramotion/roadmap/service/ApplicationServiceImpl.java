@@ -2,6 +2,7 @@ package com.ramotion.roadmap.service;
 
 import com.ramotion.roadmap.config.AppConfig;
 import com.ramotion.roadmap.exceptions.AccessDeniedException;
+import com.ramotion.roadmap.exceptions.ValidationException;
 import com.ramotion.roadmap.model.*;
 import com.ramotion.roadmap.repository.ApplicationRepository;
 import com.ramotion.roadmap.repository.UserHasApplicationRepository;
@@ -59,11 +60,85 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public ApplicationEntity createApplication(ApplicationEntity entity, String ownerEmail) {
+        if (entity == null || ownerEmail == null) return null;
+
+        UserEntity existedUser = userRepository.findByEmail(ownerEmail);
+        if (existedUser == null) return null;
+
+        entity.setId(null);
+        entity.setApplicationUsers(null);
+        entity.setApiToken(generateAPIToken());
+
+        for (FeatureEntity featureEntity : entity.getApplicationFeatures()) {
+            featureEntity.setId(null);
+            featureEntity.setApplication(entity);
+            for (FeatureTextEntity localized : featureEntity.getLocalizedFeatures()) {
+                localized.setId(null);
+                localized.setFeature(featureEntity);
+            }
+        }
+
+        applicationRepository.save(entity);
+
+        //create owner record for app
+        UserHasApplicationEntity owner = new UserHasApplicationEntity(existedUser.getId(), entity.getId(), AppConfig.USER_ACCESS_OWNER);
+        userHasApplicationRepository.save(owner);
+
+        ApplicationEntity savedApp = applicationRepository.findOne(entity.getId());
+        //notify app user, also this action initialize lazy loaded collections
+        messagingTemplate.convertAndSendToUser(ownerEmail, APIMappings.Socket.TOPIC_APPS, savedApp);
+        return savedApp;
+    }
+
+    @Override
+    public ApplicationEntity editApplication(long appId, ApplicationEntity entity, String userEmail) {
+        if (entity == null || userEmail == null) return null;
+
+        UserEntity existedUser = userRepository.findByEmail(userEmail);
+
+        ApplicationEntity existedApp = applicationRepository.findOne(appId);
+
+        if (existedApp == null || existedUser == null) return null;
+
+        UserHasApplicationEntity userAccessLevel = userHasApplicationRepository.findByUserIdAndApplicationId(existedUser.getId(), existedApp.getId());
+
+        if (userAccessLevel == null || userAccessLevel.getAccessLevel() > AppConfig.USER_ACCESS_EDIT)
+            throw new AccessDeniedException();
+
+        existedApp.setName(entity.getName());
+        if (entity.getApiToken() != null) existedApp.setApiToken(entity.getApiToken());
+        existedApp.setApplicationFeatures(entity.getApplicationFeatures());
+        existedApp.setDescription(entity.getDescription());
+
+        for (FeatureEntity featureEntity : existedApp.getApplicationFeatures()) {
+            if (featureEntity.getApplicationId() != null && featureEntity.getApplicationId() != appId)
+                throw new ValidationException().withError("applicationFeatures", "you can't attach existed feature to another app");
+            featureEntity.setApplication(existedApp);
+            for (FeatureTextEntity localized : featureEntity.getLocalizedFeatures()) {
+                if (localized.getFeatureId() != null && !localized.getFeatureId().equals(featureEntity.getId()))
+                    throw new ValidationException().withError("applicationFeatures", "you can't attach existed localization text to another feature");
+                localized.setFeature(featureEntity);
+            }
+        }
+
+        applicationRepository.save(existedApp);
+
+        ApplicationEntity savedApp = applicationRepository.findOne(entity.getId());
+
+        //notify app users, also this action initialize lazy loaded collections
+        for (UserHasApplicationEntity userAccess : savedApp.getApplicationUsers()) {
+            messagingTemplate.convertAndSendToUser(userAccess.getUserByUserId().getEmail(), APIMappings.Socket.TOPIC_APPS, savedApp);
+        }
+
+        return savedApp;
+    }
+
+    @Override
     public ApplicationEntity createOrUpdateApplication(ApplicationEntity entity, String ownerEmail) {
         if (entity == null || ownerEmail == null) return null;
 
         UserEntity existedUser = userRepository.findByEmail(ownerEmail);
-
         if (existedUser == null) return null;
 
         ApplicationEntity existedApp = null;

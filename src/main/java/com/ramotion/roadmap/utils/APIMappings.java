@@ -19,11 +19,8 @@ public class APIMappings {
 
     public static class Socket {
         public static final String INITIAL_CONNECT = "/socket";
-
         public static final String TOPIC = "/topic";
-
         public static final String TOPIC_APPS = TOPIC + "/apps";
-        public static final String TOPIC_NEW_VOTE = TOPIC + "/on_new_survey_vote";
 
     }
 
