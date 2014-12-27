@@ -34,7 +34,13 @@ API's divided into private(require authorization) and public(available without a
 
         username:testuser1@mail.com
         password:123
-- *Success output (HTTP status 200):* `(empty)`
+- *Success output (HTTP status 200):*
+
+        {
+            "id":100500,
+            "email":"user@email.com"
+        }
+
 - *Error output (HTTP status 403):* `(empty)`
 
 **Logout**
@@ -155,28 +161,60 @@ API's divided into private(require authorization) and public(available without a
             ...
         ]
 
-**Edit or create new application**
+**Create new application**
 
 - *URL:* `/apps`
 - *Method:* `POST`
-- *Description:* Edit application or create the new (if id's not specified)
+- *Description:* Create new application
 - *Input:*
 
             {
-                "id": 1,
                 "name": "App1",
                 "description": "Description1",
                 "applicationFeatures": [
                     {
-                        "id": 1,
+                        "implemented": false,
+                        "localizedFeatures": [
+                            {
+                                "language": "en",
+                                "text": "Feature 1 en-text",
+                            },
+                            ...
+                        ]
+                    },
+                    ...
+                ],
+            },
+
+- *Success output (HTTP status 200):* full structure of app, completely similar to one application structure from application list request
+
+- *Validation error output (HTTP status 422):* similar to input but with error message in values
+
+
+**Edit existed application**
+
+- *URL:* `/apps/{id}`
+- *Method:* `PUT`
+- *Description:* Edit existed application
+- *Input:*
+
+            {
+                "name": "App edited name",
+                "apiToken": "some random string means that token must be regenerated",
+                "description": "Edited description",
+                "applicationFeatures": [
+                    {
                         "applicationId": 1,
                         "implemented": false,
                         "localizedFeatures": [
                             {
-                                "id": 1,
                                 "featureId": 1,
                                 "language": "en",
-                                "text": "Feature 1 en-text",
+                                "text": "Feature 1 en-text translation",
+                            },
+                            {
+                                "language": "ru",
+                                "text": "new translation",
                             },
                             ...
                         ]

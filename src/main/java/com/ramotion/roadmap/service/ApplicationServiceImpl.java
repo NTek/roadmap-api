@@ -1,10 +1,10 @@
 package com.ramotion.roadmap.service;
 
 import com.ramotion.roadmap.config.AppConfig;
-import com.ramotion.roadmap.exceptions.AccessDeniedException;
-import com.ramotion.roadmap.exceptions.ValidationException;
+import com.ramotion.roadmap.exceptions.*;
 import com.ramotion.roadmap.model.*;
 import com.ramotion.roadmap.repository.ApplicationRepository;
+import com.ramotion.roadmap.repository.FeatureTextRepository;
 import com.ramotion.roadmap.repository.UserHasApplicationRepository;
 import com.ramotion.roadmap.repository.UserRepository;
 import com.ramotion.roadmap.utils.APIMappings;
@@ -34,6 +34,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Autowired
     private UserHasApplicationRepository userHasApplicationRepository;
 
+    @Autowired
+    private FeatureTextRepository featureTextRepository;
+
     @Override
     public ApplicationRepository getRepository() {
         return applicationRepository;
@@ -43,7 +46,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public List<ApplicationEntity> getApplicationsByUser(String userEmail) {
         UserEntity user = userRepository.findByEmail(userEmail);
-        if (user == null) return null;
+        if (user == null) throw new UnauthorizedException("User account not found");
         List<UserHasApplicationEntity> userApps = userHasApplicationRepository.findByUserId(user.getId());
         List<ApplicationEntity> apps = new ArrayList<>(userApps.size());
         for (UserHasApplicationEntity userApp : userApps) {
@@ -61,10 +64,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public ApplicationEntity createApplication(ApplicationEntity entity, String ownerEmail) {
-        if (entity == null || ownerEmail == null) return null;
+        if (entity == null || ownerEmail == null) throw new InternalErrorException("Incorrect method parameters");
 
         UserEntity existedUser = userRepository.findByEmail(ownerEmail);
-        if (existedUser == null) return null;
+        if (existedUser == null) throw new UnauthorizedException("User account not found");
 
         entity.setId(null);
         entity.setApplicationUsers(null);
@@ -93,13 +96,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public ApplicationEntity editApplication(long appId, ApplicationEntity entity, String userEmail) {
-        if (entity == null || userEmail == null) return null;
+        if (entity == null || userEmail == null) throw new InternalErrorException("Incorrect method parameters");
 
         UserEntity existedUser = userRepository.findByEmail(userEmail);
+        if (existedUser == null) throw new UnauthorizedException("User account not found");
 
         ApplicationEntity existedApp = applicationRepository.findOne(appId);
 
-        if (existedApp == null || existedUser == null) return null;
+        if (existedApp == null) throw new NotFoundException("Application not found");
 
         UserHasApplicationEntity userAccessLevel = userHasApplicationRepository.findByUserIdAndApplicationId(existedUser.getId(), existedApp.getId());
 
@@ -112,13 +116,33 @@ public class ApplicationServiceImpl implements ApplicationService {
         existedApp.setDescription(entity.getDescription());
 
         for (FeatureEntity featureEntity : existedApp.getApplicationFeatures()) {
-            if (featureEntity.getApplicationId() != null && featureEntity.getApplicationId() != appId)
+
+            if (featureEntity.getId() != null
+                    && featureEntity.getApplicationId() != null
+                    && featureEntity.getApplicationId() != appId)
                 throw new ValidationException().withError("applicationFeatures", "you can't attach existed feature to another app");
+
             featureEntity.setApplication(existedApp);
+
             for (FeatureTextEntity localized : featureEntity.getLocalizedFeatures()) {
-                if (localized.getFeatureId() != null && !localized.getFeatureId().equals(featureEntity.getId()))
-                    throw new ValidationException().withError("applicationFeatures", "you can't attach existed localization text to another feature");
-                localized.setFeature(featureEntity);
+
+                if (localized.getFeatureId() == null) {
+                    localized.setFeature(featureEntity);
+                }
+
+                //TODO: Add edit/save logic for avoid duplicates
+
+//                localized.setId(null);
+
+//                Language lang = localized.getLanguage();
+//                Long featureId = featureEntity.getId();
+
+//                if (featureId != null) {
+//                    FeatureTextEntity existedLocalization = featureTextRepository.findByFeatureIdAndLanguage(featureId, lang);
+//                    localized.setId(existedLocalization.getId());
+//                }
+
+
             }
         }
 
@@ -132,64 +156,6 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         return savedApp;
-    }
-
-    @Override
-    public ApplicationEntity createOrUpdateApplication(ApplicationEntity entity, String ownerEmail) {
-        if (entity == null || ownerEmail == null) return null;
-
-        UserEntity existedUser = userRepository.findByEmail(ownerEmail);
-        if (existedUser == null) return null;
-
-        ApplicationEntity existedApp = null;
-        if (entity.getId() != null)
-            existedApp = applicationRepository.findOne(entity.getId());
-
-        if (existedApp == null) {
-            //it's a creating
-            existedApp = entity;
-            existedApp.setApplicationUsers(null);
-            existedApp.setApiToken(generateAPIToken());
-
-            for (FeatureEntity featureEntity : existedApp.getApplicationFeatures()) {
-                featureEntity.setApplication(existedApp);
-                for (FeatureTextEntity localized : featureEntity.getLocalizedFeatures()) {
-                    localized.setFeature(featureEntity);
-                }
-            }
-            applicationRepository.save(existedApp);
-
-            //create owner record for app
-            UserHasApplicationEntity owner = new UserHasApplicationEntity(existedUser.getId(), existedApp.getId(), AppConfig.USER_ACCESS_OWNER);
-            userHasApplicationRepository.save(owner);
-
-        } else {
-            //Check user access level - if user can't edit app - throw error!
-            UserHasApplicationEntity accessObject = userHasApplicationRepository.findByUserIdAndApplicationId(existedUser.getId(), existedApp.getId());
-            if (accessObject == null || accessObject.getAccessLevel() > AppConfig.USER_ACCESS_OWNER)
-                throw new AccessDeniedException();
-
-            //it's updating
-            existedApp.setName(entity.getName());
-            if (entity.getApiToken() != null) existedApp.setApiToken(entity.getApiToken());
-            existedApp.setApplicationFeatures(entity.getApplicationFeatures());
-            existedApp.setDescription(entity.getDescription());
-
-            for (FeatureEntity featureEntity : existedApp.getApplicationFeatures()) {
-                featureEntity.setApplication(existedApp);
-                for (FeatureTextEntity localized : featureEntity.getLocalizedFeatures()) {
-                    localized.setFeature(featureEntity);
-                }
-            }
-            applicationRepository.save(existedApp);
-        }
-
-        existedApp = applicationRepository.findOne(existedApp.getId());
-
-        //notify subscribers for this app topic, also this action initialize lazy loaded collections
-        messagingTemplate.convertAndSend(APIMappings.Socket.TOPIC_APPS + "/" + existedApp.getUuid(), existedApp);
-
-        return existedApp;
     }
 
     @Override

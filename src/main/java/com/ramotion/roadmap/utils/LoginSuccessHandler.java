@@ -1,5 +1,7 @@
 package com.ramotion.roadmap.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ramotion.roadmap.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -10,10 +12,18 @@ import java.io.IOException;
 
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
+    private ObjectMapper mapper = new ObjectMapper();
+
+    private UserService userService;
+
+    public LoginSuccessHandler(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().print("Success!");
-
+        response.setContentType("application/json");
+        response.getWriter().print(mapper.writeValueAsString(userService.getUserProfile(authentication.getName())));
     }
 }

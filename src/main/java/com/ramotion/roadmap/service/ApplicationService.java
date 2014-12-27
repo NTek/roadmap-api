@@ -15,8 +15,6 @@ public interface ApplicationService {
 
     ApplicationEntity editApplication(long appId, ApplicationEntity entity, String userEmail);
 
-    ApplicationEntity createOrUpdateApplication(ApplicationEntity applicationEntity, String ownerEmail);
-
     void deleteApplication(long appId, String ownerEmail);
 
 }

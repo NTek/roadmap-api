@@ -34,7 +34,6 @@ public class APIController {
 //    @Autowired
 //    private SurveyService surveyService;
 
-
     @Autowired
     private ApplicationService applicationService;
 
@@ -96,7 +95,6 @@ public class APIController {
         if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
         return null;
     }
-
 
     //============================================= EXCEPTION HANDLERS =================================================
 

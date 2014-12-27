@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface FeatureTextRepository extends CrudRepository<FeatureTextEntity, Long> {
 
     FeatureTextEntity findByFeatureIdAndLanguage(long featureId, Language language);
+
 }

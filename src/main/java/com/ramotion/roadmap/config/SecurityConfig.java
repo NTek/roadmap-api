@@ -1,5 +1,6 @@
 package com.ramotion.roadmap.config;
 
+import com.ramotion.roadmap.service.UserService;
 import com.ramotion.roadmap.utils.APIMappings;
 import com.ramotion.roadmap.utils.LoginFailureHandler;
 import com.ramotion.roadmap.utils.LoginSuccessHandler;
@@ -24,13 +25,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final Logger LOG = Logger.getLogger(SecurityConfig.class.getName());
 
-
     public static final String AUTH_BY_USERNAME_SQL = "select email,role from user where email = ?";
     public static final String USERS_BY_USERNAME_SQL = "select email,password,enabled from user where email = ?";
     public static final String CHANGE_PASSWORD_SQL = "update user set password = ? where email = ?";
 
     @Autowired
     private BasicDataSource basicDataSource;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * PostConstruct actions - executes after constructor when all fields injected
@@ -91,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public LoginSuccessHandler getLoginSuccessHandler() {
-        return new LoginSuccessHandler();
+        return new LoginSuccessHandler(userService);
     }
 
     @Bean

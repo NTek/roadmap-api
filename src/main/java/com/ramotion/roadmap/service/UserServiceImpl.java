@@ -1,6 +1,7 @@
 package com.ramotion.roadmap.service;
 
 import com.ramotion.roadmap.dto.EmailPasswordForm;
+import com.ramotion.roadmap.dto.UserProfile;
 import com.ramotion.roadmap.exceptions.ValidationException;
 import com.ramotion.roadmap.model.UserEntity;
 import com.ramotion.roadmap.repository.UserRepository;
@@ -49,5 +50,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(entity);
 
         return null;
+    }
+
+    @Override
+    public UserProfile getUserProfile(String userEmail) {
+        if (userEmail == null) return null;
+        UserEntity user = userRepository.findByEmail(userEmail);
+        return new UserProfile(user.getId(), user.getEmail());
     }
 }
