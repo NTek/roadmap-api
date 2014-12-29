@@ -100,7 +100,6 @@ API's divided into private(require authorization) and public(available without a
                         },
                         "localizedFeatures": [
                             {
-                                "id": 1,
                                 "featureId": 1,
                                 "language": "en",
                                 "text": "Feature 1 en-text",
@@ -140,7 +139,6 @@ API's divided into private(require authorization) and public(available without a
                                 },
                                 "localizedFeatures": [
                                     {
-                                        "id": 1,
                                         "featureId": 1,
                                         "language": "en",
                                         "text": "Feature 1 en-text",
@@ -208,7 +206,6 @@ API's divided into private(require authorization) and public(available without a
                         "implemented": false,
                         "localizedFeatures": [
                             {
-                                "featureId": 1,
                                 "language": "en",
                                 "text": "Feature 1 en-text translation",
                             },

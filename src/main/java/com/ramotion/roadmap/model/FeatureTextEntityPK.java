@@ -3,17 +3,12 @@ package com.ramotion.roadmap.model;
 import java.io.Serializable;
 
 public class FeatureTextEntityPK implements Serializable {
-    private Long featureId;
+
+//    private Long featureId;
 
     private Language language;
 
-    public Long getFeatureId() {
-        return featureId;
-    }
-
-    public void setFeatureId(Long featureId) {
-        this.featureId = featureId;
-    }
+    private FeatureEntity feature;
 
     public Language getLanguage() {
         return language;
@@ -23,6 +18,23 @@ public class FeatureTextEntityPK implements Serializable {
         this.language = language;
     }
 
+//    public Long getFeatureId() {
+//        return featureId;
+//    }
+//
+//    public void setFeatureId(Long feature_id) {
+//        this.featureId = feature_id;
+//    }
+
+
+    public FeatureEntity getFeature() {
+        return feature;
+    }
+
+    public void setFeature(FeatureEntity feature) {
+        this.feature = feature;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -30,7 +42,7 @@ public class FeatureTextEntityPK implements Serializable {
 
         FeatureTextEntityPK that = (FeatureTextEntityPK) o;
 
-        if (featureId != null ? !featureId.equals(that.featureId) : that.featureId != null) return false;
+        if (feature != null ? !feature.equals(that.feature) : that.feature != null) return false;
         if (language != that.language) return false;
 
         return true;
@@ -38,8 +50,8 @@ public class FeatureTextEntityPK implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = featureId != null ? featureId.hashCode() : 0;
-        result = 31 * result + (language != null ? language.hashCode() : 0);
+        int result = language != null ? language.hashCode() : 0;
+        result = 31 * result + (feature != null ? feature.hashCode() : 0);
         return result;
     }
 }

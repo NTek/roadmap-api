@@ -13,9 +13,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "feature_text")
 @EntityListeners(value = AuditableEntityListener.class)
+@IdClass(FeatureTextEntityPK.class)
 public class FeatureTextEntity implements EntityWithAuditTimestamps {
-
-    private Long id;
 
     private Long featureId;
 
@@ -32,17 +31,6 @@ public class FeatureTextEntity implements EntityWithAuditTimestamps {
     @JsonIgnore
     private FeatureEntity feature;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, insertable = true, updatable = true)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Column(name = "feature_id", nullable = false, insertable = false, updatable = false)
     public Long getFeatureId() {
         return featureId;
@@ -52,6 +40,7 @@ public class FeatureTextEntity implements EntityWithAuditTimestamps {
         this.featureId = featureId;
     }
 
+    @Id
     @Enumerated(EnumType.STRING)
     @Column(name = "language", nullable = false, insertable = true, updatable = true)
     public Language getLanguage() {
@@ -81,8 +70,9 @@ public class FeatureTextEntity implements EntityWithAuditTimestamps {
         this.auditTimestamps = auditTimestamps;
     }
 
+    @Id
     @ManyToOne
-    @JoinColumn(name = "feature_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "feature_id", referencedColumnName = "id", nullable = false, insertable = true, updatable = true)
     public FeatureEntity getFeature() {
         return feature;
     }
@@ -99,10 +89,6 @@ public class FeatureTextEntity implements EntityWithAuditTimestamps {
 
         FeatureTextEntity that = (FeatureTextEntity) o;
 
-        if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
-            return false;
-        if (feature != null ? !feature.equals(that.feature) : that.feature != null)
-            return false;
         if (featureId != null ? !featureId.equals(that.featureId) : that.featureId != null) return false;
         if (language != that.language) return false;
         if (text != null ? !text.equals(that.text) : that.text != null) return false;
@@ -115,8 +101,6 @@ public class FeatureTextEntity implements EntityWithAuditTimestamps {
         int result = featureId != null ? featureId.hashCode() : 0;
         result = 31 * result + (language != null ? language.hashCode() : 0);
         result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
-        result = 31 * result + (feature != null ? feature.hashCode() : 0);
         return result;
     }
 }

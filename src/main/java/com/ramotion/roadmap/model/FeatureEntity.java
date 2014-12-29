@@ -119,16 +119,9 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
         FeatureEntity that = (FeatureEntity) o;
 
         if (implemented != that.implemented) return false;
-        if (application != null ? !application.equals(that.application) : that.application != null) return false;
         if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null)
             return false;
-        if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
-            return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (localizedFeatures != null ? !localizedFeatures.equals(that.localizedFeatures) : that.localizedFeatures != null)
-            return false;
-        if (survey != null ? !survey.equals(that.survey) : that.survey != null) return false;
-        if (votes != null ? !votes.equals(that.votes) : that.votes != null) return false;
 
         return true;
     }
@@ -138,11 +131,6 @@ public class FeatureEntity implements EntityWithAuditTimestamps {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (applicationId != null ? applicationId.hashCode() : 0);
         result = 31 * result + (implemented ? 1 : 0);
-        result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
-        result = 31 * result + (application != null ? application.hashCode() : 0);
-        result = 31 * result + (localizedFeatures != null ? localizedFeatures.hashCode() : 0);
-        result = 31 * result + (survey != null ? survey.hashCode() : 0);
-        result = 31 * result + (votes != null ? votes.hashCode() : 0);
         return result;
     }
 }

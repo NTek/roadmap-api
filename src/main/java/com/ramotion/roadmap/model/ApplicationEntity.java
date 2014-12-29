@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -34,7 +35,7 @@ public class ApplicationEntity implements EntityWithAuditTimestamps, EntityWithU
     private Collection<UserHasApplicationEntity> applicationUsers;
 
     @Valid
-    private Collection<FeatureEntity> applicationFeatures;
+    private Set<FeatureEntity> applicationFeatures;
 
     private Collection<SurveyEntity> applicationSurveys;
 
@@ -113,12 +114,12 @@ public class ApplicationEntity implements EntityWithAuditTimestamps, EntityWithU
         this.applicationUsers = userToApplicationsById;
     }
 
-    @OneToMany(mappedBy = "application", cascade = {CascadeType.ALL})
-    public Collection<FeatureEntity> getApplicationFeatures() {
+    @OneToMany(mappedBy = "application", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    public Set<FeatureEntity> getApplicationFeatures() {
         return applicationFeatures;
     }
 
-    public void setApplicationFeatures(Collection<FeatureEntity> applicationFeatures) {
+    public void setApplicationFeatures(Set<FeatureEntity> applicationFeatures) {
         this.applicationFeatures = applicationFeatures;
     }
 
@@ -141,10 +142,7 @@ public class ApplicationEntity implements EntityWithAuditTimestamps, EntityWithU
         if (activeSurveyId != null ? !activeSurveyId.equals(that.activeSurveyId) : that.activeSurveyId != null)
             return false;
         if (apiToken != null ? !apiToken.equals(that.apiToken) : that.apiToken != null) return false;
-        if (auditTimestamps != null ? !auditTimestamps.equals(that.auditTimestamps) : that.auditTimestamps != null)
-            return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
@@ -153,13 +151,11 @@ public class ApplicationEntity implements EntityWithAuditTimestamps, EntityWithU
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
+        int result = uuid != null ? uuid.hashCode() : 0;
         result = 31 * result + (apiToken != null ? apiToken.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (activeSurveyId != null ? activeSurveyId.hashCode() : 0);
-        result = 31 * result + (auditTimestamps != null ? auditTimestamps.hashCode() : 0);
         return result;
     }
 }

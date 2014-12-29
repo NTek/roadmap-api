@@ -160,7 +160,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         Properties jpaProperties = new Properties();
         jpaProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         jpaProperties.setProperty("hibernate.surveyId.new_generator_mappings", "true");
-        jpaProperties.setProperty("show_sql", "true");
+        jpaProperties.setProperty("hibernate.show_sql", "true");
         jpaProperties.setProperty("format_sql", "true");
 
         entityManagerFactoryBean.setJpaProperties(jpaProperties);

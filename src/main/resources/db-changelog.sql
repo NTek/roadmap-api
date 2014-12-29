@@ -138,15 +138,13 @@ CREATE TABLE IF NOT EXISTS `vote` (
   ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `feature_text` (
-  `id`          BIGINT       NOT NULL AUTO_INCREMENT,
   `feature_id`  BIGINT       NOT NULL,
   `language`    VARCHAR(2)   NOT NULL DEFAULT 'en',
   `text`        VARCHAR(255) NOT NULL,
   `modified_at` TIMESTAMP    NULL,
   `created_at`  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX `localized_features-to-features_idx` (`feature_id` ASC),
-  INDEX `id_UNIQUE` (`id` ASC),
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`feature_id`, `language`),
   CONSTRAINT `localized_features-to-feature`
   FOREIGN KEY (`feature_id`)
   REFERENCES `feature` (`id`)

@@ -1,10 +1,12 @@
 package com.ramotion.roadmap.service;
 
 import com.ramotion.roadmap.config.AppConfig;
-import com.ramotion.roadmap.exceptions.*;
+import com.ramotion.roadmap.exceptions.AccessDeniedException;
+import com.ramotion.roadmap.exceptions.InternalErrorException;
+import com.ramotion.roadmap.exceptions.NotFoundException;
+import com.ramotion.roadmap.exceptions.UnauthorizedException;
 import com.ramotion.roadmap.model.*;
 import com.ramotion.roadmap.repository.ApplicationRepository;
-import com.ramotion.roadmap.repository.FeatureTextRepository;
 import com.ramotion.roadmap.repository.UserHasApplicationRepository;
 import com.ramotion.roadmap.repository.UserRepository;
 import com.ramotion.roadmap.utils.APIMappings;
@@ -33,9 +35,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Autowired
     private UserHasApplicationRepository userHasApplicationRepository;
-
-    @Autowired
-    private FeatureTextRepository featureTextRepository;
 
     @Override
     public ApplicationRepository getRepository() {
@@ -77,7 +76,6 @@ public class ApplicationServiceImpl implements ApplicationService {
             featureEntity.setId(null);
             featureEntity.setApplication(entity);
             for (FeatureTextEntity localized : featureEntity.getLocalizedFeatures()) {
-                localized.setId(null);
                 localized.setFeature(featureEntity);
             }
         }
@@ -105,7 +103,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         if (existedApp == null) throw new NotFoundException("Application not found");
 
-        UserHasApplicationEntity userAccessLevel = userHasApplicationRepository.findByUserIdAndApplicationId(existedUser.getId(), existedApp.getId());
+        UserHasApplicationEntity userAccessLevel = userHasApplicationRepository.findByUserIdAndApplicationId(existedUser.getId(), appId);
 
         if (userAccessLevel == null || userAccessLevel.getAccessLevel() > AppConfig.USER_ACCESS_EDIT)
             throw new AccessDeniedException();
@@ -115,40 +113,25 @@ public class ApplicationServiceImpl implements ApplicationService {
         existedApp.setApplicationFeatures(entity.getApplicationFeatures());
         existedApp.setDescription(entity.getDescription());
 
+//        entity.setId(appId);
+
         for (FeatureEntity featureEntity : existedApp.getApplicationFeatures()) {
 
             if (featureEntity.getId() != null
                     && featureEntity.getApplicationId() != null
-                    && featureEntity.getApplicationId() != appId)
-                throw new ValidationException().withError("applicationFeatures", "you can't attach existed feature to another app");
-
+                    && featureEntity.getApplicationId() != appId) {
+                featureEntity.setId(null);
+            }
             featureEntity.setApplication(existedApp);
 
             for (FeatureTextEntity localized : featureEntity.getLocalizedFeatures()) {
-
-                if (localized.getFeatureId() == null) {
-                    localized.setFeature(featureEntity);
-                }
-
-                //TODO: Add edit/save logic for avoid duplicates
-
-//                localized.setId(null);
-
-//                Language lang = localized.getLanguage();
-//                Long featureId = featureEntity.getId();
-
-//                if (featureId != null) {
-//                    FeatureTextEntity existedLocalization = featureTextRepository.findByFeatureIdAndLanguage(featureId, lang);
-//                    localized.setId(existedLocalization.getId());
-//                }
-
-
+                localized.setFeature(featureEntity);
             }
         }
 
         applicationRepository.save(existedApp);
 
-        ApplicationEntity savedApp = applicationRepository.findOne(entity.getId());
+        ApplicationEntity savedApp = applicationRepository.findOne(existedApp.getId());
 
         //notify app users, also this action initialize lazy loaded collections
         for (UserHasApplicationEntity userAccess : savedApp.getApplicationUsers()) {
