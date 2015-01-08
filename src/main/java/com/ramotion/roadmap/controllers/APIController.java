@@ -6,7 +6,6 @@ import com.ramotion.roadmap.exceptions.AccessDeniedException;
 import com.ramotion.roadmap.exceptions.ValidationException;
 import com.ramotion.roadmap.model.ApplicationEntity;
 import com.ramotion.roadmap.model.Language;
-import com.ramotion.roadmap.model.SurveyEntity;
 import com.ramotion.roadmap.service.APIService;
 import com.ramotion.roadmap.service.ApplicationService;
 import com.ramotion.roadmap.service.UserService;
@@ -87,14 +86,24 @@ public class APIController {
         return applicationService.editApplication(id, app, principal.getName());
     }
 
-    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS + "/{app}/survey", method = RequestMethod.POST)
-    public Object createOrEditSurvey(Principal principal,
-                                     @PathVariable("app") long appId,
-                                     @Valid @RequestBody SurveyEntity survey,
-                                     BindingResult errors) {
-        if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
-        return null;
+    @RequestMapping(value = APIMappings.Web.FRONTEND_PROFILE, method = RequestMethod.GET)
+    public Object getUserProfile(Principal principal) {
+        return userService.getUserProfile(principal.getName());
     }
+
+//    @RequestMapping(value = APIMappings.Web.FRONTEND_PROFILE, method = RequestMethod.POST)
+//    public Object editUserProfile(Principal principal) {
+//
+//    }
+
+//    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS + "/{app}/survey", method = RequestMethod.POST)
+//    public Object createOrEditSurvey(Principal principal,
+//                                     @PathVariable("app") long appId,
+//                                     @Valid @RequestBody SurveyEntity survey,
+//                                     BindingResult errors) {
+//        if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
+//        return null;
+//    }
 
     //============================================= EXCEPTION HANDLERS =================================================
 

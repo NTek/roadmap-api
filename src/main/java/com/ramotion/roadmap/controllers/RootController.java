@@ -35,7 +35,7 @@ public class RootController {
     @ResponseBody
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Object getStatus(Principal principal, HttpServletRequest req) {
-        Enumeration<String> headers = req.getHeaderNames();
+//        Enumeration<String> headers = req.getHeaderNames();
         Map<String, Object> response = new HashMap<>();
         response.put("started", AppConfig.DATETIME_FORMATTER.format(new Date(serverStartedAt)));
         response.put("uptime", createUptimeString(System.currentTimeMillis() - serverStartedAt));

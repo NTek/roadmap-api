@@ -1,6 +1,5 @@
 package com.ramotion.roadmap.config;
 
-import com.ramotion.roadmap.service.UserService;
 import com.ramotion.roadmap.utils.APIMappings;
 import com.ramotion.roadmap.utils.LoginFailureHandler;
 import com.ramotion.roadmap.utils.LoginSuccessHandler;
@@ -32,8 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private BasicDataSource basicDataSource;
 
-    @Autowired
-    private UserService userService;
+//    @Autowired
+//    private UserService userService;
 
     /**
      * PostConstruct actions - executes after constructor when all fields injected
@@ -94,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public LoginSuccessHandler getLoginSuccessHandler() {
-        return new LoginSuccessHandler(userService);
+        return new LoginSuccessHandler();
     }
 
     @Bean

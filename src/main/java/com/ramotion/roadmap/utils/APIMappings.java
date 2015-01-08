@@ -11,7 +11,7 @@ public class APIMappings {
 
         public static final String FRONTEND_REGISTRATION = "/register";
         public static final String FRONTEND_REGISTRATION_CONFIRM = "/confirm";
-        public static final String FRONTEND_EDIT_USER = "/profile";
+        public static final String FRONTEND_PROFILE = "/profile";
         public static final String FRONTEND_APPS = "/apps";
         public static final String FRONTEND_EDIT_SURVEY = "/survey";
 
