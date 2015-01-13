@@ -8,6 +8,14 @@ public class UserHasApplicationEntityPK implements Serializable {
 
     private Long applicationId;
 
+    public UserHasApplicationEntityPK() {
+    }
+
+    public UserHasApplicationEntityPK(Long userId, Long applicationId) {
+        this.userId = userId;
+        this.applicationId = applicationId;
+    }
+
     public Long getUserId() {
         return userId;
     }

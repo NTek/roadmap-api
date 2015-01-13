@@ -11,5 +11,4 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
     UserEntity findByUuid(String uuid);
 
-
 }

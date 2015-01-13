@@ -2,12 +2,14 @@ package com.ramotion.roadmap.controllers;
 
 import com.ramotion.roadmap.dto.EmailPasswordForm;
 import com.ramotion.roadmap.dto.NewVoteRequestDto;
+import com.ramotion.roadmap.dto.SurveyDto;
 import com.ramotion.roadmap.exceptions.AccessDeniedException;
 import com.ramotion.roadmap.exceptions.ValidationException;
 import com.ramotion.roadmap.model.ApplicationEntity;
 import com.ramotion.roadmap.model.Language;
 import com.ramotion.roadmap.service.APIService;
 import com.ramotion.roadmap.service.ApplicationService;
+import com.ramotion.roadmap.service.SurveyService;
 import com.ramotion.roadmap.service.UserService;
 import com.ramotion.roadmap.utils.APIMappings;
 import org.apache.log4j.Logger;
@@ -30,8 +32,8 @@ public class APIController {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private SurveyService surveyService;
+    @Autowired
+    private SurveyService surveyService;
 
     @Autowired
     private ApplicationService applicationService;
@@ -91,19 +93,13 @@ public class APIController {
         return userService.getUserProfile(principal.getName());
     }
 
-//    @RequestMapping(value = APIMappings.Web.FRONTEND_PROFILE, method = RequestMethod.POST)
-//    public Object editUserProfile(Principal principal) {
-//
-//    }
-
-//    @RequestMapping(value = APIMappings.Web.FRONTEND_APPS + "/{app}/survey", method = RequestMethod.POST)
-//    public Object createOrEditSurvey(Principal principal,
-//                                     @PathVariable("app") long appId,
-//                                     @Valid @RequestBody SurveyEntity survey,
-//                                     BindingResult errors) {
-//        if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
-//        return null;
-//    }
+    @RequestMapping(value = APIMappings.Web.FRONTEND_SURVEY, method = RequestMethod.POST)
+    public Object createOrEditSurvey(Principal principal,
+                                     @Valid @RequestBody SurveyDto dto,
+                                     BindingResult errors) {
+        if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
+        return surveyService.createSurvey(dto, principal.getName());
+    }
 
     //============================================= EXCEPTION HANDLERS =================================================
 

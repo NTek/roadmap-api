@@ -5,7 +5,7 @@
     <groupId>com.ramotion</groupId>
     <artifactId>roadmap</artifactId>
     <packaging>war</packaging>
-    <version>0.5.8</version>
+    <version>0.5.9</version>
 
     <name>roadmap-api</name>
 
@@ -195,6 +195,14 @@
             <version>1.1.2</version>
         </dependency>
 
+        <!-- MAILING -->
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.3</version>
+        </dependency>
+
         <!-- LOGGING -->
 
         <dependency>
@@ -216,6 +224,7 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+
 
     </dependencies>
 

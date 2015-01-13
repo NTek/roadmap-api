@@ -143,7 +143,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public void deleteApplication(long appId, String ownerEmail) {
-
+        UserEntity existedUser = userRepository.findByEmail(ownerEmail);
+        if (existedUser == null) throw new UnauthorizedException("User account not found");
+        ApplicationEntity existedApp = applicationRepository.findOne(appId);
+        if (existedApp == null) throw new NotFoundException("Application not found");
+        UserHasApplicationEntity userAccessLevel = userHasApplicationRepository.findByUserIdAndApplicationId(existedUser.getId(), appId);
+        if (userAccessLevel == null || userAccessLevel.getAccessLevel() > AppConfig.USER_ACCESS_OWNER)
+            throw new AccessDeniedException();
+        applicationRepository.delete(appId);
     }
 
     private String generateAPIToken() {

@@ -6,6 +6,7 @@ import com.ramotion.roadmap.model.utils.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -37,7 +38,7 @@ public class SurveyEntity implements EntityWithAuditTimestamps, EntityWithUUID {
     @JsonIgnore
     private ApplicationEntity application;
 
-    private Collection<FeatureEntity> feature;
+    private Set<FeatureEntity> feature;
 
     @JsonIgnore
     private Collection<VoteEntity> votes;
@@ -174,7 +175,7 @@ public class SurveyEntity implements EntityWithAuditTimestamps, EntityWithUUID {
     }
 
     @ManyToOne
-    @JoinColumn(name = "application_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "application_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public ApplicationEntity getApplication() {
         return application;
     }
@@ -185,11 +186,11 @@ public class SurveyEntity implements EntityWithAuditTimestamps, EntityWithUUID {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "survey_has_feature")
-    public Collection<FeatureEntity> getFeature() {
+    public Set<FeatureEntity> getFeature() {
         return feature;
     }
 
-    public void setFeature(Collection<FeatureEntity> surveyFeatures) {
+    public void setFeature(Set<FeatureEntity> surveyFeatures) {
         this.feature = surveyFeatures;
     }
 

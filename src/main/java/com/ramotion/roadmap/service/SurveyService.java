@@ -1,16 +1,13 @@
 package com.ramotion.roadmap.service;
 
+import com.ramotion.roadmap.dto.SurveyDto;
 import com.ramotion.roadmap.model.SurveyEntity;
 
 public interface SurveyService {
 
-    SurveyEntity createSurvey(SurveyEntity entity, String username);
+    SurveyEntity createSurvey(SurveyDto dto, String username);
 
-    SurveyEntity renameSurvey(long surveyId, String newName, String username);
-
-    SurveyEntity closeSurvey(long surveyId, String username);
-
-    void deleteSurvey();
+    void deleteSurvey(long surveyId, String username);
 
 
 }

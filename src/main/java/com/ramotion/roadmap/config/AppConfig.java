@@ -12,6 +12,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -52,6 +54,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     public static final String DB_URL_ENV_VAR_NAME = "CLEARDB_DATABASE_URL";
     public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
+    public static final String EMAIL_FROM = "";
 
     @Autowired
     private Environment env;
@@ -175,5 +178,28 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         springLiquibase.setContexts("test, production");
         springLiquibase.setDropFirst(false);
         return springLiquibase;
+    }
+
+
+    /**
+     * Standard Java mail sender with connection settings
+     */
+    @Bean
+    public JavaMailSender getMailSender() {
+        JavaMailSenderImpl jms = new JavaMailSenderImpl();
+
+        Properties javaMailProps = new Properties();
+        javaMailProps.setProperty("mail.transport.protocol", "smtp");
+        javaMailProps.setProperty("mail.smtp.auth", "true");
+        javaMailProps.setProperty("mail.smtp.starttls.enable", env.getProperty("mailsender.smtp.starttls"));
+        javaMailProps.setProperty("mail.debug", env.getProperty("mailsender.debug"));
+
+        jms.setHost(env.getProperty("mailsender.smtp.host"));
+        jms.setPort(Integer.parseInt(env.getProperty("mailsender.smtp.port")));
+        jms.setUsername(env.getProperty("mailsender.smtp.username"));
+        jms.setPassword(env.getProperty("mailsender.smtp.password"));
+
+        jms.setJavaMailProperties(javaMailProps);
+        return jms;
     }
 }
