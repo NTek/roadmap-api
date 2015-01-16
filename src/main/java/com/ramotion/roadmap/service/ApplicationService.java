@@ -17,4 +17,5 @@ public interface ApplicationService {
 
     void deleteApplication(long appId, String ownerEmail);
 
+    void notifyAppUsers(ApplicationEntity app);
 }

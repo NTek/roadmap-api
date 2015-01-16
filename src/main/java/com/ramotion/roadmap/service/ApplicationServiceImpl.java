@@ -133,10 +133,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         ApplicationEntity savedApp = applicationRepository.findOne(existedApp.getId());
 
-        //notify app users, also this action initialize lazy loaded collections
-        for (UserHasApplicationEntity userAccess : savedApp.getApplicationUsers()) {
-            messagingTemplate.convertAndSendToUser(userAccess.getUserByUserId().getEmail(), APIMappings.Socket.TOPIC_APPS, savedApp);
-        }
+        notifyAppUsers(savedApp);
 
         return savedApp;
     }
@@ -155,6 +152,15 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     private String generateAPIToken() {
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    @Override
+    public void notifyAppUsers(ApplicationEntity app) {
+        if (app == null || app.getApplicationUsers() == null) return;
+        //notify app users, also this action initialize lazy loaded collections
+        for (UserHasApplicationEntity userAccess : app.getApplicationUsers()) {
+            messagingTemplate.convertAndSendToUser(userAccess.getUserByUserId().getEmail(), APIMappings.Socket.TOPIC_APPS, app);
+        }
     }
 
 }

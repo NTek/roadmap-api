@@ -5,7 +5,7 @@
     <groupId>com.ramotion</groupId>
     <artifactId>roadmap</artifactId>
     <packaging>war</packaging>
-    <version>0.5.9</version>
+    <version>0.5.10</version>
 
     <name>roadmap-api</name>
 

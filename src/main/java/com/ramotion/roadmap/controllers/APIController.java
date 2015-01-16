@@ -94,11 +94,36 @@ public class APIController {
     }
 
     @RequestMapping(value = APIMappings.Web.FRONTEND_SURVEY, method = RequestMethod.POST)
-    public Object createOrEditSurvey(Principal principal,
-                                     @Valid @RequestBody SurveyDto dto,
-                                     BindingResult errors) {
+    public Object createSurvey(Principal principal,
+                               @Valid @RequestBody SurveyDto dto,
+                               BindingResult errors) {
         if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
         return surveyService.createSurvey(dto, principal.getName());
+    }
+
+    @RequestMapping(value = APIMappings.Web.FRONTEND_SURVEY + "/{id}/close", method = RequestMethod.GET)
+    public Object closeSurvey(Principal principal,
+                              @PathVariable(value = "id") long id) {
+        return surveyService.closeSurvey(id, principal.getName());
+    }
+
+    @RequestMapping(value = APIMappings.Web.FRONTEND_SURVEY + "/{id}/disable", method = RequestMethod.GET)
+    public Object disableSurvey(Principal principal,
+                                @PathVariable(value = "id") long id) {
+        return surveyService.disableSurvey(id, principal.getName());
+    }
+
+    @RequestMapping(value = APIMappings.Web.FRONTEND_SURVEY + "/{id}/enable", method = RequestMethod.GET)
+    public Object enableSurvey(Principal principal,
+                               @PathVariable(value = "id") long id) {
+        return surveyService.enableSurvey(id, principal.getName());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = APIMappings.Web.FRONTEND_SURVEY + "/{id}", method = RequestMethod.DELETE)
+    public void deleteSurvey(Principal principal,
+                             @PathVariable(value = "id") long id) {
+        surveyService.deleteSurvey(id, principal.getName());
     }
 
     //============================================= EXCEPTION HANDLERS =================================================

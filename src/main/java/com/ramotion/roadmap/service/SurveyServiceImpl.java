@@ -5,12 +5,11 @@ import com.ramotion.roadmap.dto.SurveyDto;
 import com.ramotion.roadmap.exceptions.*;
 import com.ramotion.roadmap.model.*;
 import com.ramotion.roadmap.repository.*;
-import com.ramotion.roadmap.utils.APIMappings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -19,8 +18,9 @@ import java.util.UUID;
 @Transactional
 public class SurveyServiceImpl implements SurveyService {
 
+
     @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+    private ApplicationService applicationService;
 
     @Autowired
     private SurveyRepository surveyRepository;
@@ -39,17 +39,18 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public SurveyEntity createSurvey(SurveyDto dto, String userEmail) {
-        if (dto == null) throw new InternalErrorException("Incorrect method parameters");
+        if (dto == null || userEmail == null) throw new InternalErrorException("Incorrect method parameters");
 
         UserEntity authorizedUser = userRepository.findByEmail(userEmail);
         if (authorizedUser == null) throw new UnauthorizedException("User account not found");
 
-        UserHasApplicationEntity userHasApplicationEntity = userHasApplicationRepository.findOne(new UserHasApplicationEntityPK());
-        if (userHasApplicationEntity.getAccessLevel() > AppConfig.USER_ACCESS_EDIT)
-            throw new AccessDeniedException("You can't create surveys for this app");
-
         ApplicationEntity existedApplication = applicationRepository.findOne(dto.getApplicationId());
         if (existedApplication == null) throw new NotFoundException("Application not found");
+
+        UserHasApplicationEntity userHasApplicationEntity =
+                userHasApplicationRepository.findOne(new UserHasApplicationEntityPK(authorizedUser.getId(), existedApplication.getId()));
+        if (userHasApplicationEntity.getAccessLevel() > AppConfig.USER_ACCESS_EDIT)
+            throw new AccessDeniedException("You can't create surveys for this app");
 
         if (existedApplication.getActiveSurveyId() != null) {
             throw new ValidationException().withError("applicationId", "this application already has a active survey");
@@ -76,23 +77,95 @@ public class SurveyServiceImpl implements SurveyService {
         newSurvey.setRequiredVotes(dto.getRequiredVotes());
         newSurvey.setRequiredDate(dto.getRequiredDate());
         newSurvey.setFeature(features);
+        newSurvey.setStartedAt(new Timestamp(System.currentTimeMillis()));
 
         surveyRepository.save(newSurvey);
 
-        ApplicationEntity savedApp = applicationRepository.findOne(newSurvey.getApplicationId());
+        existedApplication.setActiveSurveyId(newSurvey.getId());
+        applicationRepository.save(existedApplication);
 
-        //notify app users, also this action initialize lazy loaded collections
-        for (UserHasApplicationEntity userAccess : savedApp.getApplicationUsers()) {
-            messagingTemplate.convertAndSendToUser(userAccess.getUserByUserId().getEmail(), APIMappings.Socket.TOPIC_APPS, savedApp);
-        }
-
+        applicationService.notifyAppUsers(existedApplication);
         return newSurvey;
     }
 
     @Override
-    public void deleteSurvey(long surveyId, String username) {
+    public void deleteSurvey(long surveyId, String userEmail) {
+        if (userEmail == null) throw new InternalErrorException("Incorrect method parameters");
+        UserEntity authorizedUser = userRepository.findByEmail(userEmail);
+        if (authorizedUser == null) throw new UnauthorizedException("User account not found");
+        SurveyEntity survey = surveyRepository.findOne(surveyId);
+        if (survey == null) throw new NotFoundException("Survey not found");
+
+        UserHasApplicationEntity userHasApplicationEntity =
+                userHasApplicationRepository.findOne(new UserHasApplicationEntityPK(authorizedUser.getId(), survey.getApplicationId()));
+        if (userHasApplicationEntity.getAccessLevel() > AppConfig.USER_ACCESS_EDIT)
+            throw new AccessDeniedException("You can't delete surveys for this app");
+
+        ApplicationEntity app = survey.getApplication();
+        if (app.getActiveSurveyId().equals(surveyId)) {
+            app.setActiveSurveyId(null);
+            applicationRepository.save(app);
+        }
+
+        surveyRepository.delete(survey);
+
+        applicationService.notifyAppUsers(app);
 
     }
 
+    @Override
+    public SurveyEntity enableSurvey(long surveyId, String userEmail) {
+        return setSurveyDisabledFlag(surveyId, userEmail, false);
+    }
+
+    @Override
+    public SurveyEntity disableSurvey(long surveyId, String userEmail) {
+        return setSurveyDisabledFlag(surveyId, userEmail, true);
+    }
+
+    @Override
+    public SurveyEntity closeSurvey(long surveyId, String userEmail) {
+        if (userEmail == null) throw new InternalErrorException("Incorrect method parameters");
+
+        UserEntity authorizedUser = userRepository.findByEmail(userEmail);
+        if (authorizedUser == null) throw new UnauthorizedException("User account not found");
+        SurveyEntity survey = surveyRepository.findOne(surveyId);
+        if (survey == null) throw new NotFoundException("Survey not found");
+
+        UserHasApplicationEntity userHasApplicationEntity =
+                userHasApplicationRepository.findOne(new UserHasApplicationEntityPK(authorizedUser.getId(), survey.getApplicationId()));
+        if (userHasApplicationEntity.getAccessLevel() > AppConfig.USER_ACCESS_EDIT)
+            throw new AccessDeniedException("You can't close surveys in this app");
+
+        ApplicationEntity app = survey.getApplication();
+        app.setActiveSurveyId(null);
+        applicationRepository.save(app);
+        survey.setFinishedAt(new Timestamp(System.currentTimeMillis()));
+        surveyRepository.save(survey);
+        applicationService.notifyAppUsers(app);
+        return survey;
+    }
+
+
+    private SurveyEntity setSurveyDisabledFlag(long surveyId, String userEmail, boolean isDisabled) {
+        if (userEmail == null) throw new InternalErrorException("Incorrect method parameters");
+        UserEntity authorizedUser = userRepository.findByEmail(userEmail);
+        if (authorizedUser == null) throw new UnauthorizedException("User account not found");
+        SurveyEntity survey = surveyRepository.findOne(surveyId);
+        if (survey == null) throw new NotFoundException("Survey not found");
+
+        if (survey.getFinishedAt() != null)
+            throw new NotFoundException("Active survey with that id not found");
+
+        UserHasApplicationEntity userHasApplicationEntity =
+                userHasApplicationRepository.findOne(new UserHasApplicationEntityPK(authorizedUser.getId(), survey.getApplicationId()));
+        if (userHasApplicationEntity.getAccessLevel() > AppConfig.USER_ACCESS_EDIT)
+            throw new AccessDeniedException("You can't delete surveys for this app");
+
+        survey.setDisabled(isDisabled);
+        surveyRepository.save(survey);
+        applicationService.notifyAppUsers(survey.getApplication());
+        return survey;
+    }
 
 }

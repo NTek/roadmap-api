@@ -17,6 +17,7 @@ public class JsonTimestampDeserializer extends JsonDeserializer<Timestamp> {
     public Timestamp deserialize(JsonParser jsonParser,
                                  DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
 
+        if (jsonParser.getText() == null) return null;
         try {
             Date parsed = AppConfig.DATETIME_FORMATTER.parse(jsonParser.getText());
             return new Timestamp(parsed.getTime());

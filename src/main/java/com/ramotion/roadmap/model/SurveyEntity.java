@@ -44,6 +44,7 @@ public class SurveyEntity implements EntityWithAuditTimestamps, EntityWithUUID {
     private Collection<VoteEntity> votes;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
     public Long getId() {
         return id;
@@ -116,7 +117,7 @@ public class SurveyEntity implements EntityWithAuditTimestamps, EntityWithUUID {
         this.finishedAt = finishedAt;
     }
 
-    @Column(name = "application_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "application_id", nullable = false, insertable = true, updatable = true)
     public Long getApplicationId() {
         return applicationId;
     }
