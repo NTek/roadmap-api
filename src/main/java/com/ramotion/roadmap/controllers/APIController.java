@@ -107,6 +107,13 @@ public class APIController {
         return surveyService.closeSurvey(id, principal.getName());
     }
 
+    @RequestMapping(value = APIMappings.Web.FRONTEND_SURVEY + "/{id}/rename", method = RequestMethod.GET)
+    public Object closeSurvey(Principal principal,
+                              @RequestParam(required = true) String name,
+                              @PathVariable(value = "id") long id) {
+        return surveyService.renameSurvey(id, name, principal.getName());
+    }
+
     @RequestMapping(value = APIMappings.Web.FRONTEND_SURVEY + "/{id}/disable", method = RequestMethod.GET)
     public Object disableSurvey(Principal principal,
                                 @PathVariable(value = "id") long id) {

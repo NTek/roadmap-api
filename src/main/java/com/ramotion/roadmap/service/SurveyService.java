@@ -9,9 +9,11 @@ public interface SurveyService {
 
     void deleteSurvey(long surveyId, String username);
 
-    SurveyEntity enableSurvey(long id, String name);
+    SurveyEntity enableSurvey(long id, String username);
 
-    SurveyEntity disableSurvey(long id, String name);
+    SurveyEntity disableSurvey(long id, String username);
 
-    SurveyEntity closeSurvey(long id, String name);
+    SurveyEntity closeSurvey(long id, String username);
+
+    SurveyEntity renameSurvey(long id, String name, String username);
 }

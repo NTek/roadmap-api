@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="roadmap-api:war exploded">
-    <output-path>$PROJECT_DIR$/target/roadmap-api-0.5.10</output-path>
+    <output-path>$PROJECT_DIR$/target/roadmap-api-0.5.11</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">

@@ -146,6 +146,26 @@ public class SurveyServiceImpl implements SurveyService {
         return survey;
     }
 
+    @Override
+    public SurveyEntity renameSurvey(long surveyId, String name, String userEmail) {
+        if (userEmail == null) throw new InternalErrorException("Incorrect method parameters");
+
+        UserEntity authorizedUser = userRepository.findByEmail(userEmail);
+        if (authorizedUser == null) throw new UnauthorizedException("User account not found");
+        SurveyEntity survey = surveyRepository.findOne(surveyId);
+        if (survey == null) throw new NotFoundException("Survey not found");
+
+        UserHasApplicationEntity userHasApplicationEntity =
+                userHasApplicationRepository.findOne(new UserHasApplicationEntityPK(authorizedUser.getId(), survey.getApplicationId()));
+        if (userHasApplicationEntity.getAccessLevel() > AppConfig.USER_ACCESS_EDIT)
+            throw new AccessDeniedException("You can't rename this survey");
+
+        survey.setTitle(name);
+        surveyRepository.save(survey);
+        applicationService.notifyAppUsers(survey.getApplication());
+        return survey;
+    }
+
 
     private SurveyEntity setSurveyDisabledFlag(long surveyId, String userEmail, boolean isDisabled) {
         if (userEmail == null) throw new InternalErrorException("Incorrect method parameters");
