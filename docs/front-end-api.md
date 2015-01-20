@@ -223,3 +223,76 @@ API's divided into private(require authorization) and public(available without a
 - *Success output (HTTP status 200):* full structure of app, completely similar to one application structure from application list request
 
 - *Validation error output (HTTP status 422):* similar to input but with error message in values
+
+
+**Create new survey for app**
+
+- *URL:* `/survey`
+- *Method:* `POST`
+- *Description:* Creates a new survey
+- *Input:*
+
+            {
+                "applicationId": 1,
+                "title":"New survey title",
+                "features":[1,2],
+                "requiredVotes":300,
+                "requiredDate": "2014-12-16T18:24:06.000+0400"
+            }
+
+- *Success output (HTTP status 200):*
+
+            {
+            "id": 5,
+            "uuid": "1e424c9e-1406-4a87-b331-731f1965ad93",
+            "applicationId": 1,
+            "title": "new survey",
+            "disabled": false,
+            "requiredVotes": 300,
+            "requiredDate": null,
+            "startedAt": "2015-01-20T16:38:42.334+0400",
+            "finishedAt": "2014-12-16T18:24:06.000+0400",
+            "auditTimestamps": {
+                "createdAt": "2015-01-20T16:38:42.337+0400",
+                "modifiedAt": "2015-01-20T16:38:42.337+0400"
+            },
+            "feature": [ … ]
+            }
+
+- *Validation error output (HTTP status 422):* Similar to success output but with error message in values
+
+
+**Close active survey in app**
+
+- *URL:* `/survey/{id}/close`
+- *Method:* `GET`
+- *Description:* Close active survey in application
+- *Input:* `(empty)`
+- *Output (HTTP status 200):* Survey entity
+
+
+**Disable/enable active survey in app**
+
+- *URL:* `/survey/{id}/disable` and `/survey/{id}/enable`
+- *Method:* `GET`
+- *Description:* Disable/enable active survey in application
+- *Input:* `(empty)`
+- *Output (HTTP status 200):* Survey entity
+
+
+**Rename active survey in app**
+
+- *URL:* `/survey/{id}/rename`
+- *Method:* `GET`
+- *Description:* Disable/enable active survey in application
+- *Input:* `name=NewName`
+- *Output:* Survey entity with changed name
+
+
+**Delete active survey in app**
+
+- *URL:* `/survey/{id}`
+- *Method:* `DELETE`
+- *Description:* Delete survey
+- *Input:* `none`
+- *Output:* `none`

@@ -1,7 +1,6 @@
 package com.ramotion.roadmap.utils;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.ramotion.roadmap.config.AppConfig;
@@ -15,14 +14,17 @@ public class JsonTimestampDeserializer extends JsonDeserializer<Timestamp> {
 
     @Override
     public Timestamp deserialize(JsonParser jsonParser,
-                                 DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+                                 DeserializationContext deserializationContext) throws IOException {
 
         if (jsonParser.getText() == null) return null;
+        String dateText = jsonParser.getText();
         try {
-            Date parsed = AppConfig.DATETIME_FORMATTER.parse(jsonParser.getText());
+            Date parsed = AppConfig.DATETIME_FORMATTER.parse(dateText);
             return new Timestamp(parsed.getTime());
         } catch (ParseException e) {
-            return null;
+            throw new IOException("Invalid date format");
         }
     }
+
+
 }

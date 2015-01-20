@@ -1,5 +1,7 @@
 package com.ramotion.roadmap.exceptions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -21,9 +23,9 @@ import java.util.HashMap;
 @ResponseBody
 public class DefaultExceptionHandler {
 
-    private static final Logger LOG = Logger.getLogger(DefaultExceptionHandler.class.getName());
+    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
-    public static final String DEFAULT_ERROR_VIEW = "exception";
+    private static final Logger LOG = Logger.getLogger(DefaultExceptionHandler.class.getName());
 
     @ExceptionHandler(value = ValidationException.class)
     public Object validationException(HttpServletRequest req, ValidationException e) {
@@ -56,26 +58,21 @@ public class DefaultExceptionHandler {
 
     //All exceptions
     @ExceptionHandler(value = Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Object errorsHandler(HttpServletRequest req, HttpServletResponse res, Exception e) throws Exception {
-        LOG.error("Unhandled exception detected!", e);
-        return defaultExceptionView(req, e);
+    public void errorsHandler(HttpServletResponse res, Exception e) throws Exception {
+        HashMap<String, String> resp = new HashMap<>();
+        resp.put("exception", e.getClass().getSimpleName());
+        resp.put("message", e.getMessage());
+        res.setStatus(500);
+        res.getWriter().print(ow.writeValueAsString(resp));
+        res.addHeader("Content-type","application/json");
     }
 
 
     private HashMap defaultExceptionView(HttpServletRequest req, Exception e) {
-        HashMap<String, Object> resp = new HashMap<>();
+        HashMap<String, String> resp = new HashMap<>();
         resp.put("exception", e.getClass().getSimpleName());
         resp.put("message", e.getMessage());
         return resp;
     }
 
-//    private ModelAndView defaultExceptionView(HttpServletRequest req, Exception e) {
-//        // Otherwise setup and send the user to a default error-view.
-//        ModelAndView mav = new ModelAndView();
-//        mav.addObject("exception", e);
-//        mav.addObject("url", req.getRequestURL());
-//        mav.setViewName(DEFAULT_ERROR_VIEW);
-//        return mav;
-//    }
 }
