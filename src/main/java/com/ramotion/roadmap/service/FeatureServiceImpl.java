@@ -6,13 +6,10 @@ import com.ramotion.roadmap.model.ApplicationEntity;
 import com.ramotion.roadmap.model.FeatureEntity;
 import com.ramotion.roadmap.model.UserEntity;
 import com.ramotion.roadmap.model.UserHasApplicationEntity;
-import com.ramotion.roadmap.repository.ApplicationRepository;
 import com.ramotion.roadmap.repository.FeatureRepository;
 import com.ramotion.roadmap.repository.UserHasApplicationRepository;
 import com.ramotion.roadmap.repository.UserRepository;
-import com.ramotion.roadmap.utils.APIMappings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FeatureServiceImpl implements FeatureService {
 
     @Autowired
-    private SimpMessagingTemplate messagingTemplate;
-
-    @Autowired
-    private ApplicationRepository applicationRepository;
+    private ApplicationService applicationService;
 
     @Autowired
     private UserRepository userRepository;
@@ -56,7 +50,7 @@ public class FeatureServiceImpl implements FeatureService {
         featureRepository.delete(featureEntity);
 
         //notify subscribers for this app topic, also this action initialize lazy loaded collections
-        messagingTemplate.convertAndSend(APIMappings.Socket.TOPIC_APPS + "/" + app.getUuid(), app);
+        applicationService.notifyAppUsers(app);
     }
 
     @Override
@@ -69,8 +63,4 @@ public class FeatureServiceImpl implements FeatureService {
         return false;
     }
 
-    @Override
-    public void deleteLocalizedFeature(long localizedFeatureId) {
-
-    }
 }

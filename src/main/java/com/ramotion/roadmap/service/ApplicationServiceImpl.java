@@ -1,6 +1,7 @@
 package com.ramotion.roadmap.service;
 
 import com.ramotion.roadmap.config.AppConfig;
+import com.ramotion.roadmap.config.WebSocketConfig;
 import com.ramotion.roadmap.exceptions.AccessDeniedException;
 import com.ramotion.roadmap.exceptions.InternalErrorException;
 import com.ramotion.roadmap.exceptions.NotFoundException;
@@ -9,7 +10,6 @@ import com.ramotion.roadmap.model.*;
 import com.ramotion.roadmap.repository.ApplicationRepository;
 import com.ramotion.roadmap.repository.UserHasApplicationRepository;
 import com.ramotion.roadmap.repository.UserRepository;
-import com.ramotion.roadmap.utils.APIMappings;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -88,7 +88,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         ApplicationEntity savedApp = applicationRepository.findOne(entity.getId());
         //notify app user, also this action initialize lazy loaded collections
-        messagingTemplate.convertAndSendToUser(ownerEmail, APIMappings.Socket.TOPIC_APPS, savedApp);
+        notifyAppUsers(savedApp);
         return savedApp;
     }
 
@@ -112,8 +112,6 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (entity.getApiToken() != null) existedApp.setApiToken(entity.getApiToken());
         existedApp.setApplicationFeatures(entity.getApplicationFeatures());
         existedApp.setDescription(entity.getDescription());
-
-//        entity.setId(appId);
 
         for (FeatureEntity featureEntity : existedApp.getApplicationFeatures()) {
 
@@ -159,7 +157,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (app == null || app.getApplicationUsers() == null) return;
         //notify app users, also this action initialize lazy loaded collections
         for (UserHasApplicationEntity userAccess : app.getApplicationUsers()) {
-            messagingTemplate.convertAndSendToUser(userAccess.getUserByUserId().getEmail(), APIMappings.Socket.TOPIC_APPS, app);
+            messagingTemplate.convertAndSendToUser(userAccess.getUserByUserId().getEmail(), WebSocketConfig.TOPIC_APPS, app);
         }
     }
 

@@ -28,8 +28,15 @@ public class DefaultExceptionHandler {
     private static final Logger LOG = Logger.getLogger(DefaultExceptionHandler.class.getName());
 
     @ExceptionHandler(value = ValidationException.class)
-    public Object validationException(HttpServletRequest req, ValidationException e) {
-        return defaultExceptionView(req, e);
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public Object validationException(ValidationException e) {
+        return e.getErrors();
+    }
+
+    @ExceptionHandler(value = com.ramotion.roadmap.exceptions.AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Object forbidden(com.ramotion.roadmap.exceptions.AccessDeniedException e) {
+        return e.getMessage();
     }
 
     @ExceptionHandler(value = NotFoundException.class)
@@ -64,9 +71,8 @@ public class DefaultExceptionHandler {
         resp.put("message", e.getMessage());
         res.setStatus(500);
         res.getWriter().print(ow.writeValueAsString(resp));
-        res.addHeader("Content-type","application/json");
+        res.addHeader("Content-type", "application/json");
     }
-
 
     private HashMap defaultExceptionView(HttpServletRequest req, Exception e) {
         HashMap<String, String> resp = new HashMap<>();

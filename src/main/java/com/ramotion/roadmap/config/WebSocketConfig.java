@@ -1,6 +1,5 @@
 package com.ramotion.roadmap.config;
 
-import com.ramotion.roadmap.utils.APIMappings;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -16,6 +15,10 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     private static final Logger LOG = Logger.getLogger(WebSocketConfig.class.getName());
 
+    public static final String INITIAL_CONNECT = "/socket";
+    public static final String TOPIC = "/topic";
+    public static final String TOPIC_APPS = TOPIC + "/apps";
+
     @PostConstruct
     public void postConstruct() {
         LOG.info("WebSocket config constructed");
@@ -24,14 +27,12 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         //Message Brokers for subscribers
-        registry.enableSimpleBroker(APIMappings.Socket.TOPIC);
-        //Prefix for input requests mapping
-//        registry.setApplicationDestinationPrefixes("/app");
+        registry.enableSimpleBroker(TOPIC);
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(APIMappings.Socket.INITIAL_CONNECT).withSockJS();
+        registry.addEndpoint(INITIAL_CONNECT).withSockJS();
     }
 
 }

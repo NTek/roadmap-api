@@ -1,6 +1,5 @@
 package com.ramotion.roadmap.config;
 
-import com.ramotion.roadmap.utils.APIMappings;
 import com.ramotion.roadmap.utils.LoginFailureHandler;
 import com.ramotion.roadmap.utils.LoginSuccessHandler;
 import com.ramotion.roadmap.utils.RestAuthenticationEntryPoint;
@@ -31,12 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private BasicDataSource basicDataSource;
 
-//    @Autowired
-//    private UserService userService;
-
-    /**
-     * PostConstruct actions - executes after constructor when all fields injected
-     */
     @PostConstruct
     public void postConstruct() {
         LOG.info("Security config constructed");
@@ -73,8 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/alogin").permitAll()
-                .antMatchers(APIMappings.Web.SDK_API_ROOT + "/**").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
