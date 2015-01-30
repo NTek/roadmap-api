@@ -62,6 +62,11 @@ public class APIController {
         userService.registerUser(form);
     }
 
+    @RequestMapping(value = "/api/email-change-confirmation/{token}", method = RequestMethod.GET)
+    public Object emailChangeConfirmation(@PathVariable(value = "token") String token) {
+        return userService.confirmNewEmail(token);
+    }
+
     //========================================== CLOSED API FOR FRONTEND ===============================================
 
     @RequestMapping(value = "/apps", method = RequestMethod.GET)
@@ -89,6 +94,16 @@ public class APIController {
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public Object getUserProfile(Principal principal) {
         return userService.getUserProfile(principal.getName());
+    }
+
+
+    @ResponseStatus(value = HttpStatus.OK)
+    @RequestMapping(value = "/profile/email", method = RequestMethod.POST)
+    public void changeEmail(Principal principal,
+                            @Valid @RequestBody EmailPasswordForm emailPasswordForm,
+                            BindingResult errors) {
+        if (errors.hasErrors()) throw new ValidationException().withBindingResult(errors);
+        userService.changeEmail(emailPasswordForm, principal.getName());
     }
 
     @RequestMapping(value = "/survey", method = RequestMethod.POST)

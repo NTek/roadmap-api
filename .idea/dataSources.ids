@@ -23,8 +23,27 @@
       <index name="active_survey_id_UNIQUE" unique="true" columns="active_survey_id"/>
       <index name="api_security_key_UNIQUE" unique="true" columns="api_token"/>
       <index name="id_UNIQUE" unique="true" columns="id"/>
-      <index name="name_UNIQUE" unique="true" columns="name"/>
       <index name="uid_UNIQUE" unique="true" columns="uuid"/>
+    </table>
+    <table name="databasechangelog" schema="" catalog="roadmap" type="TABLE">
+      <column name="ID" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="AUTHOR" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="FILENAME" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="DATEEXECUTED" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="ORDEREXECUTED" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="EXECTYPE" sqlType="VARCHAR" precision="10" scale="0" nullable="false" jdbcType="12"/>
+      <column name="MD5SUM" sqlType="VARCHAR" precision="35" scale="0" nullable="true" jdbcType="12"/>
+      <column name="DESCRIPTION" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="COMMENTS" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TAG" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="LIQUIBASE" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="databasechangeloglock" schema="" catalog="roadmap" type="TABLE">
+      <column name="ID" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="LOCKED" sqlType="BIT" precision="1" scale="0" nullable="false" jdbcType="-7"/>
+      <column name="LOCKGRANTED" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="LOCKEDBY" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="ID"/>
     </table>
     <table name="feature" schema="" catalog="roadmap" type="TABLE">
       <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
@@ -41,19 +60,17 @@
       <index name="application_features-to-application_idx" unique="false" columns="application_id"/>
     </table>
     <table name="feature_text" schema="" catalog="roadmap" type="TABLE">
-      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
       <column name="feature_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
       <column name="language" sqlType="VARCHAR" precision="2" scale="0" nullable="false" jdbcType="12" def="J2VuJw=="/>
       <column name="text" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="modified_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
       <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
-      <primary-key name="PRIMARY" columns="id"/>
+      <primary-key name="PRIMARY" columns="feature_id,language"/>
       <foreign-key name="localized_features-to-feature" columns="feature_id" ref-table="feature" ref-schema="" ref-catalog="roadmap" ref-columns="id" update-rule="0" delete-rule="0" deferrability="2"/>
-      <index name="id_UNIQUE" unique="true" columns="id"/>
       <index name="localized_features-to-features_idx" unique="false" columns="feature_id"/>
     </table>
     <table name="survey" schema="" catalog="roadmap" type="TABLE">
-      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
       <column name="uuid" sqlType="BINARY" precision="16" scale="0" nullable="true" jdbcType="-2"/>
       <column name="title" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
       <column name="application_id" sqlType="BIGINT" precision="19" scale="0" nullable="false" jdbcType="-5"/>
@@ -89,6 +106,8 @@
       <column name="role" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12" def="J1JPTEVfVVNFUic="/>
       <column name="recovery_token_expiration" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
       <column name="recovery_token" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="newEmail" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="emailConfirmationToken" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
       <column name="modified_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
       <column name="created_at" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
       <primary-key name="PRIMARY" columns="id"/>

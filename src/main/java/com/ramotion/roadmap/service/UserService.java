@@ -11,8 +11,9 @@ public interface UserService {
 
     UserEntity registerUser(EmailPasswordForm emailPasswordForm);
 
-    UserEntity updateUserProfile(UserEntity entity);
+    UserProfile confirmNewEmail(String confirmationToken);
 
     UserProfile getUserProfile(String userEmail);
 
+    void changeEmail(EmailPasswordForm emailPasswordForm, String name);
 }

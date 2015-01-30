@@ -21,6 +21,12 @@ public class UserEntity implements EntityWithAuditTimestamps, EntityWithUUID {
     private String email;
 
     @JsonIgnore
+    private String newEmail;
+
+    @JsonIgnore
+    private String emailConfirmationToken;
+
+    @JsonIgnore
     private String password;
 
     @JsonIgnore
@@ -61,7 +67,7 @@ public class UserEntity implements EntityWithAuditTimestamps, EntityWithUUID {
         this.uuid = uuid;
     }
 
-    @Column(name = "email", nullable = false, insertable = true, updatable = true, length = 255)
+    @Column(name = "email", unique = true, nullable = false, insertable = true, updatable = true, length = 255)
     public String getEmail() {
         return email;
     }
@@ -113,6 +119,24 @@ public class UserEntity implements EntityWithAuditTimestamps, EntityWithUUID {
 
     public void setRecoveryToken(String recoveryToken) {
         this.recoveryToken = recoveryToken;
+    }
+
+    @Column(name = "newEmail", unique = false, nullable = false, insertable = true, updatable = true, length = 255)
+    public String getNewEmail() {
+        return newEmail;
+    }
+
+    public void setNewEmail(String newEmail) {
+        this.newEmail = newEmail;
+    }
+
+    @Column(name = "emailConfirmationToken", nullable = true, insertable = true, updatable = true, length = 255)
+    public String getEmailConfirmationToken() {
+        return emailConfirmationToken;
+    }
+
+    public void setEmailConfirmationToken(String newEmailConfirmationToken) {
+        this.emailConfirmationToken = newEmailConfirmationToken;
     }
 
     @Override

@@ -282,3 +282,10 @@ VALUES (1, 2, 0, NULL, NULL);
 INSERT INTO `user_has_application` (`user_id`, `application_id`, `access_level`, `modified_at`, `created_at`)
 VALUES (2, 3, 0, NULL, NULL);
 COMMIT;
+
+-- changeset oleg.v:2
+ALTER TABLE `user`
+ADD COLUMN `newEmail` VARCHAR(255) NULL
+AFTER `recovery_token`,
+ADD COLUMN `emailConfirmationToken` VARCHAR(255) NULL
+AFTER `newEmail`;

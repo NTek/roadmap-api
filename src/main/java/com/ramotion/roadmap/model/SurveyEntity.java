@@ -1,9 +1,7 @@
 package com.ramotion.roadmap.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ramotion.roadmap.model.utils.*;
-import com.ramotion.roadmap.utils.JsonTimestampSerializer;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -28,13 +26,13 @@ public class SurveyEntity implements EntityWithAuditTimestamps, EntityWithUUID {
 
     private Long requiredVotes;
 
-    @JsonSerialize(using = JsonTimestampSerializer.class)
+    //    @JsonSerialize(using = JsonTimestampSerializer.class)
     private Timestamp requiredDate;
 
-    @JsonSerialize(using = JsonTimestampSerializer.class)
+    //    @JsonSerialize(using = JsonTimestampSerializer.class)
     private Timestamp startedAt;
 
-    @JsonSerialize(using = JsonTimestampSerializer.class)
+    //    @JsonSerialize(using = JsonTimestampSerializer.class)
     private Timestamp finishedAt;
 
     @Embedded

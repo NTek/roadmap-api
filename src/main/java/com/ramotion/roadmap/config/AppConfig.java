@@ -54,7 +54,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
     public static final String DB_URL_ENV_VAR_NAME = "CLEARDB_DATABASE_URL";
     public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
-    public static final String EMAIL_FROM = "";
+
+    public static final String EMAIL_FROM = "Roadmap";
 
     @Autowired
     private Environment env;

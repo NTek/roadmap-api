@@ -270,7 +270,6 @@ API's divided into private(require authorization) and public(available without a
 - *Input:* `(empty)`
 - *Output (HTTP status 200):* Survey entity
 
-
 **Disable/enable active survey in app**
 
 - *URL:* `/survey/{id}/disable` and `/survey/{id}/enable`
@@ -287,7 +286,6 @@ API's divided into private(require authorization) and public(available without a
 - *Description:* Disable/enable active survey in application
 - *Input:* `name=NewName`
 - *Output:* Survey entity with changed name
-
 
 **Delete active survey in app**
 

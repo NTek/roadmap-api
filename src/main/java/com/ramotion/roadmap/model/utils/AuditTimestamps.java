@@ -1,8 +1,5 @@
 package com.ramotion.roadmap.model.utils;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.ramotion.roadmap.utils.JsonTimestampSerializer;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.sql.Timestamp;
@@ -10,10 +7,10 @@ import java.sql.Timestamp;
 @Embeddable
 public class AuditTimestamps {
 
-    @JsonSerialize(using = JsonTimestampSerializer.class)
+//    @JsonSerialize(using = JsonTimestampSerializer.class)
     private Timestamp createdAt;
 
-    @JsonSerialize(using = JsonTimestampSerializer.class)
+//    @JsonSerialize(using = JsonTimestampSerializer.class)
     private Timestamp modifiedAt;
 
     @Column(name = "created_at", nullable = false, insertable = true, updatable = false)

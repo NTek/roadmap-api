@@ -2,7 +2,9 @@ package com.ramotion.roadmap.service;
 
 
 import com.ramotion.roadmap.config.AppConfig;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,7 +12,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,14 +19,22 @@ import java.nio.file.Files;
 @Service
 public class MailerService {
 
-    public static final Resource EMAIL_CONFIRMATION_TEMPLATE = new ClassPathResource("email_confirmation_letter_template.html");
+    private static final Logger LOG = Logger.getLogger(MailerService.class.getName());
+
+    public static final Resource EMAIL_CHANGE_CONFIRMATION_TEMPLATE = new ClassPathResource("email_confirmation_letter_template.html");
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private JavaMailSender mailSender;
 
-    public String preparePasswordTemplate(String password, String template) {
+    public String prepareEmailChangeConfirmationTemplate(String confirmationToken, String newEmail, String template) {
         if (template == null) return null;
-        return template.replaceAll("%password%", password);
+        String domain = env.getProperty("frontend.domain");
+        String path = env.getProperty("frontend.email_change_confirm_page");
+        String confirmationLink = domain + path + confirmationToken;
+        return template.replaceAll("%confirmationLink%", confirmationLink).replaceAll("%newEmail%", newEmail);
     }
 
     @Async
@@ -37,18 +46,18 @@ public class MailerService {
             helper.setTo(receiver);
             helper.setSubject(subject);
             helper.setText(body, itsHtml);
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            LOG.error("Error while preparing mime message for mailing", e);
+            return;
         }
-
         mailSender.send(msg);
     }
 
-    public String loadLetterTemplate(Resource templateResource) {
+    public String loadTemplateFromResource(Resource templateResource) {
         try {
             return new String(Files.readAllBytes(templateResource.getFile().toPath()));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Can't load letter template from " + templateResource.getFilename(), e);
             return null;
         }
     }

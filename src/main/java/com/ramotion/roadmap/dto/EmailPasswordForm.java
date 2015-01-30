@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 /**
  * Simple email-password form with validation requirments
@@ -18,7 +17,7 @@ public class EmailPasswordForm {
 
     @NotNull(message = "required")
     @NotEmpty(message = "password can't be empty")
-    @Pattern(regexp = "(^(?=.*\\d)(?=.*[a-zA-Z]).{6,50}$)", message = "at least one char and one number, length between 6 and 50 chars")
+//    @Pattern(regexp = "(^(?=.*\\d)(?=.*[a-zA-Z]).{6,50}$)", message = "at least one char and one number, length between 6 and 50 chars")
     private String password;
 
     public String getEmail() {

@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="JavaDev">
     <words>
+      <w>&amp;amp</w>
       <w>abkhazian</w>
       <w>auditable</w>
       <w>changelog</w>
@@ -8,10 +9,14 @@
       <w>cors</w>
       <w>heroku</w>
       <w>inno</w>
+      <w>jdbc</w>
       <w>liquibase</w>
+      <w>mailsender</w>
       <w>postgre</w>
       <w>postgresql</w>
       <w>roadmap</w>
+      <w>smtp</w>
+      <w>starttls</w>
       <w>websocket</w>
     </words>
   </dictionary>

@@ -13,11 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
-/**
- * Created by Oleg Vasiliev on 20.11.2014.
- * Implementation for Web API Service
- * TODO: Move validations to separate validator class
- */
 @Service
 @Transactional
 public class APIServiceImpl implements APIService {

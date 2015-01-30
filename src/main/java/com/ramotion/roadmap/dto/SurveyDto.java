@@ -1,10 +1,5 @@
 package com.ramotion.roadmap.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.ramotion.roadmap.utils.JsonTimestampDeserializer;
-import com.ramotion.roadmap.utils.JsonTimestampSerializer;
-
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Set;
@@ -22,8 +17,8 @@ public class SurveyDto {
 
     private Long requiredVotes;
 
-    @JsonSerialize(using = JsonTimestampSerializer.class)
-    @JsonDeserialize(using = JsonTimestampDeserializer.class)
+    //    @JsonSerialize(using = JsonTimestampSerializer.class)
+    //    @JsonDeserialize(using = JsonTimestampDeserializer.class)
     private Timestamp requiredDate;
 
     public String getTitle() {
